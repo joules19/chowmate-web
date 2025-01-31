@@ -1,0 +1,18 @@
+[
+  {
+    "name": "United States",
+    "flag": "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg"
+  },
+  {
+    "name": "Canada",
+    "flag": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg"
+  },
+  {
+    "name": "Germany",
+    "flag": "https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg"
+  },
+  {
+    "name": "Nigeria",
+    "flag": "https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg"
+  }
+]
