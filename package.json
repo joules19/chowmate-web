@@ -1,5 +1,5 @@
 {
-  "name": "onta",
+  "name": "chowbro",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,6 +17,7 @@
     "clsx": "^2.1.1",
     "formik": "^2.4.6",
     "framer-motion": "^11.13.3",
+    "lucide-react": "^0.475.0",
     "next": "14.2.18",
     "postcss": "^8.4.49",
     "react": "^18",
@@ -25,6 +26,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@iconify/react": "^5.2.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

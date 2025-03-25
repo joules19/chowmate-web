@@ -3,7 +3,7 @@
 export const customAntdTheme = {
   token: {
     // Primary color
-    colorPrimary: "#36A2EB",
+    colorPrimary: "FFD54F",
 
     // Link colors
     colorLink: "#1DA57A",

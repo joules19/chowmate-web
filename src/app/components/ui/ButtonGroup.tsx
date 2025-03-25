@@ -1,11 +1,11 @@
 // ButtonGroup.tsx
 import React from "react";
 import { Button } from "antd";
-import { OntaUsageType } from "@/app/data/types/auth";
+import { ChowbroUsageType } from "@/app/data/types/auth";
 
 interface ButtonGroupProps {
-  onButtonClick: (buttonType: OntaUsageType) => void;
-  activeButton: OntaUsageType;
+  onButtonClick: (buttonType: ChowbroUsageType) => void;
+  activeButton: ChowbroUsageType;
 }
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({
@@ -17,33 +17,33 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
       <div className="flex gap-3 -mt-[1px]">
         <Button
           type="text"
-          onClick={() => onButtonClick(OntaUsageType.POSTER)}
+          onClick={() => onButtonClick(ChowbroUsageType.VENDOR)}
           style={{
             backgroundColor:
-              activeButton === OntaUsageType.POSTER ? "black" : "transparent",
-            color: activeButton === OntaUsageType.POSTER ? "white" : "black",
+              activeButton === ChowbroUsageType.VENDOR ? "black" : "transparent",
+            color: activeButton === ChowbroUsageType.VENDOR ? "white" : "black",
             border:
-              activeButton === OntaUsageType.POSTER
+              activeButton === ChowbroUsageType.VENDOR
                 ? "none"
                 : "1px solid black",
           }}
         >
-          I Want To Post Jobs
+          I am a Vendor
         </Button>
         <Button
           type="text"
-          onClick={() => onButtonClick(OntaUsageType.SEEKER)}
+          onClick={() => onButtonClick(ChowbroUsageType.CUSTOMER)}
           style={{
             backgroundColor:
-              activeButton === OntaUsageType.SEEKER ? "black" : "transparent",
-            color: activeButton === OntaUsageType.SEEKER ? "white" : "black",
+              activeButton === ChowbroUsageType.CUSTOMER ? "black" : "transparent",
+            color: activeButton === ChowbroUsageType.CUSTOMER ? "white" : "black",
             border:
-              activeButton === OntaUsageType.SEEKER
+              activeButton === ChowbroUsageType.CUSTOMER
                 ? "none"
                 : "1px solid black",
           }}
         >
-          I Am Looking For Jobs
+          Here for chow
         </Button>
       </div>
     </div>

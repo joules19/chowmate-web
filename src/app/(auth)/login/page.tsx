@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import Logo from "../../assets/images/Logo.png";
+import Logo from "../../assets/images/chowbro_logo.png";
 import Illustration from "../../assets/images/illustration.png";
 import LoginForm from "@/app/components/forms/LoginForm";
 import { Button } from "antd";
@@ -49,7 +49,7 @@ const Login: React.FC = () => {
     <div className="h-screen max-w-[1400px] mx-auto px-2 sm:px-2 md:px-4">
       <div className="h-full w-full flex flex-col">
         <div className="logo-section py-4">
-          <Image src={Logo} alt="Logo" width={150} height={70} />
+          <Image src={Logo} alt="Logo" width={180} />
         </div>
 
         <div className="h-full w-full flex flex-col p-0 lg:flex-row mt-[2rem]">
@@ -60,22 +60,19 @@ const Login: React.FC = () => {
             </div>
             <div className="flex flex-col gap-1 mt-4 px-6 lg:px-0">
               <p className="ml-[80px] text-3xl leading-10 lg:text-4xl font-semibold text-dark-1 text-center lg:text-left">
-                Empowering Careers
-              </p>
+              Bringing Flavors Home              </p>
               <div className="flex gap-3 items-center text-center -ml-0 relative bg-primary-4 -skew-y-1 mx-auto max-w-4xl px-6 py-1 lg:px-10">
-                <p className="relative leading-10 text-xl lg:text-4xl font-semibold text-dark-1 text-center">
-                  With AI-Driven Recruitment{" "}
+                <p className="relative leading-10 text-xl lg:text-[32px] font-semibold text-dark-1 text-center">
+                Through Your Favorite Local Eats
                 </p>
               </div>
             </div>
             <div className="flex flex-col gap-3 items-center mt-4 px-6 lg:px-0">
               <p className="text-[18px] leading-10 font-normal text-dark-1 text-center lg:text-left">
-                Made for recruiters and jobseekers everywhere.
-              </p>
+              For food lovers and taste adventurers everywhere.              </p>
               <div className="h-[38px] sm:w-[150px]">
                 <Button>
-                  Learn more
-                  <LinkIcon className="w-5 h-5 ml-2" />
+                Explore now                  <LinkIcon className="w-5 h-5 ml-2" />
                 </Button>
               </div>
             </div>

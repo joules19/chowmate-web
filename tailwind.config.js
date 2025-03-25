@@ -12,11 +12,11 @@ module.exports = {
         xl: "1440px",
       },
       colors: {
-        "primary-1": "#36A2EB",
+        "primary-1": "#FFD54F",
         "primary-2": "#6CB4EE",
-        "primary-3": "#F0F8FF",
-        "primary-4": "#A8D3F5",
-        "primary-5": "#01A985",
+        "primary-fade": "#FFFBF0",
+        "primary-4": "#FFF3CD",
+        "primary-5": "#FFC107",
 
         "green-1": "#008000",
 
@@ -24,7 +24,7 @@ module.exports = {
         "dark-2": "#353535",
         "dark-3": "#D1D5DB",
 
-        "gray-1": "#BDBDBD",
+        "gray-1": "#EEEEEE",
         "gray-2": "#282828",
         "gray-3": "#4f4f4f",
         "gray-4": "#f8f8f8",

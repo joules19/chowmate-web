@@ -2,41 +2,41 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import LogoWhite from "../../assets/images/Logo_White.png";
-import BuildingImage from "../../assets/images/build2.png";
-import ContractImage from "../../assets/images/buld.png";
+import LogoWhite from "../../assets/images/chowbro_logo_white.png";
+import VendorImage from "../../assets/images/meal1.jpg";
+import CustomerImage from "../../assets/images/meal.jpg";
 import { Button } from "antd";
 import ButtonGroup from "@/app/components/ui/ButtonGroup";
 import SignupInfoCard from "@/app/components/cards/SignupInfoCard";
-import { OntaUsageType } from "@/app/data/types/auth";
-import JobPosterForm from "@/app/components/forms/JobPosterForm";
-import JobSeekerForm from "@/app/components/forms/JobSeekerForm";
+import { ChowbroUsageType } from "@/app/data/types/auth";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import VendorSignupForm from "@/app/components/forms/VendorSignupForm";
+import CustomerSignupForm from "@/app/components/forms/CustomerSignupForm";
 
 const contentMap = {
-  [OntaUsageType.POSTER]: {
-    title: "Expand Your Global Team with Confidence",
+  [ChowbroUsageType.VENDOR]: {
+    title: "Grow Your Food Business with Ease",
     description:
-      "Focus on finding the best talent while we take care of the rest.",
-    image: BuildingImage,
+      "Join Chowbro and reach hungry customers ready to discover your flavors.",
+    image: VendorImage,
   },
-  [OntaUsageType.SEEKER]: {
-    title: "Find Your Dream Job with Onta",
+  [ChowbroUsageType.CUSTOMER]: {
+    title: "Satisfy Your Cravings with Chowbro",
     description:
-      "Browse through exciting opportunities and take the next step in your career.",
-    image: ContractImage,
+      "Explore a world of culinary delights at your doorstep, anytime you crave.",
+    image: CustomerImage,
   },
 };
 
 const Signup: React.FC = () => {
   const router = useRouter();
-  const [activeButton, setActiveButton] = useState<OntaUsageType>(
-    OntaUsageType.POSTER
+  const [activeButton, setActiveButton] = useState<ChowbroUsageType>(
+    ChowbroUsageType.VENDOR
   );
   const [showForm, setShowForm] = useState(false);
 
-  const handleClick = (buttonType: OntaUsageType) => {
+  const handleClick = (buttonType: ChowbroUsageType) => {
     setActiveButton(buttonType);
   };
 
@@ -61,7 +61,7 @@ const Signup: React.FC = () => {
             onClick={() => router.push("/")}
             className="cursor-pointer"
             src={LogoWhite}
-            width={120}
+            width={180}
             alt="logo"
           />
           <div className="flex flex-col gap-[25px]">
@@ -69,7 +69,7 @@ const Signup: React.FC = () => {
             <p className="text-base font-normal text-white">{description}</p>
           </div>
         </div>
-        <div className="flex flex-1 w-full h-full mt-6 bg-white">
+        <div className="flex flex-1 w-full h-full mt-6 bg-white opacity-95">
           <Image
             src={image}
             layout="responsive"
@@ -89,10 +89,10 @@ const Signup: React.FC = () => {
 
         <div className="flex flex-col w-full sm:max-w-[1000px] mx-auto">
           {!showForm ? (
-            <div className="flex flex-col gap-[50px] max-w-[600px]  lg:ml-[260px]">
+            <div className="flex flex-col gap-[50px] max-w-[600px] lg:ml-[260px]">
               <div className="flex flex-col gap-3">
                 <h1 className="text-[35px] font-medium">
-                  How will you use ONTA?
+                  How will you use Chowbro?
                 </h1>
                 <p className="text-base">Please select an option below.</p>
               </div>
@@ -143,8 +143,8 @@ const Signup: React.FC = () => {
                 </Button>
               </div>
 
-              {activeButton === OntaUsageType.POSTER && <JobPosterForm />}
-              {activeButton === OntaUsageType.SEEKER && <JobSeekerForm />}
+              {activeButton === ChowbroUsageType.VENDOR && <VendorSignupForm />}
+              {activeButton === ChowbroUsageType.CUSTOMER && <CustomerSignupForm />}
             </motion.div>
           )}
         </div>

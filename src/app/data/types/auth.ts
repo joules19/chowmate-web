@@ -1,5 +1,5 @@
 // ButtonType.ts
-export enum OntaUsageType {
-  POSTER = "poster",
-  SEEKER = "seeker",
+export enum ChowbroUsageType {
+  VENDOR = "vendor",
+  CUSTOMER = "customer",
 }
