@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, Input } from "antd";
@@ -7,7 +7,6 @@ import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import Image from "next/image";
 import GoogleIcon from "./../../assets/icons/devicon_google.png";
 import { Divider } from "../ui/Divider";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 // Validation schema
@@ -32,10 +31,7 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({
   isLoading,
-  setIsLoading,
   onSubmit,
-  loginAsAdmin,
-  setLoginAsAdmin,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -45,8 +41,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
     validationSchema,
     onSubmit,
   });
-
-  const router = useRouter();
 
   return (
     <form onSubmit={formik.handleSubmit}>

@@ -9,7 +9,7 @@ interface TextAreaFieldProps {
   onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
   required?: boolean;
   readOnly?: boolean;
-  error?: string | false | any;
+  error?: string | false;
   rows?: number;
 }
 
@@ -23,7 +23,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
   required = false,
   error = "",
   rows = 3,
-  readOnly = false,
+  // readOnly = false,
 }) => (
   <div className="mb-4">
     <label htmlFor={id} className="block text-sm font-medium text-gray-700">
@@ -37,9 +37,8 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
       onBlur={onBlur}
       required={required}
       rows={rows}
-      className={`mt-1 block w-full px-3 py-2 border-[.8px] ${
-        error ? "border-red-500" : "border-gray-300"
-      }  shadow-sm flex-grow mr-2 p-2 border-[.8px] border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-1  sm:text-sm`}
+      className={`mt-1 block w-full px-3 py-2 border-[.8px] ${error ? "border-red-500" : "border-gray-300"
+        }  shadow-sm flex-grow mr-2 p-2 border-[.8px] border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-1  sm:text-sm`}
     />
     {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
   </div>

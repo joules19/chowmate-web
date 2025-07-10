@@ -1,5 +1,4 @@
 "use client";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 
 interface InputFieldProps {
@@ -13,7 +12,7 @@ interface InputFieldProps {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   required?: boolean;
   readOnly?: boolean;
-  error?: string | false | any;
+  error?: string | false;
   heightMobile?: string; // Dynamic height for mobile
   heightSm?: string; // Dynamic height for small screens
   heightMd?: string; // Dynamic height for medium screens
@@ -35,7 +34,7 @@ const InputField: React.FC<InputFieldProps> = ({
   heightSm = "42px",
   heightMd = "53px",
 }) => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible] = useState(false);
 
   const [height, setHeight] = useState("");
   const [smHeight, setSmHeight] = useState("");
@@ -62,9 +61,8 @@ const InputField: React.FC<InputFieldProps> = ({
         onBlur={onBlur}
         required={required}
         readOnly={readOnly}
-        className={`mt-1 block w-full ${height} ${smHeight} ${mdHeight} px-3 py-2 border-[.8px] ${
-          error ? "border-red-500" : "border-gray-300"
-        } shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm flex-grow mr-2 p-2 border-[.8px] border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-1`}
+        className={`mt-1 block w-full ${height} ${smHeight} ${mdHeight} px-3 py-2 border-[.8px] ${error ? "border-red-500" : "border-gray-300"
+          } shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm flex-grow mr-2 p-2 border-[.8px] border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-1`}
       />
       {/* {type === "password" && (
         <span

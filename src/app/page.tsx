@@ -1,7 +1,4 @@
 "use client";
-import { Button } from "./components/ui/Button";
-import HeroImage from "./assets/images/Hero-Img.png";
-import Image from "next/image";
 import ServiceCard from "./components/cards/ServiceCard";
 import FaqSection from "./components/ui/FaqSection";
 import Navbar from "./components/navigation/NavBar";

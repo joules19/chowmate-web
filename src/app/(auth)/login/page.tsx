@@ -28,19 +28,21 @@ const Login: React.FC = () => {
       });
 
       if (response.status === 200) {
-        const userDetails = {
-          email: response?.data?.user.email,
-          token: response?.data?.token,
-          refreshToken: response?.data?.token,
-          firstname: response?.data?.user.firstName,
-          lastname: response?.data?.user.lastName,
-          role: response?.data?.user.role,
-          initialSetup: response?.data?.user.initialSetup,
-          passwordChangedStatus: response?.data?.user.passwordChangedStatus,
-          isOnboardingComplete: response?.data?.user.isOnboardingComplete,
-        };
+        // const userDetails = {
+        //   email: response?.data?.user.email,
+        //   token: response?.data?.token,
+        //   refreshToken: response?.data?.token,
+        //   firstname: response?.data?.user.firstName,
+        //   lastname: response?.data?.user.lastName,
+        //   role: response?.data?.user.role,
+        //   initialSetup: response?.data?.user.initialSetup,
+        //   passwordChangedStatus: response?.data?.user.passwordChangedStatus,
+        //   isOnboardingComplete: response?.data?.user.isOnboardingComplete,
+        // };
       }
     } catch (err) {
+      console.error("Login failed:", err);
+
       setIsLoading(false);
     }
   };

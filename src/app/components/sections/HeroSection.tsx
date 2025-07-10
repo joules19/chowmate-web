@@ -1,7 +1,7 @@
 "use client";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { Clock, MapPin, Package, Shield, ArrowRight, Zap, CheckCircle, Navigation } from "lucide-react";
+import { Clock, Shield, ArrowRight, Navigation } from "lucide-react";
 import { useEffect, useState } from "react";
 import HeroImage from "../../assets/images/map.jpg";
 import { Button } from "../ui/AppButton";

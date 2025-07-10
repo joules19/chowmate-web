@@ -80,7 +80,7 @@ export default function TestimonialsSection() {
                         What Our Customers Say
                     </h2>
                     <p className="text-lg lg:text-xl text-[#333333] max-w-2xl mx-auto">
-                        Don't just take our word for it - hear from our satisfied customers
+                        Don&#39;t just take our word for it - hear from our satisfied customers
                     </p>
                 </motion.div>
 
@@ -143,7 +143,7 @@ export default function TestimonialsSection() {
                                         transition={{ delay: 0.4 }}
                                         className="text-lg lg:text-xl text-[#333333] italic mb-8 max-w-2xl leading-relaxed"
                                     >
-                                        "{testimonials[currentIndex].content}"
+                                        {testimonials[currentIndex].content.replace(/'/g, "&#39;")}
                                     </motion.p>
 
                                     {/* Customer Info */}

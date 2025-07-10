@@ -5,7 +5,6 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { customAntdTheme } from "./theme/themeConfig";
 import { ConfigProvider } from "antd";
 import { Montserrat } from "next/font/google";
-import Navbar from "./components/navigation/NavBar";
 
 export const metadata: Metadata = {
   title: "Food Delivery App",

@@ -7,7 +7,7 @@ const { Text } = Typography;
 
 const NotificationButton: React.FC = () => {
   // Manage dynamic notification count
-  const [notifications, setNotifications] = useState([
+  const [notifications] = useState([
     { id: 1, message: "Performance Review", href: "#" },
     { id: 2, message: "New Employee", href: "#" },
     { id: 3, message: "Onboarding Today", href: "#" },

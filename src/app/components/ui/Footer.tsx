@@ -51,7 +51,7 @@ export default function Footer() {
                             <span className="text-2xl font-bold text-white">Chowmate</span>
                         </Link>
                         <p className="text-sm mb-6 text-[#A1A1A1]">
-                            Your trusted partner for fast, reliable delivery services. From food to groceries, we've got you covered.
+                            Your trusted partner for fast, reliable delivery services. From food to groceries, we&#39;ve got you covered.
                         </p>
                         <div className="flex space-x-4">
                             {socialLinks.map((social, index) => (

@@ -59,4 +59,10 @@ const CreateProfile: React.FC = () => {
   );
 };
 
-export default CreateProfile;
+const CreateProfilePage: React.FC = () => (
+  <React.Suspense fallback={<div>Loading...</div>}>
+    <CreateProfile />
+  </React.Suspense>
+);
+
+export default CreateProfilePage;

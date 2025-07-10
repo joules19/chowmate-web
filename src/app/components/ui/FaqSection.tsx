@@ -1,6 +1,6 @@
 "use client";
 import { Icon } from "@iconify/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface Faq {
   question: string;
