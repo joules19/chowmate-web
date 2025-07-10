@@ -1,13 +1,16 @@
 "use client";
-
 import { Button } from "./components/ui/Button";
 import HeroImage from "./assets/images/Hero-Img.png";
 import Image from "next/image";
-import { MapIcon } from "lucide-react";
-import { Icon } from "@iconify/react";
 import ServiceCard from "./components/cards/ServiceCard";
 import FaqSection from "./components/ui/FaqSection";
 import Navbar from "./components/navigation/NavBar";
+import { motion } from "framer-motion";
+import StatsSection from "./components/sections/StatsSection";
+import Footer from "./components/ui/Footer";
+import TestimonialsSection from "./components/sections/TestimonialSection";
+import CTASection from "./components/sections/CTASection";
+import HeroSection from "./components/sections/HeroSection";
 
 const services = [
   {
@@ -17,8 +20,8 @@ const services = [
   },
   {
     icon: "mdi:bike-fast",
-    title: "Chowbro collects package",
-    description: "Chowbro carefully handles your package, guaranteeing a seamless and secure pickup experience from start to finish. "
+    title: "Chowmate collects package",
+    description: "Chowmate carefully handles your package, guaranteeing a seamless and secure pickup experience from start to finish."
   },
   {
     icon: "ph:package-light",
@@ -29,8 +32,8 @@ const services = [
 
 const faqs = [
   {
-    question: "What is Chowbro?",
-    answer: "Chowbro is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
+    question: "What is Chowmate?",
+    answer: "Chowmate is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
   },
   {
     question: "What is service fee?",
@@ -38,10 +41,10 @@ const faqs = [
   },
   {
     question: "Why do we charge service fee?",
-    answer: "Chowbro is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
+    answer: "Chowmate is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
   },
   {
-    question: "How do I create an account on Chowbro?",
+    question: "How do I create an account on Chowmate?",
     answer: "We cover a wide range of areas. Please check our service map on the website for detailed coverage information."
   },
   {
@@ -50,60 +53,71 @@ const faqs = [
   },
   {
     question: "How do I delete a saved card?",
-    answer: "Chowbro is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
+    answer: "Chowmate is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
   }
 ];
 
 export default function Home() {
   return (
     <>
-      <Navbar /> {/* Use the Client Component */}
+      <Navbar />
 
-      {/* Hero section */}
-      <div className="container mx-auto p-4 flex gap-20">
-        <div className="flex flex-col flex-1 pl-14 pt-20">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col">
-              <h1 className="text-[48px] font-semibold">Welcome to Chowbro!</h1>
-              <h1 className="text-[50px] font-semibold mt-[-8px]">Food delivery and more</h1>
-              <div>
-                <p className="text-[16px] font-normal mt">
-                  Groceries, shops, pharmacies, anything—you’re in the right place!
-                </p>
-              </div>
-            </div>
+      {/* Hero section with animations */}
+      <HeroSection />
 
-            <Button buttonText="Explore Now" mode="solid" className="mt-6 !w-[144px] !h-[56px] !bg-black !text-white !hover:text-dark-1" />
+      {/* Stats Section */}
+      <StatsSection />
+
+      {/* Services section with enhanced design */}
+      <section className="py-20 lg:py-32 bg-[#FFF8E1]">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl lg:text-5xl font-bold text-[#282828] mb-4">
+              How we work?
+            </h2>
+            <p className="text-lg lg:text-xl text-[#333333] max-w-2xl mx-auto">
+              We try to make our service fast and convenient for you!
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+              >
+                <ServiceCard
+                  icon={service.icon}
+                  title={service.title}
+                  description={service.description}
+                  index={index}
+                />
+              </motion.div>
+            ))}
           </div>
         </div>
+      </section>
 
-        <div className="hidden lg:flex flex-col flex-1">
-          <Image className="lg:w-[569px] lg:h-[500px]" src={HeroImage} alt="hero" />
-        </div>
-      </div>
+      {/* Testimonials Section */}
+      <TestimonialsSection />
 
-      {/* Services section */}
-      <div className="container mx-auto px-16 flex flex-col gap-[70px]">
-        <div className="flex flex-col text-center">
-          <h2 className="text-[36px] font-semibold">How we work?</h2>
-          <p className="text-[16px] font-normal mt-4">
-            We try to make our service fast and convenient for you!
-          </p>
-        </div>
-
-        <div className="flex flex-row gap-10">
-          {services.map((service, index) => (
-            <ServiceCard
-              key={index}
-              icon={service.icon}
-              title={service.title}
-              description={service.description}
-            />
-          ))}
-        </div>
-      </div>
-
+      {/* FAQ Section */}
       <FaqSection faqs={faqs} />
+
+      {/* CTA Section */}
+      <CTASection />
+
+      {/* Footer */}
+      <Footer />
     </>
   );
 }

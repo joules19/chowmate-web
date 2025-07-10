@@ -1,11 +1,11 @@
 // ButtonGroup.tsx
 import React from "react";
 import { Button } from "antd";
-import { ChowbroUsageType } from "@/app/data/types/auth";
+import { ChowmateUsageType } from "@/app/data/types/auth";
 
 interface ButtonGroupProps {
-  onButtonClick: (buttonType: ChowbroUsageType) => void;
-  activeButton: ChowbroUsageType;
+  onButtonClick: (buttonType: ChowmateUsageType) => void;
+  activeButton: ChowmateUsageType;
 }
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({
@@ -17,13 +17,13 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
       <div className="flex gap-3 -mt-[1px]">
         <Button
           type="text"
-          onClick={() => onButtonClick(ChowbroUsageType.VENDOR)}
+          onClick={() => onButtonClick(ChowmateUsageType.VENDOR)}
           style={{
             backgroundColor:
-              activeButton === ChowbroUsageType.VENDOR ? "black" : "transparent",
-            color: activeButton === ChowbroUsageType.VENDOR ? "white" : "black",
+              activeButton === ChowmateUsageType.VENDOR ? "black" : "transparent",
+            color: activeButton === ChowmateUsageType.VENDOR ? "white" : "black",
             border:
-              activeButton === ChowbroUsageType.VENDOR
+              activeButton === ChowmateUsageType.VENDOR
                 ? "none"
                 : "1px solid black",
           }}
@@ -32,13 +32,13 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
         </Button>
         <Button
           type="text"
-          onClick={() => onButtonClick(ChowbroUsageType.CUSTOMER)}
+          onClick={() => onButtonClick(ChowmateUsageType.CUSTOMER)}
           style={{
             backgroundColor:
-              activeButton === ChowbroUsageType.CUSTOMER ? "black" : "transparent",
-            color: activeButton === ChowbroUsageType.CUSTOMER ? "white" : "black",
+              activeButton === ChowmateUsageType.CUSTOMER ? "black" : "transparent",
+            color: activeButton === ChowmateUsageType.CUSTOMER ? "white" : "black",
             border:
-              activeButton === ChowbroUsageType.CUSTOMER
+              activeButton === ChowmateUsageType.CUSTOMER
                 ? "none"
                 : "1px solid black",
           }}

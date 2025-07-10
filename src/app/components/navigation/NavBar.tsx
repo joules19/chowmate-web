@@ -1,74 +1,183 @@
 "use client";
-
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import Logo from "../../assets/images/chowbro_logo.png";
-import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ChevronDown } from "lucide-react";
+import { Button } from "../ui/AppButton";
+import chowmateLogo from "../../assets/images/chowmate-light.png";
 
-const navLinks = [
-  { name: "Store", path: "/store" },
-  { name: "Company", path: "#" },
-  { name: "Contact", path: "#" },
+const navItems = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  {
+    name: "Services",
+    href: "/services",
+    dropdown: [
+      { name: "Food Delivery", href: "/services/food" },
+      { name: "Grocery Delivery", href: "/services/grocery" },
+      { name: "Package Delivery", href: "/services/package" },
+      { name: "Pharmacy", href: "/services/pharmacy" },
+    ],
+  },
+  { name: "Pricing", href: "/pricing" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
-  const router = useRouter();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="px-4 py-3 flex justify-between items-center">
-      <Image src={Logo} alt="Logo" width={180} />
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? "bg-white/95 backdrop-blur-md shadow-lg"
+        : "bg-transparent"
+        }`}
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
+            <img
+              src={chowmateLogo.src}
+              width={200}
+              height={60}
+              alt="Chowmate Logo"
+            />
+          </Link>
 
-      {/* Mobile Menu Button */}
-      {!menuOpen && (
-        <button className="lg:hidden text-gray-800" onClick={() => setMenuOpen(true)}>
-          <Menu size={28} />
-        </button>
-      )}
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <div
+                key={item.name}
+                className="relative"
+                onMouseEnter={() => item.dropdown && setActiveDropdown(item.name)}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <Link
+                  href={item.href}
+                  className="flex items-center space-x-1 text-[#333333] hover:text-[#FFC107] transition-colors duration-200 font-medium"
+                >
+                  <span>{item.name}</span>
+                  {item.dropdown && <ChevronDown className="w-4 h-4" />}
+                </Link>
 
-      <div className="hidden lg:flex justify-between items-center space-x-14">
-        {/* Desktop Menu */}
-        <nav className="flex space-x-6">
-          {navLinks.map((link) => (
-            <Link key={link.path} href={link.path} className="text-dark-1 hover:text-primary-1 font-medium text-base">
-              {link.name}
-            </Link>
-          ))}
-        </nav>
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {item.dropdown && activeDropdown === item.name && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2"
+                    >
+                      {item.dropdown.map((subItem) => (
+                        <Link
+                          key={subItem.name}
+                          href={subItem.href}
+                          className="block px-4 py-2 text-[#333333] hover:bg-[#FFF8E1] hover:text-[#282828] transition-colors duration-200"
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
 
-        {/* Desktop Menu - Login Button */}
-        <button onClick={() => router.push("/login")} className="flex items-center px-4 py-1 border border-dark-1 text-dark-1 font-normal text-sm hover:border-primary-1 hover:text-primary-1 rounded-md transition-colors duration-300">
-          Login
-        </button>
+          {/* CTA Buttons */}
+          <div className="hidden lg:flex items-center space-x-4">
+            <Button
+              buttonText="Sign In"
+              mode="outline"
+              className="border-[#282828] text-[#282828] px-6 py-2 rounded-full hover:border-[#FFC107] hover:text-[#FFC107] transition-all duration-200"
+            />
+            <Button
+              buttonText="Get Started"
+              mode="solid"
+              className="bg-[#FFC107] text-[#282828] px-6 py-2 rounded-full hover:bg-[#FFD54F] hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            />
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-2 rounded-lg hover:bg-[#FFF8E1] transition-colors duration-200"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6 text-[#282828]" />
+            ) : (
+              <Menu className="w-6 h-6 text-[#282828]" />
+            )}
+          </button>
+        </div>
       </div>
 
-
       {/* Mobile Menu */}
-      {menuOpen && (
-        <nav className="fixed top-0 left-0 h-full w-64 bg-primary-fade shadow-md transform transition-transform duration-300 ease-in-out lg:hidden">
-          <div className="p-4 flex justify-between items-center border-b">
-            <h2 className="text-lg font-semibold text-gray-800">Menu</h2>
-            <button onClick={() => setMenuOpen(false)}>
-              <X size={28} className="text-gray-800" />
-            </button>
-          </div>
-          <ul className="p-4 space-y-4">
-            {navLinks.map((link) => (
-              <li key={link.path}>
-                <Link
-                  href={link.path}
-                  className="block text-dark-1 hover:text-primary-1 font-medium text-base"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
-    </header>
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="lg:hidden bg-white border-t border-[#FFF8E1]"
+          >
+            <div className="container mx-auto px-4 py-4">
+              {navItems.map((item) => (
+                <div key={item.name} className="py-2">
+                  <Link
+                    href={item.href}
+                    className="block text-[#333333] hover:text-[#FFC107] transition-colors duration-200 font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                  {item.dropdown && (
+                    <div className="ml-4 mt-2 space-y-2">
+                      {item.dropdown.map((subItem) => (
+                        <Link
+                          key={subItem.name}
+                          href={subItem.href}
+                          className="block text-sm text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+              <div className="flex flex-col space-y-3 mt-4">
+                <Button
+                  buttonText="Sign In"
+                  mode="outline"
+                  className="w-full border-[#282828] text-[#282828] py-2 rounded-full"
+                />
+                <Button
+                  buttonText="Get Started"
+                  mode="solid"
+                  className="w-full bg-[#FFC107] text-[#282828] py-2 rounded-full hover:bg-[#FFD54F]"
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 }

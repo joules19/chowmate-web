@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import Logo from "../../assets/images/chowbro_logo.png";
+import Logo from "../../assets/images/chowmate_logo.png";
 import Illustration from "../../assets/images/illustration.png";
 import LoginForm from "@/app/components/forms/LoginForm";
 import { Button } from "antd";
@@ -60,19 +60,19 @@ const Login: React.FC = () => {
             </div>
             <div className="flex flex-col gap-1 mt-4 px-6 lg:px-0">
               <p className="ml-[80px] text-3xl leading-10 lg:text-4xl font-semibold text-dark-1 text-center lg:text-left">
-              Bringing Flavors Home              </p>
+                Bringing Flavors Home              </p>
               <div className="flex gap-3 items-center text-center -ml-0 relative bg-primary-4 -skew-y-1 mx-auto max-w-4xl px-6 py-1 lg:px-10">
                 <p className="relative leading-10 text-xl lg:text-[32px] font-semibold text-dark-1 text-center">
-                Through Your Favorite Local Eats
+                  Through Your Favorite Local Eats
                 </p>
               </div>
             </div>
             <div className="flex flex-col gap-3 items-center mt-4 px-6 lg:px-0">
               <p className="text-[18px] leading-10 font-normal text-dark-1 text-center lg:text-left">
-              For food lovers and taste adventurers everywhere.              </p>
+                For food lovers and taste adventurers everywhere.              </p>
               <div className="h-[38px] sm:w-[150px]">
                 <Button>
-                Explore now                  <LinkIcon className="w-5 h-5 ml-2" />
+                  Explore now                  <LinkIcon className="w-5 h-5 ml-2" />
                 </Button>
               </div>
             </div>

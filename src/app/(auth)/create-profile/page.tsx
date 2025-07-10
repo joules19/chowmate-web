@@ -3,20 +3,20 @@
 
 import { useSearchParams } from "next/navigation"; // For getting query params in Next.js 14
 import React, { useState, useEffect } from "react";
-import { ChowbroUsageType } from "@/app/data/types/auth"; // Import OntaUsageType enum
+import { ChowmateUsageType } from "@/app/data/types/auth"; // Import OntaUsageType enum
 
 const CreateProfile: React.FC = () => {
   const searchParams = useSearchParams(); // Get query params
   const type = searchParams.get("type"); // Extract the 'type' param from the query
-  const [profileType, setProfileType] = useState<ChowbroUsageType | null>(null);
+  const [profileType, setProfileType] = useState<ChowmateUsageType | null>(null);
 
   // Effect to handle the type query and set profileType
   useEffect(() => {
     if (type) {
-      if (type === ChowbroUsageType.VENDOR) {
-        setProfileType(ChowbroUsageType.VENDOR);
-      } else if (type === ChowbroUsageType.CUSTOMER) {
-        setProfileType(ChowbroUsageType.CUSTOMER);
+      if (type === ChowmateUsageType.VENDOR) {
+        setProfileType(ChowmateUsageType.VENDOR);
+      } else if (type === ChowmateUsageType.CUSTOMER) {
+        setProfileType(ChowmateUsageType.CUSTOMER);
       }
     }
   }, [type]);
@@ -28,7 +28,7 @@ const CreateProfile: React.FC = () => {
 
   // Render content based on the profile type
   const renderContent = () => {
-    if (profileType === ChowbroUsageType.VENDOR) {
+    if (profileType === ChowmateUsageType.VENDOR) {
       return (
         <div>
           <h1>Create a Poster Profile</h1>
@@ -38,7 +38,7 @@ const CreateProfile: React.FC = () => {
           </p>
         </div>
       );
-    } else if (profileType === ChowbroUsageType.CUSTOMER) {
+    } else if (profileType === ChowmateUsageType.CUSTOMER) {
       return (
         <div>
           <h1>Create a Seeker Profile</h1>

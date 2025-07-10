@@ -2,27 +2,27 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import LogoWhite from "../../assets/images/chowbro_logo_white.png";
+import LogoWhite from "../../assets/images/chowmate_logo_white.png";
 import VendorImage from "../../assets/images/meal1.jpg";
 import CustomerImage from "../../assets/images/meal.jpg";
 import { Button } from "antd";
 import ButtonGroup from "@/app/components/ui/ButtonGroup";
 import SignupInfoCard from "@/app/components/cards/SignupInfoCard";
-import { ChowbroUsageType } from "@/app/data/types/auth";
+import { ChowmateUsageType } from "@/app/data/types/auth";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import VendorSignupForm from "@/app/components/forms/VendorSignupForm";
 import CustomerSignupForm from "@/app/components/forms/CustomerSignupForm";
 
 const contentMap = {
-  [ChowbroUsageType.VENDOR]: {
+  [ChowmateUsageType.VENDOR]: {
     title: "Grow Your Food Business with Ease",
     description:
-      "Join Chowbro and reach hungry customers ready to discover your flavors.",
+      "Join Chowmate and reach hungry customers ready to discover your flavors.",
     image: VendorImage,
   },
-  [ChowbroUsageType.CUSTOMER]: {
-    title: "Satisfy Your Cravings with Chowbro",
+  [ChowmateUsageType.CUSTOMER]: {
+    title: "Satisfy Your Cravings with Chowmate",
     description:
       "Explore a world of culinary delights at your doorstep, anytime you crave.",
     image: CustomerImage,
@@ -31,12 +31,12 @@ const contentMap = {
 
 const Signup: React.FC = () => {
   const router = useRouter();
-  const [activeButton, setActiveButton] = useState<ChowbroUsageType>(
-    ChowbroUsageType.VENDOR
+  const [activeButton, setActiveButton] = useState<ChowmateUsageType>(
+    ChowmateUsageType.VENDOR
   );
   const [showForm, setShowForm] = useState(false);
 
-  const handleClick = (buttonType: ChowbroUsageType) => {
+  const handleClick = (buttonType: ChowmateUsageType) => {
     setActiveButton(buttonType);
   };
 
@@ -92,7 +92,7 @@ const Signup: React.FC = () => {
             <div className="flex flex-col gap-[50px] max-w-[600px] lg:ml-[260px]">
               <div className="flex flex-col gap-3">
                 <h1 className="text-[35px] font-medium">
-                  How will you use Chowbro?
+                  How will you use Chowmate?
                 </h1>
                 <p className="text-base">Please select an option below.</p>
               </div>
@@ -143,8 +143,8 @@ const Signup: React.FC = () => {
                 </Button>
               </div>
 
-              {activeButton === ChowbroUsageType.VENDOR && <VendorSignupForm />}
-              {activeButton === ChowbroUsageType.CUSTOMER && <CustomerSignupForm />}
+              {activeButton === ChowmateUsageType.VENDOR && <VendorSignupForm />}
+              {activeButton === ChowmateUsageType.CUSTOMER && <CustomerSignupForm />}
             </motion.div>
           )}
         </div>

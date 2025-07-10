@@ -1,5 +1,5 @@
 // ButtonType.ts
-export enum ChowbroUsageType {
+export enum ChowmateUsageType {
   VENDOR = "vendor",
   CUSTOMER = "customer",
 }
