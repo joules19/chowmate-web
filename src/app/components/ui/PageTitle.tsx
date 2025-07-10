@@ -5,7 +5,7 @@ interface Props {
   color?: string;
 }
 
-const PageTitle: React.FC<Props> = ({ title, color }) => {
+const PageTitle: React.FC<Props> = ({ title }) => {
   // let date = new Date().toUTCString().slice(5, 16);
 
   return (

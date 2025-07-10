@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import LogoWhite from "../../assets/images/chowmate_logo_white.png";
+import LogoWhite from "../../assets/images/chowmate-light.png";
 import VendorImage from "../../assets/images/meal1.jpg";
 import CustomerImage from "../../assets/images/meal.jpg";
 import { Button } from "antd";
@@ -10,7 +10,6 @@ import ButtonGroup from "@/app/components/ui/ButtonGroup";
 import SignupInfoCard from "@/app/components/cards/SignupInfoCard";
 import { ChowmateUsageType } from "@/app/data/types/auth";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import VendorSignupForm from "@/app/components/forms/VendorSignupForm";
 import CustomerSignupForm from "@/app/components/forms/CustomerSignupForm";
 
@@ -42,12 +41,12 @@ const Signup: React.FC = () => {
 
   const handleNextClick = () => {
     setShowForm(true);
-    router.push(`/signup?type=${activeButton}`, undefined, { shallow: true });
+    router.push(`/signup?type=${activeButton}`, undefined,);
   };
 
   const handleBackClick = () => {
     setShowForm(false);
-    router.push(`/signup`, undefined, { shallow: true });
+    router.push(`/signup`, undefined);
   };
 
   const { title, description, image } = contentMap[activeButton];

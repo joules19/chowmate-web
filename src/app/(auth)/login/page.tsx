@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import Logo from "../../assets/images/chowmate_logo.png";
+import Logo from "../../assets/images/chowmate-light.png";
 import Illustration from "../../assets/images/illustration.png";
 import LoginForm from "@/app/components/forms/LoginForm";
 import { Button } from "antd";
