@@ -65,7 +65,9 @@ export default function SimpleFooter() {
                         </a>
                         <div className="flex items-center space-x-3 text-[#A1A1A1]">
                             <MapPin className="w-5 h-5 text-[#FFC107]" />
-                            <span>8, trinity street, Phase II, Mowe, Ogun State.</span>
+                            <span className="text-center lg:text-left">
+                                8, Trinity Street, Phase II, Mowe, Ogun State.
+                            </span>
                         </div>
                     </div>
                 </div>

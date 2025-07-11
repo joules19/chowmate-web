@@ -213,7 +213,7 @@ export default function TestimonialsSection() {
                                     />
                                 ))}
                             </div>
-                            <span className="text-[#333333] font-medium">50,000+ Happy Customers</span>
+                            <span className="text-[#333333] font-medium">10+ Happy Customers</span>
                         </div>
                         <div className="flex items-center space-x-2">
                             <div className="flex">
