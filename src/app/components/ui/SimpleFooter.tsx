@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
-import chowmateLogo from "../../assets/images/chowmate-black-logo.png";
+import chowmateLogo from "../../assets/images/chowmate-light-mont.png";
 
 const socialLinks = [
     { icon: Facebook, href: "#" },
@@ -22,7 +22,7 @@ export default function SimpleFooter() {
                         <Link href="/" className="flex items-center space-x-2 mb-4">
                             <img
                                 src={chowmateLogo.src}
-                                width={220}
+                                width={200}
                                 alt="Chowmate Logo"
                             />
                         </Link>

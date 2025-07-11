@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "../ui/AppButton";
-import chowmateLogo from "../../assets/images/chowmate-light.png";
+import chowmateLogo from "../../assets/images/chowmate-dark-mont.png";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -48,8 +48,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={chowmateLogo.src}
-              width={200}
-              height={60}
+              width={190}
               alt="Chowmate Logo"
             />
           </Link>
@@ -72,7 +71,7 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={() => setIsMobileMenuOpen(false)}
             className="lg:hidden p-2 rounded-lg hover:bg-[#FFF8E1] transition-colors duration-200"
           >
             {isMobileMenuOpen ? (

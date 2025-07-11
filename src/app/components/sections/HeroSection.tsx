@@ -355,8 +355,8 @@ const HeroSection = () => {
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.5 }}
                             >
-                                <div className="bg-white rounded-xl p-4 shadow-lg">
-                                    <div className="flex items-center justify-between mb-2">
+                                <div className="bg-white opacity-85 rounded-xl mt-[-10px] p-4 shadow-lg">
+                                    <div className="flex items-center justify-between ">
                                         <span className="text-sm text-[#A1A1A1]">Rider: John D.</span>
                                         <div className="flex items-center gap-1">
                                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -383,15 +383,15 @@ const HeroSection = () => {
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.7 }}
                             >
-                                <div className="bg-white rounded-lg p-3 text-center">
+                                <div className="bg-white rounded-lg p-3 text-center opacity-85">
                                     <p className="text-2xl font-bold text-[#282828]">3+</p>
                                     <p className="text-xs text-[#A1A1A1]">Riders Active</p>
                                 </div>
-                                <div className="bg-white rounded-lg p-3 text-center">
+                                <div className="bg-white rounded-lg p-3 text-center opacity-85">
                                     <p className="text-2xl font-bold text-[#FFC107]">25min</p>
                                     <p className="text-xs text-[#A1A1A1]">Avg Delivery</p>
                                 </div>
-                                <div className="bg-white rounded-lg p-3 text-center">
+                                <div className="bg-white rounded-lg p-3 text-center opacity-85">
                                     <p className="text-2xl font-bold text-green-500">98%</p>
                                     <p className="text-xs text-[#A1A1A1]">Success Rate</p>
                                 </div>
