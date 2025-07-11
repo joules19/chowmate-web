@@ -8,6 +8,7 @@ import Footer from "./components/ui/Footer";
 import TestimonialsSection from "./components/sections/TestimonialSection";
 import CTASection from "./components/sections/CTASection";
 import HeroSection from "./components/sections/HeroSection";
+import SimpleFooter from "./components/ui/SimpleFooter";
 
 const services = [
   {
@@ -30,27 +31,35 @@ const services = [
 const faqs = [
   {
     question: "What is Chowmate?",
-    answer: "Chowmate is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
+    answer: "Chowmate is a tech-driven logistics company that connects food vendors, restaurants, and consumers through our efficient delivery network. We provide real-time tracking, professional dispatch riders, and guaranteed delivery times to ensure your favorite meals arrive fresh and on time. Our platform makes it easy for restaurants to expand their reach while offering customers a seamless ordering experience."
   },
   {
-    question: "What is service fee?",
-    answer: "We cover a wide range of areas. Please check our service map on the website for detailed coverage information."
+    question: "What is the service fee?",
+    answer: "The service fee is a small charge that helps cover operational costs including technology infrastructure, customer support, payment processing, and platform maintenance. This fee typically ranges from ₦100-₦300 depending on your order size and location. The service fee ensures we can continue providing reliable delivery services, real-time tracking, and 24/7 customer support."
   },
   {
-    question: "Why do we charge service fee?",
-    answer: "Chowmate is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
+    question: "Why do we charge a service fee?",
+    answer: "Service fees help us maintain high-quality operations including: maintaining our technology platform and real-time tracking system, providing 24/7 customer support, processing secure payments, ensuring rider safety with insurance coverage, and investing in faster delivery infrastructure. "
   },
   {
     question: "How do I create an account on Chowmate?",
-    answer: "We cover a wide range of areas. Please check our service map on the website for detailed coverage information."
+    answer: "Creating an account is quick and easy! Simply download the Chowmate app from the App Store or Google Play, click 'Sign Up' and enter your phone number, verify with the OTP code sent to your phone, add your delivery address and payment method, and you're ready to start ordering! You can also sign up on our website at www.chowmate.app. The entire process takes less than 2 minutes."
   },
   {
     question: "What locations do we currently deliver to?",
-    answer: "You can track your package in real-time through our app or website using the tracking number provided."
+    answer: "Chowmate currently operates in Mowe environs including Redemption Camp for now. We're rapidly expanding to new areas! To check if we deliver to your location, simply enter your address in the app. If we don't cover your area yet, you can join our waitlist to be notified when we launch there."
   },
   {
-    question: "How do I delete a saved card?",
-    answer: "Chowmate is a tech-driven company that connects vendors and consumers through efficient logistics solutions. It enables food vendors to deliver meals effortlessly while offering customers a seamless way to order from their favorite restaurants in town."
+    question: "How long does delivery usually take?",
+    answer: "Our average delivery time is 25-35 minutes within our coverage areas. Delivery times may vary based on: restaurant preparation time, distance from restaurant to delivery address, weather conditions, and peak hours (lunch 12-2pm, dinner 7-9pm). You'll see an estimated delivery time before placing your order, and can track your rider in real-time once your food is picked up."
+  },
+  {
+    question: "What if my order is wrong or missing items?",
+    answer: "We take order accuracy seriously! If you receive an incorrect or incomplete order: Report it immediately through the app's 'Order Help' section, Take photos of what you received, Our support team will investigate with the restaurant, You'll receive a refund or credit within 24 hours for missing/incorrect items. For the fastest resolution, please report issues within 30 minutes of delivery."
+  },
+  {
+    question: "How do I become a Chowmate delivery rider?",
+    answer: "Join our growing team of delivery partners! Requirements include: Valid form of identification, and vehicle documents(If applicable), Smartphone with data plan, Age 18 or above, Pass our background check. Benefits include flexible working hours, competitive earnings (₦300-500 per delivery), weekly payments, and insurance coverage."
   }
 ];
 
@@ -105,7 +114,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <TestimonialsSection />
+      {/* <TestimonialsSection /> */}
 
       {/* FAQ Section */}
       <FaqSection faqs={faqs} />
@@ -114,7 +123,7 @@ export default function Home() {
       <CTASection />
 
       {/* Footer */}
-      <Footer />
+      <SimpleFooter />
     </>
   );
 }

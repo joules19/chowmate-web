@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { Button } from "../ui/Button";
 import { Apple, PlayCircle } from "lucide-react";
 
 export default function CTASection() {
@@ -23,7 +24,7 @@ export default function CTASection() {
                         Ready to Experience the Best Delivery Service?
                     </h2>
                     <p className="text-lg lg:text-xl text-[#282828]/90 mb-12 max-w-2xl mx-auto">
-                        Join thousands of satisfied customers who trust Chowmate for their daily delivery needs.
+                        Join thousands of satisfied customers who trust Chowbro for their daily delivery needs.
                         Download our app today and get 20% off your first order!
                     </p>
 

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "../ui/AppButton";
 import chowmateLogo from "../../assets/images/chowmate-light.png";
 
@@ -56,55 +56,14 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <div
-                key={item.name}
-                className="relative"
-                onMouseEnter={() => item.dropdown && setActiveDropdown(item.name)}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <Link
-                  href={item.href}
-                  className="flex items-center space-x-1 text-[#333333] hover:text-[#FFC107] transition-colors duration-200 font-medium"
-                >
-                  <span>{item.name}</span>
-                  {item.dropdown && <ChevronDown className="w-4 h-4" />}
-                </Link>
-
-                {/* Dropdown Menu */}
-                <AnimatePresence>
-                  {item.dropdown && activeDropdown === item.name && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2"
-                    >
-                      {item.dropdown.map((subItem) => (
-                        <Link
-                          key={subItem.name}
-                          href={subItem.href}
-                          className="block px-4 py-2 text-[#333333] hover:bg-[#FFF8E1] hover:text-[#282828] transition-colors duration-200"
-                        >
-                          {subItem.name}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </div>
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Button
+            {/* <Button
               buttonText="Sign In"
               mode="outline"
               className="border-[#282828] text-[#282828] px-6 py-2 rounded-full hover:border-[#FFC107] hover:text-[#FFC107] transition-all duration-200"
-            />
+            /> */}
             <Button
               buttonText="Get Started"
               mode="solid"
@@ -163,11 +122,11 @@ export default function Navbar() {
                 </div>
               ))}
               <div className="flex flex-col space-y-3 mt-4">
-                <Button
+                {/* <Button
                   buttonText="Sign In"
                   mode="outline"
                   className="w-full border-[#282828] text-[#282828] py-2 rounded-full"
-                />
+                /> */}
                 <Button
                   buttonText="Get Started"
                   mode="solid"

@@ -34,7 +34,7 @@ const FaqSection: React.FC<FaqSectionProps> = ({ faqs }) => {
   const [selectedQuestion, setSelectedQuestion] = useState<string>(faqs.length > 0 ? faqs[0].question : "");
 
   return (
-    <div className="container mx-auto bg-black p-4 sm:p-6 lg:p-8">
+    <div className="container mx-auto bg-black pt-16 pb-16 sm:pt-20 sm:pb-20 lg:pt-28 lg:pb-28">
       <div className="mx-auto w-full max-w-7xl bg-primary-fade rounded-2xl sm:rounded-3xl border-4 sm:border-6 border-black px-4 sm:px-6 lg:px-10 py-6 sm:py-8 lg:py-10 flex flex-col lg:flex-row gap-6 sm:gap-8">
         {/* Left Side (FAQs) */}
         <div className="flex flex-1 flex-col gap-6 sm:gap-8">
