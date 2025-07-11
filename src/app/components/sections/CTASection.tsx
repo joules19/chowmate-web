@@ -1,6 +1,5 @@
 "use client";
 import { motion } from "framer-motion";
-import { Button } from "../ui/Button";
 import { Apple, PlayCircle } from "lucide-react";
 
 export default function CTASection() {

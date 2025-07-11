@@ -28,7 +28,7 @@ export default function SimpleFooter() {
                         </Link>
                         <p className="text-[#A1A1A1]  mb-6 leading-relaxed">
                             Your trusted partner for fast, reliable delivery services.
-                            From food to groceries, we're building the future of logistics in Nigeria.
+                            From food to groceries, we&#39;re building the future of logistics in Nigeria.
                         </p>
                         <div className="flex space-x-4">
                             {socialLinks.map((social, index) => (

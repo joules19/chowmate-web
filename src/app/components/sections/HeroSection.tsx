@@ -9,15 +9,6 @@ import { Button } from "../ui/AppButton";
 
 const HeroSection = () => {
     const [activeStep, setActiveStep] = useState(0);
-    const [orderCount, setOrderCount] = useState(1247);
-
-    // Simulate live order counter
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setOrderCount(prev => prev + Math.floor(Math.random() * 3));
-        }, 5000);
-        return () => clearInterval(interval);
-    }, []);
 
     // Auto-progress delivery steps
     useEffect(() => {

@@ -4,8 +4,6 @@ import FaqSection from "./components/ui/FaqSection";
 import Navbar from "./components/navigation/NavBar";
 import { motion } from "framer-motion";
 import StatsSection from "./components/sections/StatsSection";
-import Footer from "./components/ui/Footer";
-import TestimonialsSection from "./components/sections/TestimonialSection";
 import CTASection from "./components/sections/CTASection";
 import HeroSection from "./components/sections/HeroSection";
 import SimpleFooter from "./components/ui/SimpleFooter";
