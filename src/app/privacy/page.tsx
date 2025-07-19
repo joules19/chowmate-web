@@ -1,7 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { Shield, Lock, Eye, FileText, Users, Clock, ChevronDown, ChevronUp } from "lucide-react";
+import { Shield, Lock, Eye, FileText, Users, Clock, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import Navbar from "../components/navigation/NavBar";
 import SimpleFooter from "../components/ui/SimpleFooter";
@@ -127,7 +126,7 @@ const PrivacyPage = () => {
                             Our Privacy Commitments
                         </h2>
                         <p className="text-base sm:text-lg text-[#666666] max-w-3xl mx-auto">
-                            We're committed to maintaining the highest standards of data protection and transparency.
+                            We&apos;re committed to maintaining the highest standards of data protection and transparency.
                         </p>
                     </motion.div>
 
@@ -176,7 +175,7 @@ const PrivacyPage = () => {
                                     </h2>
                                     <div className="bg-[#FFF8E1] p-4 sm:p-6 rounded-xl mb-4 sm:mb-6">
                                         <p className="text-sm sm:text-base text-[#333333] leading-relaxed">
-                                            Chowmate Technologies Limited ("Chowmate", "we", "us", "our") operates a comprehensive logistics platform connecting users with local restaurants and vendors for seamless food delivery services ("Platform"). We believe in complete transparency regarding how we handle your personal data. This Privacy Policy outlines our data collection, usage, and protection practices to help you make informed decisions about using our services.
+                                            Chowmate Technologies Limited (&quot;Chowmate&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates a comprehensive logistics platform connecting users with local restaurants and vendors for seamless food delivery services (&quot;Platform&quot;). We believe in complete transparency regarding how we handle your personal data. This Privacy Policy outlines our data collection, usage, and protection practices to help you make informed decisions about using our services.
                                         </p>
                                     </div>
                                     <p className="text-sm sm:text-base text-[#666666]">
@@ -208,7 +207,7 @@ const PrivacyPage = () => {
                                 <div className="mb-8 sm:mb-12">
                                     <h3 className="text-xl sm:text-2xl font-bold text-[#282828] mb-3 sm:mb-4">2. Information We Collect</h3>
                                     <p className="text-sm sm:text-base text-[#666666] mb-3 sm:mb-4">
-                                        We collect only the information necessary to provide exceptional delivery services. Here's when and how we gather your data:
+                                        We collect only the information necessary to provide exceptional delivery services. Here&apos;s when and how we gather your data:
                                     </p>
 
                                     <div className="space-y-4 sm:space-y-6">
@@ -217,7 +216,7 @@ const PrivacyPage = () => {
                                             <ul className="list-disc pl-4 sm:pl-6 text-sm sm:text-base text-[#666666] space-y-1 sm:space-y-2">
                                                 <li>Name, phone number, and email address during registration</li>
                                                 <li>Delivery addresses for order fulfillment</li>
-                                                <li>Profile preferences and dietary restrictions</li>
+                                                {/* <li>Profile preferences and dietary restrictions</li> */}
                                                 <li>Payment method details for transaction processing</li>
                                             </ul>
                                         </div>
@@ -329,7 +328,7 @@ const PrivacyPage = () => {
                                                     <li>• End-to-end encryption</li>
                                                     <li>• Secure cloud infrastructure</li>
                                                     <li>• Regular security audits</li>
-                                                    <li>• Multi-factor authentication</li>
+                                                    {/* <li>• Multi-factor authentication</li> */}
                                                 </ul>
                                             </div>
                                             <div>
@@ -413,7 +412,7 @@ const PrivacyPage = () => {
                                     <h3 className="text-xl sm:text-2xl font-bold text-[#282828] mb-3 sm:mb-4">8. Contact Us</h3>
                                     <div className="bg-[#FFF8E1] p-4 sm:p-6 rounded-xl">
                                         <p className="text-sm sm:text-base text-[#666666] mb-3 sm:mb-4">
-                                            Questions about this Privacy Policy or how we handle your data? We're here to help:
+                                            Questions about this Privacy Policy or how we handle your data? We&apos;re here to help:
                                         </p>
                                         <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-[#666666]">
                                             <p><strong>Email:</strong>{" "}
@@ -433,14 +432,14 @@ const PrivacyPage = () => {
                                                 </a>
                                             </p>
                                             <p><strong>Address:</strong> 8, Trinity Street, Phase II, Mowe, Ogun State, Nigeria</p>
-                                            <p><strong>Data Protection Officer:</strong>{" "}
+                                            {/* <p><strong>Data Protection Officer:</strong>{" "}
                                                 <a
                                                     href="mailto:dpo@chowmate.app"
                                                     className="text-[#FFC107] hover:underline focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:ring-offset-2 rounded"
                                                 >
                                                     dpo@chowmate.app
                                                 </a>
-                                            </p>
+                                            </p> */}
                                         </div>
                                     </div>
                                 </div>
@@ -475,7 +474,7 @@ const PrivacyPage = () => {
                             Frequently Asked Questions
                         </h2>
                         <p className="text-base sm:text-lg text-[#666666] max-w-3xl mx-auto">
-                            Got questions? We've got answers. Find everything you need to know about Chowmate.
+                            Got questions? We&apos;ve got answers. Find everything you need to know about Chowmate.
                         </p>
                     </motion.div>
 
@@ -491,8 +490,8 @@ const PrivacyPage = () => {
                             >
                                 <div
                                     className={`border-2 rounded-xl sm:rounded-2xl transition-all duration-300 ${expandedFaq === index
-                                            ? 'border-[#FFC107] bg-[#FFF8E1]'
-                                            : 'border-gray-200 bg-white hover:border-[#FFD54F]'
+                                        ? 'border-[#FFC107] bg-[#FFF8E1]'
+                                        : 'border-gray-200 bg-white hover:border-[#FFD54F]'
                                         }`}
                                 >
                                     <button
