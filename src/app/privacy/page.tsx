@@ -1,9 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
-import { Shield, Lock, Eye, FileText, Users, Clock, ChevronDown } from "lucide-react";
+import { Shield, Lock, Eye, FileText, Users, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import Navbar from "../components/navigation/NavBar";
 import SimpleFooter from "../components/ui/SimpleFooter";
+import PrivacyHeroSection from "../components/sections/PrivacyHeroSection";
 
 interface FAQ {
     question: string;
@@ -80,37 +81,7 @@ const PrivacyPage = () => {
             <Navbar />
 
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-[#FFF8E1] to-[#FFFCF4] pt-20 sm:pt-24 pb-12 sm:pb-16">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="text-center max-w-5xl mx-auto"
-                    >
-                        <div className="flex items-center justify-center mb-4 sm:mb-6">
-                            <div className="bg-[#FFC107] p-3 sm:p-4 rounded-full" aria-hidden="true">
-                                <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-[#282828]" />
-                            </div>
-                        </div>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#282828] mb-4 sm:mb-6 leading-tight">
-                            Privacy <span className="text-[#FFC107]">Policy</span>
-                        </h1>
-                        <p className="text-base sm:text-lg md:text-xl text-[#333333] mb-6 sm:mb-8 leading-relaxed max-w-4xl mx-auto">
-                            Your privacy matters to us. Learn how we protect, use, and manage your personal information
-                            to provide you with the best delivery experience.
-                        </p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-sm text-[#666666]">
-                            <span className="flex items-center gap-2">
-                                <Clock className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                                <span>Last updated: July 2025</span>
-                            </span>
-                            <span className="hidden sm:inline" aria-hidden="true">•</span>
-                            <span>Effective immediately</span>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
+            <PrivacyHeroSection />
 
             {/* Privacy Highlights */}
             <section className="py-12 sm:py-16 bg-white" aria-labelledby="privacy-commitments">
