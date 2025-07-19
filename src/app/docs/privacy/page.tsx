@@ -2,9 +2,9 @@
 import { motion } from "framer-motion";
 import { Shield, Lock, Eye, FileText, Users, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import Navbar from "../components/navigation/NavBar";
-import SimpleFooter from "../components/ui/SimpleFooter";
-import PrivacyHeroSection from "../components/sections/PrivacyHeroSection";
+import Navbar from "../../components/navigation/NavBar";
+import SimpleFooter from "../../components/ui/SimpleFooter";
+import PrivacyHeroSection from "../../components/sections/PrivacyHeroSection";
 
 interface FAQ {
     question: string;
