@@ -402,7 +402,7 @@ const PrivacyPage = () => {
                                                     +234 903 8073 651
                                                 </a>
                                             </p>
-                                            <p><strong>Address:</strong> 8, Trinity Street, Phase II, Mowe, Ogun State, Nigeria</p>
+                                            {/* <p><strong>Address:</strong> 8, Trinity Street, Phase II, Mowe, Ogun State, Nigeria</p> */}
                                             {/* <p><strong>Data Protection Officer:</strong>{" "}
                                                 <a
                                                     href="mailto:dpo@chowmate.app"
