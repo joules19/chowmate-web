@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import chowmateLogo from "../../assets/images/chowmate-light-mont.png";
 
 const socialLinks = [
