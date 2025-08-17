@@ -31,7 +31,7 @@ export default function AdminHeader() {
 
   return (
     <header 
-      className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4"
+      className="bg-surface-0 border-b border-border-default px-4 sm:px-6 py-3 sm:py-4"
       role="banner"
     >
       <div className="flex items-center justify-between">
@@ -39,13 +39,13 @@ export default function AdminHeader() {
         <div className="hidden md:flex items-center space-x-4 flex-1 max-w-md">
           <div className="relative w-full">
             <MagnifyingGlassIcon 
-              className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" 
+              className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-text-tertiary" 
               aria-hidden="true"
             />
             <input
               type="text"
               placeholder="Search..."
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
+              className="pl-10 pr-4 py-2 w-full border border-border-default rounded-input focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary text-sm"
               aria-label="Search admin dashboard"
             />
           </div>
@@ -58,33 +58,33 @@ export default function AdminHeader() {
         <div className="flex items-center space-x-2 sm:space-x-4">
           {/* Mobile Search Button */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:ring-2 focus:ring-primary-500"
+            className="md:hidden p-2 rounded-lg hover:bg-surface-100 transition-colors focus:ring-2 focus:ring-primary-500"
             aria-label="Search"
           >
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-500" />
+            <MagnifyingGlassIcon className="h-5 w-5 text-text-tertiary" />
           </button>
 
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleDarkMode}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:ring-2 focus:ring-primary-500"
+            className="p-2 rounded-lg hover:bg-surface-100 transition-colors focus:ring-2 focus:ring-primary-500"
             aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
             {darkMode ? (
-              <SunIcon className="h-5 w-5 text-gray-500" />
+              <SunIcon className="h-5 w-5 text-text-tertiary" />
             ) : (
-              <MoonIcon className="h-5 w-5 text-gray-500" />
+              <MoonIcon className="h-5 w-5 text-text-tertiary" />
             )}
           </button>
 
           {/* Notifications */}
           <button 
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative focus:ring-2 focus:ring-primary-500"
+            className="p-2 rounded-lg hover:bg-surface-100 transition-colors relative focus:ring-2 focus:ring-primary-500"
             aria-label="View notifications"
           >
-            <BellIcon className="h-5 w-5 text-gray-500" />
+            <BellIcon className="h-5 w-5 text-text-tertiary" />
             <span 
-              className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"
+              className="absolute top-1 right-1 h-2 w-2 bg-danger-500 rounded-full"
               role="status"
               aria-label="New notifications available"
             />
@@ -94,22 +94,22 @@ export default function AdminHeader() {
           <div className="relative">
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:ring-2 focus:ring-primary-500"
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-surface-100 transition-colors focus:ring-2 focus:ring-primary-500"
               aria-label="User menu"
               aria-expanded={showProfileMenu}
               aria-haspopup="true"
             >
-              <UserCircleIcon className="h-7 w-7 sm:h-8 sm:w-8 text-gray-500" />
+              <UserCircleIcon className="h-7 w-7 sm:h-8 sm:w-8 text-text-tertiary" />
             </button>
 
             {showProfileMenu && (
               <div 
-                className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50"
+                className="absolute right-0 mt-2 w-48 bg-surface-0 rounded-card shadow-soft-lg border border-border-default py-1 z-50"
                 role="menu"
                 aria-label="User menu options"
               >
                 <button 
-                  className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700"
+                  className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-text-secondary hover:bg-surface-100 focus:bg-surface-100"
                   role="menuitem"
                 >
                   <UserCircleIcon className="h-4 w-4" aria-hidden="true" />
@@ -117,7 +117,7 @@ export default function AdminHeader() {
                 </button>
                 <button 
                   onClick={handleLogout}
-                  className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700"
+                  className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-text-secondary hover:bg-surface-100 focus:bg-surface-100"
                   role="menuitem"
                 >
                   <ArrowRightOnRectangleIcon className="h-4 w-4" aria-hidden="true" />

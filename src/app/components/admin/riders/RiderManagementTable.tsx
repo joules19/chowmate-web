@@ -50,10 +50,10 @@ export default function RiderManagementTable({ filters }: Props) {
             </div>
           </div>
           <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900 dark:text-white">
+            <div className="text-sm font-medium text-text-primary">
               {rider.firstName} {rider.lastName}
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-text-tertiary">
               {rider.email}
             </div>
           </div>
@@ -102,9 +102,9 @@ export default function RiderManagementTable({ filters }: Props) {
       label: 'Actions',
       render: (rider) => (
         <div className="flex space-x-2">
-          <button className="text-blue-600 hover:text-blue-900">View</button>
-          <button className="text-green-600 hover:text-green-900">Approve</button>
-          <button className="text-red-600 hover:text-red-900">Suspend</button>
+          <button className="text-primary-600 hover:text-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">View</button>
+          <button className="text-green-600 hover:text-green-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">Approve</button>
+          <button className="text-red-600 hover:text-red-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">Suspend</button>
         </div>
       )
     }

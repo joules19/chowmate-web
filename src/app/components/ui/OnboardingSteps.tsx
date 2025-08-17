@@ -18,7 +18,7 @@ const OnboardingSteps: React.FC<OnboardingStepsProps> = ({ currentStep, steps })
                 <div key={index} className={`mb-4 ${index < currentStep ? "text-gray-500" : ""}`}>
                     <div className="flex items-center">
                         <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center ${index <= currentStep ? "bg-blue-500 text-white" : "bg-gray-200"
+                            className={`w-8 h-8 rounded-full flex items-center justify-center ${index <= currentStep ? "bg-primary-500 text-white" : "bg-gray-200"
                                 }`}
                         >
                             {index + 1}

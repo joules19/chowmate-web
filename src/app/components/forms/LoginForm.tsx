@@ -140,7 +140,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
       {/* Forgot Password Link */}
       <div className="mb-2 sm:mb-3 md:mb-[28px] text-right mt-4">
-        <a href="#" className="text-sm text-primary-1 hover:underline">
+        <a href="#" className="text-sm text-primary-600 hover:text-primary-700 hover:underline focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-1 py-0.5">
           Forgot password?
         </a>
       </div>
@@ -167,8 +167,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
       {/* Sign-up Redirect */}
       <p className="text-sm font-normal text-center text-dark-1 mt-2 sm:mt-4">
         Need to create an account?{" "}
-        <span className="text-primary-1 ml-1">
-          <Link href="/signup">Sign up</Link>
+        <span className="text-primary-600 hover:text-primary-700 ml-1">
+          <Link href="/signup" className="focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-1 py-0.5">Sign up</Link>
         </span>
       </p>
     </form>

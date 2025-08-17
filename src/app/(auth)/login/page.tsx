@@ -44,62 +44,14 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // For now, let's implement a mock login since the backend isn't ready
-      // In production, this would use AuthService.login(values.email, values.password)
+      // Use actual AuthService.login with real API
+      const user = await AuthService.login(values.email, values.password);
       
-      // Mock authentication - remove this when backend is ready
-      if (values.email && values.password) {
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Mock user data - replace with actual API response
-        const mockUser = {
-          id: '1',
-          email: values.email,
-          firstName: 'Admin',
-          lastName: 'User',
-          phoneNumber: '+1234567890',
-          roles: loginAsAdmin ? ['ADMIN'] : ['CUSTOMER'],
-          permissions: loginAsAdmin ? [
-            Permission.VIEW_DASHBOARD,
-            Permission.VIEW_USERS,
-            Permission.VIEW_VENDORS,
-            Permission.VIEW_RIDERS,
-            Permission.VIEW_ORDERS,
-            Permission.VIEW_ANALYTICS,
-            Permission.APPROVE_VENDOR,
-            Permission.REJECT_VENDOR,
-            Permission.SUSPEND_VENDOR,
-            Permission.APPROVE_RIDER,
-            Permission.REJECT_RIDER,
-            Permission.SUSPEND_RIDER,
-            Permission.EDIT_ORDER,
-            Permission.CANCEL_ORDER,
-            Permission.ASSIGN_RIDER
-          ] : []
-        };
-
-        // Mock token
-        const mockToken = 'mock-jwt-token-' + Date.now();
-        
-        // Store auth data
-        AuthService.setToken(mockToken);
-        AuthService.setUser(mockUser);
-        
-        message.success('Login successful!');
-        
-        // Redirect based on user role and redirect URL
-        const targetUrl = redirectUrl || (loginAsAdmin ? '/admin/dashboard' : '/');
-        router.replace(targetUrl);
-      } else {
-        message.error('Please enter valid credentials');
-      }
-
-      // TODO: Replace mock login with actual AuthService when backend is ready
-      // const user = await AuthService.login(values.email, values.password);
-      // message.success('Login successful!');
-      // const targetUrl = redirectUrl || (AuthService.hasAdminAccess() ? '/admin' : '/');
-      // router.replace(targetUrl);
+      message.success('Login successful!');
+      
+      // Redirect based on user role and redirect URL
+      const targetUrl = redirectUrl || (AuthService.hasAdminAccess() ? '/admin/dashboard' : '/');
+      router.replace(targetUrl);
 
     } catch (err: any) {
       console.error("Login failed:", err);

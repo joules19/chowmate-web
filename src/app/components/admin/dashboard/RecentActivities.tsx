@@ -50,18 +50,18 @@ export default function RecentActivities() {
       message: 'New user "Sarah Wilson" registered',
       time: '1 hour ago',
       icon: CheckCircleIcon,
-      iconColor: 'text-blue-500'
+      iconColor: 'text-primary-500'
     }
   ];
 
   return (
     <div 
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6"
+      className="bg-surface-0 rounded-card shadow-soft border border-border-light p-4 sm:p-6"
       role="region"
       aria-label="Recent activities"
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-lg font-semibold text-text-primary">
           Recent Activities
         </h3>
         <button 
@@ -82,7 +82,7 @@ export default function RecentActivities() {
           return (
             <div 
               key={activity.id} 
-              className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="flex items-start space-x-3 p-2 rounded-card hover:bg-surface-100 transition-colors"
               role="listitem"
             >
               <div 
@@ -93,13 +93,13 @@ export default function RecentActivities() {
                 <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
+                <p className="text-sm text-text-primary leading-relaxed">
                   {activity.message}
                 </p>
                 <div className="flex items-center mt-1">
                   <ClockIcon className="h-3 w-3 text-gray-400 mr-1 flex-shrink-0" aria-hidden="true" />
                   <span 
-                    className="text-xs text-gray-500 dark:text-gray-400"
+                    className="text-xs text-text-tertiary"
                     role="status"
                     aria-label={`Activity occurred ${activity.time}`}
                   >
@@ -112,9 +112,9 @@ export default function RecentActivities() {
         })}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-6 pt-4 border-t border-border-light">
         <button 
-          className="w-full text-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white focus:ring-2 focus:ring-primary-500 rounded py-2 transition-colors"
+          className="w-full text-center text-sm text-text-tertiary hover:text-text-primary focus:ring-2 focus:ring-primary-500 rounded py-2 transition-colors"
           aria-label="Load more activities"
         >
           Load More Activities

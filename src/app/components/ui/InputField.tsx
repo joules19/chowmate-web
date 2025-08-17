@@ -62,7 +62,7 @@ const InputField: React.FC<InputFieldProps> = ({
         required={required}
         readOnly={readOnly}
         className={`mt-1 block w-full ${height} ${smHeight} ${mdHeight} px-3 py-2 border-[.8px] ${error ? "border-red-500" : "border-gray-300"
-          } shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm flex-grow mr-2 p-2 border-[.8px] border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-1`}
+          } shadow-sm focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:border-primary-500 sm:text-sm rounded-md focus:outline-none`}
       />
       {/* {type === "password" && (
         <span

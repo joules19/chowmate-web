@@ -3,19 +3,20 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  ChartBarIcon, 
-  UsersIcon, 
-  BuildingStorefrontIcon, 
-  TruckIcon, 
-  ShoppingBagIcon, 
-  ChartPieIcon, 
-  Cog6ToothIcon,
+import {
+  ChartBarIcon,
+  UsersIcon,
+  BuildingStorefrontIcon,
+  TruckIcon,
+  ShoppingBagIcon,
   ChevronLeftIcon,
   ChevronRightIcon
 } from "@heroicons/react/24/outline";
 import { PermissionService } from "../../../lib/auth/permissions";
 import { Permission } from "../../../data/types/permissions";
+import Image from "next/image";
+import ChowmateLogo from "../../../assets/images/chowmate-dark-mont.png";
+
 
 const menuItems = [
   {
@@ -48,18 +49,18 @@ const menuItems = [
     icon: ShoppingBagIcon,
     permission: Permission.VIEW_ORDERS
   },
-  {
-    name: "Analytics",
-    href: "/admin/analytics",
-    icon: ChartPieIcon,
-    permission: Permission.VIEW_ANALYTICS
-  },
-  {
-    name: "Settings",
-    href: "/admin/settings",
-    icon: Cog6ToothIcon,
-    permission: Permission.VIEW_SETTINGS
-  }
+  // {
+  //   name: "Analytics",
+  //   href: "/admin/analytics",
+  //   icon: ChartPieIcon,
+  //   permission: Permission.VIEW_ANALYTICS
+  // },
+  // {
+  //   name: "Settings",
+  //   href: "/admin/settings",
+  //   icon: Cog6ToothIcon,
+  //   permission: Permission.VIEW_SETTINGS
+  // }
 ];
 
 export default function AdminSidebar() {
@@ -75,7 +76,7 @@ export default function AdminSidebar() {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  const filteredMenuItems = menuItems.filter(item => 
+  const filteredMenuItems = menuItems.filter(item =>
     PermissionService.hasPermission(item.permission)
   );
 
@@ -84,20 +85,20 @@ export default function AdminSidebar() {
       {/* Mobile Menu Button */}
       <button
         onClick={toggleMobileMenu}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-surface-0 border border-border-default shadow-soft"
         aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
         aria-expanded={mobileMenuOpen}
       >
         {mobileMenuOpen ? (
-          <ChevronLeftIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+          <ChevronLeftIcon className="h-6 w-6 text-text-secondary" />
         ) : (
-          <ChevronRightIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+          <ChevronRightIcon className="h-6 w-6 text-text-secondary" />
         )}
       </button>
 
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={toggleMobileMenu}
           aria-hidden="true"
@@ -105,14 +106,14 @@ export default function AdminSidebar() {
       )}
 
       {/* Sidebar */}
-      <aside 
+      <aside
         className={`
-          bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 
+          bg-sidebar-bg border-r border-sidebar-border 
           transition-all duration-300 z-50
           ${collapsed ? 'w-16' : 'w-64'}
           lg:static lg:translate-x-0
-          ${mobileMenuOpen 
-            ? 'fixed inset-y-0 left-0 translate-x-0' 
+          ${mobileMenuOpen
+            ? 'fixed inset-y-0 left-0 translate-x-0'
             : 'fixed inset-y-0 left-0 -translate-x-full lg:translate-x-0'
           }
         `}
@@ -121,41 +122,40 @@ export default function AdminSidebar() {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
             {!collapsed && (
-              <div className="flex items-center space-x-2">
-                <img 
-                  src="/assets/images/chowmate-logo.png" 
-                  alt="Chowmate Admin" 
-                  className="h-8 w-auto"
+              <div className="flex items-center">
+                <Image
+                  src={ChowmateLogo}
+                  alt="Chowmate Admin"
+                  width={150}
+                  height={150}
+                  priority
                 />
-                <span className="font-semibold text-xl text-gray-900 dark:text-white">
-                  Admin
-                </span>
               </div>
             )}
             <button
               onClick={toggleSidebar}
-              className="hidden lg:block p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:ring-2 focus:ring-primary-500"
+              className="hidden lg:block p-2 rounded-lg hover:bg-sidebar-hover transition-colors focus:ring-2 focus:ring-primary-500"
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               {collapsed ? (
-                <ChevronRightIcon className="h-5 w-5 text-gray-500" />
+                <ChevronRightIcon className="h-5 w-5 text-text-tertiary" />
               ) : (
-                <ChevronLeftIcon className="h-5 w-5 text-gray-500" />
+                <ChevronLeftIcon className="h-5 w-5 text-text-tertiary" />
               )}
             </button>
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="lg:hidden p-2 rounded-lg hover:bg-sidebar-hover transition-colors"
               aria-label="Close mobile menu"
             >
-              <ChevronLeftIcon className="h-5 w-5 text-gray-500" />
+              <ChevronLeftIcon className="h-5 w-5 text-text-tertiary" />
             </button>
           </div>
 
           {/* Navigation */}
-          <nav 
+          <nav
             className="flex-1 p-4 space-y-1 overflow-y-auto"
             role="menu"
             aria-label="Admin navigation"
@@ -163,7 +163,7 @@ export default function AdminSidebar() {
             {filteredMenuItems.map((item) => {
               const isActive = pathname.startsWith(item.href);
               const Icon = item.icon;
-              
+
               return (
                 <Link
                   key={item.name}
@@ -174,15 +174,15 @@ export default function AdminSidebar() {
                     focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
                     ${!collapsed ? 'space-x-3' : 'justify-center'}
                     ${isActive
-                      ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300 font-medium'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? 'bg-primary-50 text-primary-700 font-medium'
+                      : 'text-text-secondary hover:bg-sidebar-hover hover:text-text-primary'
                     }
                   `}
                   role="menuitem"
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <Icon 
-                    className="h-5 w-5 flex-shrink-0" 
+                  <Icon
+                    className="h-5 w-5 flex-shrink-0"
                     aria-hidden="true"
                   />
                   {!collapsed && (
@@ -197,21 +197,21 @@ export default function AdminSidebar() {
           </nav>
 
           {/* User Profile */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="p-4 border-t border-sidebar-border">
             <div className={`flex items-center ${collapsed ? 'justify-center' : 'space-x-3'}`}>
-              <div 
-                className="h-8 w-8 bg-primary-600 rounded-full flex items-center justify-center flex-shrink-0"
+              <div
+                className="h-8 w-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0"
                 role="img"
                 aria-label="Admin user avatar"
               >
-                <span className="text-white text-sm font-medium">A</span>
+                <span className="text-text-inverse text-sm font-medium">A</span>
               </div>
               {!collapsed && (
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                  <p className="text-sm font-medium text-text-primary truncate">
                     Admin User
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  <p className="text-xs text-text-tertiary truncate">
                     admin@chowmate.com
                   </p>
                 </div>

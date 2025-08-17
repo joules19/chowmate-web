@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "../ui/AppButton";
-import chowmateLogo from "../../assets/images/chowmate-dark-mont.png";
+import ChowmateLogo from "../../assets/images/chowmate-dark-mont.png";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -47,7 +47,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <img
-              src={chowmateLogo.src}
+              src={ChowmateLogo.src}
               width={190}
               alt="Chowmate Logo"
             />

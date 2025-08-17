@@ -38,7 +38,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
       required={required}
       rows={rows}
       className={`mt-1 block w-full px-3 py-2 border-[.8px] ${error ? "border-red-500" : "border-gray-300"
-        }  shadow-sm flex-grow mr-2 p-2 border-[.8px] border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-1  sm:text-sm`}
+        } shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:border-primary-500 sm:text-sm`}
     />
     {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
   </div>

@@ -365,7 +365,7 @@ const PrivacyPage = () => {
                                         </div>
                                     </div>
 
-                                    <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-blue-50 rounded-xl">
+                                    <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-primary-50 rounded-xl">
                                         <p className="text-[#666666] text-xs sm:text-sm">
                                             To exercise these rights, contact us at{" "}
                                             <a

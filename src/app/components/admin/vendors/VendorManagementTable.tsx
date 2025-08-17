@@ -71,7 +71,7 @@ export default function VendorManagementTable({ filters }: Props) {
     const statusConfig = {
       [VendorStatus.PendingApproval]: { color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300', label: 'Pending' },
       [VendorStatus.Approved]: { color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300', label: 'Approved' },
-      [VendorStatus.UnderReview]: { color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300', label: 'Under Review' },
+      [VendorStatus.UnderReview]: { color: 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300', label: 'Under Review' },
       [VendorStatus.Suspended]: { color: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300', label: 'Suspended' },
       [VendorStatus.Rejected]: { color: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300', label: 'Rejected' },
       [VendorStatus.RequiresManualReview]: { color: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300', label: 'Manual Review' }
@@ -104,10 +104,10 @@ export default function VendorManagementTable({ filters }: Props) {
             )}
           </div>
           <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900 dark:text-white">
+            <div className="text-sm font-medium text-text-primary">
               {vendor.businessName || `${vendor.firstName} ${vendor.lastName}`}
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-text-tertiary">
               {vendor.email}
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function VendorManagementTable({ filters }: Props) {
                   e.stopPropagation();
                   handleVendorAction(vendor.id, 'approve');
                 }}
-                className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
               >
                 Approve
               </button>
@@ -165,7 +165,7 @@ export default function VendorManagementTable({ filters }: Props) {
                   e.stopPropagation();
                   handleVendorAction(vendor.id, 'reject');
                 }}
-                className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
               >
                 Reject
               </button>
@@ -177,7 +177,7 @@ export default function VendorManagementTable({ filters }: Props) {
                 e.stopPropagation();
                 handleVendorAction(vendor.id, 'suspend');
               }}
-              className="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"
+              className="text-yellow-600 hover:text-yellow-700 dark:text-yellow-400 dark:hover:text-yellow-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
             >
               Suspend
             </button>
@@ -188,7 +188,7 @@ export default function VendorManagementTable({ filters }: Props) {
                 e.stopPropagation();
                 handleVendorAction(vendor.id, 'activate');
               }}
-              className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+              className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
             >
               Activate
             </button>

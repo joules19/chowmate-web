@@ -1,8 +1,8 @@
 export enum Role {
-  SUPER_ADMIN = 'SUPER_ADMIN',
-  ADMIN = 'ADMIN',
-  MODERATOR = 'MODERATOR',
-  SUPPORT = 'SUPPORT'
+  SUPER_ADMIN = 'SuperAdmin',
+  ADMIN = 'Admin',
+  MODERATOR = 'Moderator',
+  SUPPORT = 'Support'
 }
 
 export enum Permission {
@@ -109,4 +109,64 @@ export const RolePermissions: Record<Role, Permission[]> = {
 export interface UserPermissions {
   role: Role;
   permissions: Permission[];
+}
+
+// Utility functions to match C# backend functionality
+export class PermissionUtils {
+  /**
+   * Get all available permissions
+   */
+  static getAllPermissions(): Permission[] {
+    return Object.values(Permission);
+  }
+
+  /**
+   * Get permissions for a specific role
+   */
+  static getPermissionsForRole(role: Role | string): Permission[] {
+    const roleKey = typeof role === 'string' ? role as Role : role;
+    return RolePermissions[roleKey] || [];
+  }
+
+  /**
+   * Check if a role has a specific permission
+   */
+  static hasPermission(role: Role | string, permission: Permission | string): boolean {
+    const rolePermissions = this.getPermissionsForRole(role as Role);
+    const permissionKey = typeof permission === 'string' ? permission as Permission : permission;
+    return rolePermissions.includes(permissionKey);
+  }
+
+  /**
+   * Check if a user has a specific permission based on their roles
+   */
+  static userHasPermission(userRoles: string[], permission: Permission | string): boolean {
+    return userRoles.some(role => this.hasPermission(role as Role, permission));
+  }
+
+  /**
+   * Get all permissions for multiple roles (useful for users with multiple roles)
+   */
+  static getPermissionsForRoles(roles: (Role | string)[]): Permission[] {
+    const allPermissions = new Set<Permission>();
+    roles.forEach(role => {
+      const rolePermissions = this.getPermissionsForRole(role as Role);
+      rolePermissions.forEach(permission => allPermissions.add(permission));
+    });
+    return Array.from(allPermissions);
+  }
+
+  /**
+   * Check if a role exists in the system
+   */
+  static isValidRole(role: string): role is Role {
+    return Object.values(Role).includes(role as Role);
+  }
+
+  /**
+   * Check if a permission exists in the system
+   */
+  static isValidPermission(permission: string): permission is Permission {
+    return Object.values(Permission).includes(permission as Permission);
+  }
 }

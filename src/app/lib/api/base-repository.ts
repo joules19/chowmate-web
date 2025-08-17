@@ -1,52 +1,41 @@
-import { ApiResponse, PaginatedResponse, SearchFilters } from "../../data/types/api";
+import { PaginatedResponse, SearchFilters } from "../../data/types/api";
+import apiClient, { ApiResponse, apiRequest } from "./axios-config";
+import { AxiosResponse } from "axios";
 
 export abstract class BaseRepository<T> {
-  protected baseUrl: string;
+  protected endpoint: string;
 
-  constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
   }
 
-  protected async request<U>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<ApiResponse<U>> {
-    const token = this.getAuthToken();
-    
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
-      ...options,
-    };
-
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, config);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error(`API request failed: ${endpoint}`, error);
-      throw error;
-    }
+  protected async get<U>(path: string = ''): Promise<U> {
+    return apiRequest(() => 
+      apiClient.get<ApiResponse<U>>(`${this.endpoint}${path}`)
+    );
   }
 
-  private getAuthToken(): string | null {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('authToken');
-    }
-    return null;
+  protected async post<U>(path: string = '', data?: any): Promise<U> {
+    return apiRequest(() => 
+      apiClient.post<ApiResponse<U>>(`${this.endpoint}${path}`, data)
+    );
+  }
+
+  protected async put<U>(path: string = '', data?: any): Promise<U> {
+    return apiRequest(() => 
+      apiClient.put<ApiResponse<U>>(`${this.endpoint}${path}`, data)
+    );
+  }
+
+  protected async deleteRequest<U>(path: string = ''): Promise<U> {
+    return apiRequest(() => 
+      apiClient.delete<ApiResponse<U>>(`${this.endpoint}${path}`)
+    );
   }
 
   async getAll(filters?: SearchFilters): Promise<PaginatedResponse<T>> {
     const queryParams = new URLSearchParams();
-    
+
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -55,70 +44,27 @@ export abstract class BaseRepository<T> {
       });
     }
 
-    const endpoint = queryParams.toString() ? `?${queryParams}` : '';
-    const response = await this.request<PaginatedResponse<T>>(endpoint);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch data');
-    }
-    
-    return response.data;
+    const path = queryParams.toString() ? `?${queryParams}` : '';
+    return this.get<PaginatedResponse<T>>(path);
   }
 
   async getById(id: string): Promise<T> {
-    const response = await this.request<T>(`/${id}`);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch item');
-    }
-    
-    return response.data;
+    return this.get<T>(`/${id}`);
   }
 
   async create(data: Partial<T>): Promise<T> {
-    const response = await this.request<T>('', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to create item');
-    }
-    
-    return response.data;
+    return this.post<T>('', data);
   }
 
   async update(id: string, data: Partial<T>): Promise<T> {
-    const response = await this.request<T>(`/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to update item');
-    }
-    
-    return response.data;
+    return this.put<T>(`/${id}`, data);
   }
 
   async delete(id: string): Promise<void> {
-    const response = await this.request<void>(`/${id}`, {
-      method: 'DELETE',
-    });
-    
-    if (!response.success) {
-      throw new Error(response.message || 'Failed to delete item');
-    }
+    return this.deleteRequest<void>(`/${id}`);
   }
 
   async bulkAction(action: string, ids: string[], data?: any): Promise<void> {
-    const response = await this.request<void>('/bulk-action', {
-      method: 'POST',
-      body: JSON.stringify({ action, ids, data }),
-    });
-    
-    if (!response.success) {
-      throw new Error(response.message || 'Bulk action failed');
-    }
+    return this.post<void>('/bulk-action', { action, ids, data });
   }
 }

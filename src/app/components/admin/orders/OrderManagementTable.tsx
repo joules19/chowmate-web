@@ -22,7 +22,7 @@ export default function OrderManagementTable({ filters }: Props) {
   const getStatusBadge = (status: OrderStatus) => {
     const statusConfig = {
       [OrderStatus.Pending]: { color: 'bg-yellow-100 text-yellow-800', label: 'Pending' },
-      [OrderStatus.Preparing]: { color: 'bg-blue-100 text-blue-800', label: 'Preparing' },
+      [OrderStatus.Preparing]: { color: 'bg-primary-100 text-primary-800', label: 'Preparing' },
       [OrderStatus.RiderAssigned]: { color: 'bg-purple-100 text-purple-800', label: 'Rider Assigned' },
       [OrderStatus.RiderArrived]: { color: 'bg-indigo-100 text-indigo-800', label: 'Rider Arrived' },
       [OrderStatus.OutForDelivery]: { color: 'bg-orange-100 text-orange-800', label: 'Out for Delivery' },
@@ -44,7 +44,7 @@ export default function OrderManagementTable({ filters }: Props) {
       label: 'Order ID',
       sortable: true,
       render: (order) => (
-        <div className="font-mono text-sm font-medium text-gray-900 dark:text-white">
+        <div className="font-mono text-sm font-medium text-text-primary">
           {order.orderId}
         </div>
       )
@@ -54,10 +54,10 @@ export default function OrderManagementTable({ filters }: Props) {
       label: 'Customer',
       render: (order) => (
         <div>
-          <div className="text-sm font-medium text-gray-900 dark:text-white">
+          <div className="text-sm font-medium text-text-primary">
             {order.customer.firstName} {order.customer.lastName}
           </div>
-          <div className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="text-sm text-text-tertiary">
             {order.customer.email}
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function OrderManagementTable({ filters }: Props) {
       key: 'vendor',
       label: 'Vendor',
       render: (order) => (
-        <div className="text-sm font-medium text-gray-900 dark:text-white">
+        <div className="text-sm font-medium text-text-primary">
           {order.vendor.businessName || `${order.vendor.firstName} ${order.vendor.lastName}`}
         </div>
       )
@@ -77,7 +77,7 @@ export default function OrderManagementTable({ filters }: Props) {
       label: 'Amount',
       sortable: true,
       render: (order) => (
-        <div className="text-sm font-medium text-gray-900 dark:text-white">
+        <div className="text-sm font-medium text-text-primary">
           ${order.totalAmount.toFixed(2)}
         </div>
       )
@@ -99,10 +99,10 @@ export default function OrderManagementTable({ filters }: Props) {
       label: 'Actions',
       render: (order) => (
         <div className="flex space-x-2">
-          <button className="text-blue-600 hover:text-blue-900">View</button>
-          <button className="text-yellow-600 hover:text-yellow-900">Edit</button>
+          <button className="text-primary-600 hover:text-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">View</button>
+          <button className="text-yellow-600 hover:text-yellow-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">Edit</button>
           {order.status !== OrderStatus.Completed && order.status !== OrderStatus.Cancelled && (
-            <button className="text-red-600 hover:text-red-900">Cancel</button>
+            <button className="text-red-600 hover:text-red-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">Cancel</button>
           )}
         </div>
       )

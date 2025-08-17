@@ -87,10 +87,10 @@ export default function UserManagementTable({ filters }: Props) {
             </div>
           </div>
           <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900 dark:text-white">
+            <div className="text-sm font-medium text-text-primary">
               {user.firstName} {user.lastName}
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-text-tertiary">
               {user.email}
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function UserManagementTable({ filters }: Props) {
           {user.roles.map((role, index) => (
             <span
               key={index}
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300"
             >
               {role}
             </span>
@@ -134,7 +134,7 @@ export default function UserManagementTable({ filters }: Props) {
               e.stopPropagation();
               handleUserAction(user.id, 'suspend');
             }}
-            className="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"
+            className="text-yellow-600 hover:text-yellow-700 dark:text-yellow-400 dark:hover:text-yellow-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
           >
             Suspend
           </button>
@@ -143,7 +143,7 @@ export default function UserManagementTable({ filters }: Props) {
               e.stopPropagation();
               handleUserAction(user.id, 'activate');
             }}
-            className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+            className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
           >
             Activate
           </button>
@@ -152,7 +152,7 @@ export default function UserManagementTable({ filters }: Props) {
               e.stopPropagation();
               handleUserAction(user.id, 'delete');
             }}
-            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+            className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
           >
             Delete
           </button>

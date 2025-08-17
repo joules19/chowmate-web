@@ -43,7 +43,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
           required={required}
           disabled={disabled}
           className={`block w-full border-[.8px] ${error ? "border-red-500" : "border-gray-300"
-            } py-2 px-3 pr-8 shadow-sm flex-grow mr-2 p-2 border-[.8px] border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-1 focus:ring-primary-500 focus:border-primary-500`}
+            } py-2 px-3 pr-8 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:border-primary-500`}
         >
           <option value="" disabled>
             Select {label}

@@ -16,6 +16,22 @@ export interface ApplicationUser {
   roles: string[];
 }
 
+export interface User extends BaseEntity {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  dateOfBirth?: string;
+  isActive: boolean;
+  emailConfirmed: boolean;
+  phoneNumberConfirmed: boolean;
+  lastLoginAt?: string;
+  roles: string[];
+  permissions: string[];
+  profileImageUrl?: string;
+  profileImagePublicId?: string;
+}
+
 export enum VendorStatus {
   PendingApproval = 'PendingApproval',
   Approved = 'Approved',

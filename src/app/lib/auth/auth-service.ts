@@ -1,48 +1,44 @@
 import { PermissionService } from "./permissions";
-import { UserPermissions, Role, Permission } from "../../data/types/permissions";
+import { Role, Permission } from "../../data/types/permissions";
+import { AuthResponse, AuthUser, LoginRequest, RefreshTokenRequest } from "@/app/data/types/auth";
+import apiClient, { ApiResponse } from "../api/axios-config";
 
-export interface AuthUser {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  roles: string[];
-  permissions: Permission[];
-}
 
 export class AuthService {
   private static readonly TOKEN_KEY = 'authToken';
+  private static readonly REFRESH_TOKEN_KEY = 'refreshToken';
   private static readonly USER_KEY = 'authUser';
+  private static readonly TOKEN_EXPIRY_KEY = 'tokenExpiry';
 
-  static async login(email: string, password: string): Promise<AuthUser> {
+  static async login(email: string, password: string): Promise<AuthResponse> {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      const loginData: LoginRequest = { email, password };
+      
+      const response = await apiClient.post<ApiResponse<AuthResponse>>(
+        '/api/account/auth/admin-signin',
+        loginData
+      );
+
+      const authData = response.data.data;
+      console.log('Login response:', authData);
+
+      if (!authData.accessToken || !authData.user) {
+        throw new Error('Invalid login response - missing required data');
+      }
+
+      // Store auth data
+      this.setToken(authData.accessToken);
+      this.setRefreshToken(authData.refreshToken || '');
+      this.setTokenExpiry(authData.expiration || '');
+      this.setUser(authData.user);
+
+      // Set user permissions
+      PermissionService.setUserPermissions({
+        role: authData.user.roles[0] as Role,
+        permissions: authData.user.permissions,
       });
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const data = await response.json();
-      
-      if (data.success) {
-        this.setToken(data.token);
-        this.setUser(data.user);
-        
-        PermissionService.setUserPermissions({
-          role: data.user.roles[0] as Role,
-          permissions: data.user.permissions
-        });
-
-        return data.user;
-      } else {
-        throw new Error(data.message || 'Login failed');
-      }
+      return authData;
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -52,7 +48,9 @@ export class AuthService {
   static logout(): void {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.REFRESH_TOKEN_KEY);
       localStorage.removeItem(this.USER_KEY);
+      localStorage.removeItem(this.TOKEN_EXPIRY_KEY);
     }
     PermissionService.clearPermissions();
   }
@@ -68,6 +66,39 @@ export class AuthService {
     if (typeof window !== 'undefined') {
       localStorage.setItem(this.TOKEN_KEY, token);
     }
+  }
+
+  static getRefreshToken(): string | null {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+    }
+    return null;
+  }
+
+  static setRefreshToken(token: string): void {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(this.REFRESH_TOKEN_KEY, token);
+    }
+  }
+
+  static getTokenExpiry(): string | null {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(this.TOKEN_EXPIRY_KEY);
+    }
+    return null;
+  }
+
+  static setTokenExpiry(expiry: string): void {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(this.TOKEN_EXPIRY_KEY, expiry);
+    }
+  }
+
+  static isTokenExpired(): boolean {
+    const expiry = this.getTokenExpiry();
+    if (!expiry) return true;
+    
+    return new Date(expiry) <= new Date();
   }
 
   static getUser(): AuthUser | null {
@@ -89,31 +120,31 @@ export class AuthService {
   }
 
   static async refreshToken(): Promise<boolean> {
-    const token = this.getToken();
-    if (!token) return false;
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) return false;
 
     try {
-      const response = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const refreshData: RefreshTokenRequest = { refreshToken };
+      
+      const response = await apiClient.post<ApiResponse<AuthResponse>>(
+        '/api/auth/refresh',
+        refreshData
+      );
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          this.setToken(data.token);
-          return true;
-        }
+      const authData = response.data.data;
+      if (authData.accessToken) {
+        this.setToken(authData.accessToken);
+        this.setRefreshToken(authData.refreshToken || '');
+        this.setTokenExpiry(authData.expiration || '');
+        return true;
       }
+      
+      return false;
     } catch (error) {
       console.error('Token refresh failed:', error);
+      this.logout();
+      return false;
     }
-
-    this.logout();
-    return false;
   }
 
   static async validateToken(): Promise<boolean> {
@@ -121,23 +152,15 @@ export class AuthService {
     if (!token) return false;
 
     try {
-      const response = await fetch('/api/auth/validate', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await apiClient.post<ApiResponse<{ valid: boolean }>>(
+        '/api/auth/validate'
+      );
 
-      if (response.ok) {
-        const data = await response.json();
-        return data.success;
-      }
+      return response.data.data.valid;
     } catch (error) {
       console.error('Token validation failed:', error);
+      return false;
     }
-
-    return false;
   }
 
   static async initializeAuth(): Promise<AuthUser | null> {
@@ -168,7 +191,7 @@ export class AuthService {
     const user = this.getUser();
     if (!user) return false;
 
-    return user.roles.some(role => 
+    return user.roles.some(role =>
       [Role.SUPER_ADMIN, Role.ADMIN, Role.MODERATOR].includes(role as Role)
     );
   }

@@ -27,32 +27,32 @@ export default function OrderFilters({ filters, onFiltersChange }: Props) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div className="bg-surface-0 rounded-card shadow-soft border border-border-light p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="lg:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             Search Orders
           </label>
           <div className="relative">
-            <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-text-tertiary" />
             <input
               type="text"
               placeholder="Search by order ID, customer, or vendor..."
               value={filters.search || ''}
               onChange={(e) => handleSearchChange(e.target.value)}
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="pl-10 pr-4 py-2 w-full border border-border-default rounded-input focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             Status
           </label>
           <select
             value={filters.status || ''}
             onChange={(e) => handleStatusChange(e.target.value)}
-            className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+            className="w-full border border-border-default rounded-input px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary"
           >
             <option value="">All Statuses</option>
             <option value={OrderStatus.Pending}>Pending</option>
@@ -66,22 +66,22 @@ export default function OrderFilters({ filters, onFiltersChange }: Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             Date Range
           </label>
           <input
             type="date"
             value={filters.dateFrom || ''}
             onChange={(e) => handleDateFromChange(e.target.value)}
-            className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+            className="w-full border border-border-default rounded-input px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary"
           />
         </div>
       </div>
 
       <div className="mt-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <FunnelIcon className="h-5 w-5 text-gray-400" />
-          <span className="text-sm text-gray-600 dark:text-gray-400">
+          <FunnelIcon className="h-5 w-5 text-text-tertiary" />
+          <span className="text-sm text-text-tertiary">
             {Object.values(filters).filter(Boolean).length} filter(s) applied
           </span>
         </div>

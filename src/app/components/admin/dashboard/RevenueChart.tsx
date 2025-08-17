@@ -28,12 +28,12 @@ export default function RevenueChart() {
 
   return (
     <div 
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6"
+      className="bg-surface-0 rounded-card shadow-soft border border-border-light p-4 sm:p-6"
       role="region"
       aria-label="Revenue overview chart"
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-lg font-semibold text-text-primary">
           Revenue Overview
         </h3>
         <div 
@@ -46,7 +46,7 @@ export default function RevenueChart() {
             className={`px-3 py-1.5 text-sm rounded-md transition-colors focus:ring-2 focus:ring-primary-500 ${
               timeRange === '7d'
                 ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                : 'text-text-tertiary hover:text-text-secondary'
             }`}
             role="tab"
             aria-selected={timeRange === '7d'}
@@ -59,7 +59,7 @@ export default function RevenueChart() {
             className={`px-3 py-1.5 text-sm rounded-md transition-colors focus:ring-2 focus:ring-primary-500 ${
               timeRange === '30d'
                 ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                : 'text-text-tertiary hover:text-text-secondary'
             }`}
             role="tab"
             aria-selected={timeRange === '30d'}
@@ -88,7 +88,7 @@ export default function RevenueChart() {
                   aria-label={`${item.day}: $${item.revenue.toLocaleString()}`}
                   tabIndex={0}
                 />
-                <span className="text-xs text-gray-500 dark:text-gray-400 mt-2 truncate max-w-full">
+                <span className="text-xs text-text-tertiary mt-2 truncate max-w-full">
                   {item.day}
                 </span>
               </div>
@@ -98,7 +98,7 @@ export default function RevenueChart() {
       </div>
 
       <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm">
-        <span className="text-gray-600 dark:text-gray-400">
+        <span className="text-text-tertiary">
           Total: ${data.reduce((sum, item) => sum + item.revenue, 0).toLocaleString()}
         </span>
         <span 
