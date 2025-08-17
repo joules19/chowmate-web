@@ -1,16 +1,39 @@
 "use client";
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Logo from "../../assets/images/chowmate-light.png";
 import Illustration from "../../assets/images/illustration.png";
 import LoginForm from "@/app/components/forms/LoginForm";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { LinkIcon } from "@heroicons/react/24/outline";
+import { AuthService } from "../../lib/auth/auth-service";
+import { Permission } from "../../data/types/permissions";
 
 const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loginAsAdmin, setLoginAsAdmin] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
+
+  // Check if user is already authenticated
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await AuthService.initializeAuth();
+        if (user) {
+          // User is already authenticated, redirect them
+          const targetUrl = redirectUrl || (AuthService.hasAdminAccess() ? '/admin/dashboard' : '/');
+          router.replace(targetUrl);
+        }
+      } catch (error) {
+        // User not authenticated, stay on login page
+      }
+    };
+
+    checkAuth();
+  }, [router, redirectUrl]);
 
   // Handle form submission
   const handleSubmit = async (values: {
@@ -21,28 +44,67 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const baseUrl = ``;
-      const response = await axios.post(`${baseUrl}auth/login`, {
-        ...values,
-        isAdmin: loginAsAdmin,
-      });
+      // For now, let's implement a mock login since the backend isn't ready
+      // In production, this would use AuthService.login(values.email, values.password)
+      
+      // Mock authentication - remove this when backend is ready
+      if (values.email && values.password) {
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Mock user data - replace with actual API response
+        const mockUser = {
+          id: '1',
+          email: values.email,
+          firstName: 'Admin',
+          lastName: 'User',
+          phoneNumber: '+1234567890',
+          roles: loginAsAdmin ? ['ADMIN'] : ['CUSTOMER'],
+          permissions: loginAsAdmin ? [
+            Permission.VIEW_DASHBOARD,
+            Permission.VIEW_USERS,
+            Permission.VIEW_VENDORS,
+            Permission.VIEW_RIDERS,
+            Permission.VIEW_ORDERS,
+            Permission.VIEW_ANALYTICS,
+            Permission.APPROVE_VENDOR,
+            Permission.REJECT_VENDOR,
+            Permission.SUSPEND_VENDOR,
+            Permission.APPROVE_RIDER,
+            Permission.REJECT_RIDER,
+            Permission.SUSPEND_RIDER,
+            Permission.EDIT_ORDER,
+            Permission.CANCEL_ORDER,
+            Permission.ASSIGN_RIDER
+          ] : []
+        };
 
-      if (response.status === 200) {
-        // const userDetails = {
-        //   email: response?.data?.user.email,
-        //   token: response?.data?.token,
-        //   refreshToken: response?.data?.token,
-        //   firstname: response?.data?.user.firstName,
-        //   lastname: response?.data?.user.lastName,
-        //   role: response?.data?.user.role,
-        //   initialSetup: response?.data?.user.initialSetup,
-        //   passwordChangedStatus: response?.data?.user.passwordChangedStatus,
-        //   isOnboardingComplete: response?.data?.user.isOnboardingComplete,
-        // };
+        // Mock token
+        const mockToken = 'mock-jwt-token-' + Date.now();
+        
+        // Store auth data
+        AuthService.setToken(mockToken);
+        AuthService.setUser(mockUser);
+        
+        message.success('Login successful!');
+        
+        // Redirect based on user role and redirect URL
+        const targetUrl = redirectUrl || (loginAsAdmin ? '/admin/dashboard' : '/');
+        router.replace(targetUrl);
+      } else {
+        message.error('Please enter valid credentials');
       }
-    } catch (err) {
-      console.error("Login failed:", err);
 
+      // TODO: Replace mock login with actual AuthService when backend is ready
+      // const user = await AuthService.login(values.email, values.password);
+      // message.success('Login successful!');
+      // const targetUrl = redirectUrl || (AuthService.hasAdminAccess() ? '/admin' : '/');
+      // router.replace(targetUrl);
+
+    } catch (err: any) {
+      console.error("Login failed:", err);
+      message.error(err.message || 'Login failed. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -83,9 +145,20 @@ const Login: React.FC = () => {
           {/* Login Section */}
           <div className="lg:flex-1 w-full flex items-start justify-center rounded-[8px] p-2 sm:p-8">
             <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6 sm:p-8">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-1">
-                Log in
-              </h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl sm:text-3xl font-bold text-center text-1">
+                  Log in
+                </h2>
+                <div className="flex items-center space-x-2">
+                  <label className="text-sm text-gray-600">Admin</label>
+                  <input
+                    type="checkbox"
+                    checked={loginAsAdmin}
+                    onChange={(e) => setLoginAsAdmin(e.target.checked)}
+                    className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                  />
+                </div>
+              </div>
 
               <LoginForm
                 isLoading={isLoading}

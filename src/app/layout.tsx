@@ -5,6 +5,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { customAntdTheme } from "./theme/themeConfig";
 import { ConfigProvider } from "antd";
 import { Montserrat } from "next/font/google";
+import AdminLink from "./components/navigation/AdminLink";
 
 export const metadata: Metadata = {
   title: "Food Delivery App",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AntdRegistry>
           <ConfigProvider theme={customAntdTheme}>
             <main className="">{children}</main>
+            <AdminLink />
           </ConfigProvider>
         </AntdRegistry>
       </body>

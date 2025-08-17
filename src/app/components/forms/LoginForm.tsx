@@ -149,6 +149,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       <div className="w-full h-[38px]">
         <Button
           type="primary"
+          htmlType="submit"
           loading={isLoading}
           style={{
             width: "100%",
