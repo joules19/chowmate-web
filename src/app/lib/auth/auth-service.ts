@@ -1,5 +1,5 @@
 import { PermissionService } from "./permissions";
-import { Role, Permission } from "../../data/types/permissions";
+import { Role } from "../../data/types/permissions";
 import { AuthResponse, AuthUser, LoginRequest, RefreshTokenRequest } from "@/app/data/types/auth";
 import apiClient, { ApiResponse } from "../api/axios-config";
 
@@ -13,7 +13,7 @@ export class AuthService {
   static async login(email: string, password: string): Promise<AuthResponse> {
     try {
       const loginData: LoginRequest = { email, password };
-      
+
       const response = await apiClient.post<ApiResponse<AuthResponse>>(
         '/api/account/auth/admin-signin',
         loginData
@@ -97,7 +97,7 @@ export class AuthService {
   static isTokenExpired(): boolean {
     const expiry = this.getTokenExpiry();
     if (!expiry) return true;
-    
+
     return new Date(expiry) <= new Date();
   }
 
@@ -125,7 +125,7 @@ export class AuthService {
 
     try {
       const refreshData: RefreshTokenRequest = { refreshToken };
-      
+
       const response = await apiClient.post<ApiResponse<AuthResponse>>(
         '/api/auth/refresh',
         refreshData
@@ -138,7 +138,7 @@ export class AuthService {
         this.setTokenExpiry(authData.expiration || '');
         return true;
       }
-      
+
       return false;
     } catch (error) {
       console.error('Token refresh failed:', error);
