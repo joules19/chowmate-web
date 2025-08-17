@@ -55,31 +55,54 @@ export default function RecentActivities() {
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div 
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6"
+      role="region"
+      aria-label="Recent activities"
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           Recent Activities
         </h3>
-        <button className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+        <button 
+          className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 focus:ring-2 focus:ring-primary-500 rounded px-2 py-1 self-start sm:self-auto"
+          aria-label="View all activities"
+        >
           View All
         </button>
       </div>
 
-      <div className="space-y-4">
+      <div 
+        className="space-y-3 sm:space-y-4"
+        role="list"
+        aria-label="Activity list"
+      >
         {activities.map((activity) => {
           const Icon = activity.icon;
           return (
-            <div key={activity.id} className="flex items-start space-x-3">
-              <div className={`flex-shrink-0 ${activity.iconColor}`}>
-                <Icon className="h-5 w-5" />
+            <div 
+              key={activity.id} 
+              className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              role="listitem"
+            >
+              <div 
+                className={`flex-shrink-0 ${activity.iconColor} p-1`}
+                role="img"
+                aria-label={`${activity.type} activity`}
+              >
+                <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-900 dark:text-white">
+                <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
                   {activity.message}
                 </p>
                 <div className="flex items-center mt-1">
-                  <ClockIcon className="h-3 w-3 text-gray-400 mr-1" />
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                  <ClockIcon className="h-3 w-3 text-gray-400 mr-1 flex-shrink-0" aria-hidden="true" />
+                  <span 
+                    className="text-xs text-gray-500 dark:text-gray-400"
+                    role="status"
+                    aria-label={`Activity occurred ${activity.time}`}
+                  >
                     {activity.time}
                   </span>
                 </div>
@@ -90,7 +113,10 @@ export default function RecentActivities() {
       </div>
 
       <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <button className="w-full text-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+        <button 
+          className="w-full text-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white focus:ring-2 focus:ring-primary-500 rounded py-2 transition-colors"
+          aria-label="Load more activities"
+        >
           Load More Activities
         </button>
       </div>
