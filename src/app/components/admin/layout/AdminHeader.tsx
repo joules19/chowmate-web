@@ -4,15 +4,12 @@ import { useState } from "react";
 import {
   BellIcon,
   MagnifyingGlassIcon,
-  SunIcon,
-  MoonIcon,
   UserCircleIcon,
   ArrowRightOnRectangleIcon
 } from "@heroicons/react/24/outline";
 import { AuthService } from "../../../lib/auth/auth-service";
 
 export default function AdminHeader() {
-  const [darkMode, setDarkMode] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleLogout = () => {

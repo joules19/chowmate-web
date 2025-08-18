@@ -1,11 +1,6 @@
-export interface BaseEntity {
-  id: string;
-  createdAt: string;
-  createdBy?: string;
-  modifiedAt?: string;
-  isDeleted: boolean;
-  deletedAt?: string;
-}
+import { BaseEntity } from "./base-entity";
+import { Customer } from "./customer";
+
 
 export interface ApplicationUser {
   id: string;
@@ -109,24 +104,6 @@ export interface Vendor extends BaseEntity {
   rejectionReason?: string;
   approvalNotes?: string;
   locationConfidence: LocationConfidenceLevel;
-}
-
-export interface Customer extends BaseEntity {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  email: string;
-  userId: string;
-  user: ApplicationUser;
-}
-
-export interface CustomerAddress extends BaseEntity {
-  customerId: string;
-  address: string;
-  latitude?: number;
-  longitude?: number;
-  isDefault: boolean;
-  label?: string;
 }
 
 export interface Rider extends BaseEntity {

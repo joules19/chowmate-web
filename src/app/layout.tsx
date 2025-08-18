@@ -6,6 +6,7 @@ import { customAntdTheme } from "./theme/themeConfig";
 import { ConfigProvider } from "antd";
 import { Montserrat } from "next/font/google";
 import AdminLink from "./components/navigation/AdminLink";
+import QueryProvider from "./providers/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Food Delivery App",
@@ -21,12 +22,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={montserrat.className}>
       <body className="bg-primary-fade">
-        <AntdRegistry>
-          <ConfigProvider theme={customAntdTheme}>
-            <main className="">{children}</main>
-            <AdminLink />
-          </ConfigProvider>
-        </AntdRegistry>
+        <QueryProvider>
+          <AntdRegistry>
+            <ConfigProvider theme={customAntdTheme}>
+              <main className="">{children}</main>
+              <AdminLink />
+            </ConfigProvider>
+          </AntdRegistry>
+        </QueryProvider>
       </body>
     </html>
   );

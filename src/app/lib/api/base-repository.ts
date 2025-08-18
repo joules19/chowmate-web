@@ -10,25 +10,25 @@ export abstract class BaseRepository<T> {
   }
 
   protected async get<U>(path: string = ''): Promise<U> {
-    return apiRequest(() => 
+    return apiRequest(() =>
       apiClient.get<ApiResponse<U>>(`${this.endpoint}${path}`)
     );
   }
 
   protected async post<U>(path: string = '', data?: any): Promise<U> {
-    return apiRequest(() => 
+    return apiRequest(() =>
       apiClient.post<ApiResponse<U>>(`${this.endpoint}${path}`, data)
     );
   }
 
   protected async put<U>(path: string = '', data?: any): Promise<U> {
-    return apiRequest(() => 
+    return apiRequest(() =>
       apiClient.put<ApiResponse<U>>(`${this.endpoint}${path}`, data)
     );
   }
 
   protected async deleteRequest<U>(path: string = ''): Promise<U> {
-    return apiRequest(() => 
+    return apiRequest(() =>
       apiClient.delete<ApiResponse<U>>(`${this.endpoint}${path}`)
     );
   }

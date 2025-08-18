@@ -1,210 +1,136 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import DataTable, { Column } from "../shared/DataTable";
-import { ApplicationUser } from "../../../data/types/entities";
-import { SearchFilters, PaginatedResponse } from "../../../data/types/api";
-import { RepositoryFactory } from "../../../lib/api/repository-factory";
+import { useState } from "react";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import CustomerTable from "../../../components/admin/customers/CustomerTable";
+import CustomerFilters from "../../../components/admin/customers/CustomerFilters";
+import { CustomerFilters as CustomerFiltersType } from "../../../data/types/customer";
+import { useCustomerStats } from "@/app/lib/hooks/api-hooks.ts/use-customer";
 
-interface Props {
-  filters: SearchFilters;
-}
-
-export default function UserManagementTable({ filters }: Props) {
-  const [users, setUsers] = useState<PaginatedResponse<ApplicationUser>>({
-    data: [],
-    total: 0,
-    page: 1,
-    limit: 10,
-    totalPages: 0
+export default function CustomersPage() {
+  const [filters, setFilters] = useState<CustomerFiltersType>({
+    pageNumber: 1,
+    pageSize: 10,
+    sortBy: 'createdAt',
+    sortOrder: 'desc'
   });
-  const [loading, setLoading] = useState(true);
 
-  const userRepository = RepositoryFactory.getUserRepository();
-
-  useEffect(() => {
-    fetchUsers();
-  }, [filters]);
-
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await userRepository.getAll(filters);
-      setUsers(response);
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
-      setUsers({
-        data: mockUsers,
-        total: mockUsers.length,
-        page: 1,
-        limit: 10,
-        totalPages: Math.ceil(mockUsers.length / 10)
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSort = (key: string, order: 'asc' | 'desc') => {
-    console.log('Sorting by:', key, order);
-  };
-
-  const handlePageChange = (page: number) => {
-    console.log('Page changed to:', page);
-  };
-
-  const handleUserAction = async (userId: string, action: 'suspend' | 'activate' | 'delete') => {
-    try {
-      switch (action) {
-        case 'suspend':
-          await userRepository.suspend(userId, 'Administrative action');
-          break;
-        case 'activate':
-          await userRepository.activate(userId);
-          break;
-        case 'delete':
-          await userRepository.delete(userId);
-          break;
-      }
-      fetchUsers();
-    } catch (error) {
-      console.error(`Failed to ${action} user:`, error);
-    }
-  };
-
-  const columns: Column<ApplicationUser>[] = [
-    {
-      key: 'firstName',
-      label: 'Name',
-      sortable: true,
-      render: (user) => (
-        <div className="flex items-center">
-          <div className="h-10 w-10 flex-shrink-0">
-            <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-              <span className="text-sm font-medium text-primary-700">
-                {user.firstName.charAt(0)}{user.lastName.charAt(0)}
-              </span>
-            </div>
-          </div>
-          <div className="ml-4">
-            <div className="text-sm font-medium text-text-primary">
-              {user.firstName} {user.lastName}
-            </div>
-            <div className="text-sm text-text-tertiary">
-              {user.email}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      key: 'phoneNumber',
-      label: 'Phone',
-      sortable: true
-    },
-    {
-      key: 'roles',
-      label: 'Roles',
-      render: (user) => (
-        <div className="flex flex-wrap gap-1">
-          {user.roles.map((role, index) => (
-            <span
-              key={index}
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300"
-            >
-              {role}
-            </span>
-          ))}
-        </div>
-      )
-    },
-    {
-      key: 'createdAt',
-      label: 'Created',
-      sortable: true,
-      render: (user) => new Date(user.createdAt || '').toLocaleDateString()
-    },
-    {
-      key: 'actions',
-      label: 'Actions',
-      render: (user) => (
-        <div className="flex space-x-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleUserAction(user.id, 'suspend');
-            }}
-            className="text-yellow-600 hover:text-yellow-700 dark:text-yellow-400 dark:hover:text-yellow-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
-          >
-            Suspend
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleUserAction(user.id, 'activate');
-            }}
-            className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
-          >
-            Activate
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleUserAction(user.id, 'delete');
-            }}
-            className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1"
-          >
-            Delete
-          </button>
-        </div>
-      )
-    }
-  ];
+  const { data: stats, isLoading: statsLoading } = useCustomerStats();
 
   return (
-    <DataTable
-      data={users.data}
-      columns={columns}
-      loading={loading}
-      pagination={{
-        page: users.page,
-        limit: users.limit,
-        total: users.total,
-        totalPages: users.totalPages
-      }}
-      onSort={handleSort}
-      onPageChange={handlePageChange}
-      onRowClick={(user) => console.log('User clicked:', user)}
-    />
+    <div className="space-y-6 p-6 bg-background-primary min-h-screen">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            Customer Management
+          </h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Manage customer accounts and monitor their activity
+          </p>
+
+          {/* Quick Stats */}
+          {stats && !statsLoading && (
+            <div className="flex items-center space-x-6 mt-4">
+              <div className="text-sm">
+                <span className="font-medium text-gray-900">{stats.totalCustomers.toLocaleString()}</span>
+                <span className="text-gray-500 ml-1">Total</span>
+              </div>
+              <div className="text-sm">
+                <span className="font-medium text-green-600">{stats.activeCustomers.toLocaleString()}</span>
+                <span className="text-gray-500 ml-1">Active</span>
+              </div>
+              <div className="text-sm">
+                <span className="font-medium text-yellow-600">{stats.suspendedCustomers.toLocaleString()}</span>
+                <span className="text-gray-500 ml-1">Suspended</span>
+              </div>
+              <div className="text-sm">
+                <span className="font-medium text-primary-600">{stats.newCustomersThisMonth.toLocaleString()}</span>
+                <span className="text-gray-500 ml-1">New this month</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Action Button */}
+        <button
+          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+          aria-label="Add new customer"
+        >
+          <PlusIcon className="h-5 w-5 mr-2" />
+          <span className="hidden sm:inline">Add Customer</span>
+          <span className="sm:hidden">Add</span>
+        </button>
+      </div>
+
+      {/* Stats Cards */}
+      {stats && !statsLoading && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-background-secondary rounded-lg shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                <p className="text-2xl font-bold text-gray-900">${stats.totalRevenue.toLocaleString()}</p>
+              </div>
+              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <span className="text-green-600 text-lg">💰</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-background-secondary rounded-lg shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Avg Order Value</p>
+                <p className="text-2xl font-bold text-gray-900">${stats.averageOrderValue.toFixed(2)}</p>
+              </div>
+              <div className="h-12 w-12 bg-primary-50 rounded-lg flex items-center justify-center">
+                <span className="text-primary-600 text-lg">📊</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-background-secondary rounded-lg shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Active Rate</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.totalCustomers > 0 ? Math.round((stats.activeCustomers / stats.totalCustomers) * 100) : 0}%
+                </p>
+              </div>
+              <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <span className="text-blue-600 text-lg">✅</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-background-secondary rounded-lg shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Growth Rate</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  +{stats.totalCustomers > 0 ? Math.round((stats.newCustomersThisMonth / stats.totalCustomers) * 100) : 0}%
+                </p>
+              </div>
+              <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                <span className="text-purple-600 text-lg">📈</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Filters */}
+      <CustomerFilters
+        filters={filters}
+        onFiltersChange={setFilters}
+      />
+
+      {/* Customer Table */}
+      <CustomerTable
+        filters={filters}
+        onFiltersChange={setFilters}
+      />
+    </div>
   );
 }
-
-const mockUsers: ApplicationUser[] = [
-  {
-    id: '1',
-    email: 'john.doe@example.com',
-    firstName: 'John',
-    lastName: 'Doe',
-    phoneNumber: '+1234567890',
-    roles: ['CUSTOMER'],
-    createdAt: '2024-01-15T10:30:00Z'
-  },
-  {
-    id: '2',
-    email: 'jane.smith@example.com',
-    firstName: 'Jane',
-    lastName: 'Smith',
-    phoneNumber: '+1234567891',
-    roles: ['VENDOR'],
-    createdAt: '2024-01-14T09:15:00Z'
-  },
-  {
-    id: '3',
-    email: 'admin@chowmate.com',
-    firstName: 'Admin',
-    lastName: 'User',
-    phoneNumber: '+1234567892',
-    roles: ['ADMIN'],
-    createdAt: '2024-01-10T08:00:00Z'
-  }
-];

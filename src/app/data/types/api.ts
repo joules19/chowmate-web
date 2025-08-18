@@ -26,7 +26,7 @@ export interface SearchFilters {
 }
 
 export interface AdminDashboardStats {
-  totalUsers: number;
+  totalCustomers: number;
   totalVendors: number;
   totalRiders: number;
   totalOrders: number;

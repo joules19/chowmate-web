@@ -1,46 +1,95 @@
 "use client";
 
-export default function OrderStatusChart() {
-  const statusData = [
-    { status: 'Completed', count: 2850, color: 'bg-green-500', percentage: 65 },
-    { status: 'Pending', count: 420, color: 'bg-yellow-500', percentage: 15 },
-    { status: 'In Progress', count: 380, color: 'bg-primary-500', percentage: 12 },
-    { status: 'Cancelled', count: 210, color: 'bg-red-500', percentage: 8 }
-  ];
+import { OrderStatusFilters } from "@/app/lib/api/repositories/dashboard-repository";
+import { useOrderStatusData } from "@/app/lib/hooks/api-hooks.ts/use-dashboard";
+
+interface Props {
+  filters?: OrderStatusFilters;
+}
+
+export default function OrderStatusChart({ filters }: Props) {
+  const { data: statusData, isLoading, error, refetch } = useOrderStatusData(filters);
+
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded mb-6 w-48"></div>
+          <div className="space-y-4">
+            {[...Array(5)].map((_, index) => (
+              <div key={index} className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-gray-200 rounded-full"></div>
+                <div className="h-4 bg-gray-200 rounded flex-1"></div>
+                <div className="h-4 bg-gray-200 rounded w-12"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+        <div className="bg-red-50 border border-red-200 rounded p-4">
+          <div className="flex items-center justify-between">
+            <p className="text-red-600">Failed to load order status data: {error.message}</p>
+            <button
+              onClick={() => refetch()}
+              className="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded text-sm transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!statusData || statusData.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+        <div className="bg-yellow-50 border border-yellow-200 rounded p-4">
+          <p className="text-yellow-600">No order status data available</p>
+        </div>
+      </div>
+    );
+  }
 
   const total = statusData.reduce((sum, item) => sum + item.count, 0);
 
   return (
-    <div 
-      className="bg-surface-0 rounded-card shadow-soft border border-border-light p-4 sm:p-6"
+    <div
+      className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6"
       role="region"
       aria-label="Order status distribution"
     >
-      <h3 className="text-lg font-semibold text-text-primary mb-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-6">
         Order Status Distribution
       </h3>
 
       <div className="space-y-3 sm:space-y-4">
         {statusData.map((item, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="flex flex-col sm:flex-row sm:items-center gap-3"
             role="group"
             aria-label={`${item.status}: ${item.count} orders, ${item.percentage}%`}
           >
             <div className="flex items-center space-x-3 min-w-0 flex-shrink-0">
-              <div 
+              <div
                 className={`w-3 h-3 rounded-full ${item.color} flex-shrink-0`}
                 role="img"
                 aria-label={`${item.status} indicator`}
               />
-              <span className="text-sm font-medium text-text-secondary truncate">
+              <span className="text-sm font-medium text-gray-700 truncate">
                 {item.status}
               </span>
             </div>
             <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
-              <div 
-                className="flex-1 w-full sm:w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2"
+              <div
+                className="flex-1 w-full sm:w-32 bg-gray-200 rounded-full h-2"
                 role="progressbar"
                 aria-valuenow={item.percentage}
                 aria-valuemin={0}
@@ -52,10 +101,10 @@ export default function OrderStatusChart() {
                   style={{ width: `${item.percentage}%` }}
                 />
               </div>
-              <span className="text-sm font-medium text-text-primary w-12 sm:w-16 text-right flex-shrink-0">
+              <span className="text-sm font-medium text-gray-900 w-12 sm:w-16 text-right flex-shrink-0">
                 {item.count.toLocaleString()}
               </span>
-              <span className="text-xs text-text-tertiary w-8 sm:w-10 text-right flex-shrink-0">
+              <span className="text-xs text-gray-500 w-8 sm:w-10 text-right flex-shrink-0">
                 {item.percentage}%
               </span>
             </div>
@@ -63,13 +112,13 @@ export default function OrderStatusChart() {
         ))}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-border-light">
+      <div className="mt-6 pt-4 border-t border-gray-200">
         <div className="flex justify-between items-center">
-          <span className="text-sm font-medium text-text-tertiary">
+          <span className="text-sm font-medium text-gray-500">
             Total Orders
           </span>
-          <span 
-            className="text-lg font-bold text-text-primary"
+          <span
+            className="text-lg font-bold text-gray-900"
             role="status"
             aria-label={`Total orders: ${total.toLocaleString()}`}
           >

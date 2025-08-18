@@ -1,125 +1,218 @@
 "use client";
 
-import { ClockIcon, CheckCircleIcon, XCircleIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { useState } from 'react';
+import { ClockIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { ActivityFilters } from '@/app/data/types/activities';
+import { useRecentActivities } from '@/app/lib/hooks/api-hooks.ts/use-dashboard';
+import ActivityModal from '../activities/ActivityModal';
 
-export default function RecentActivities() {
-  const activities = [
-    {
-      id: 1,
-      type: 'vendor_approved',
-      message: 'Vendor "Pizza Palace" has been approved',
-      time: '2 minutes ago',
-      icon: CheckCircleIcon,
-      iconColor: 'text-green-500'
-    },
-    {
-      id: 2,
-      type: 'order_cancelled',
-      message: 'Order #ORD-12345 was cancelled by customer',
-      time: '5 minutes ago',
-      icon: XCircleIcon,
-      iconColor: 'text-red-500'
-    },
-    {
-      id: 3,
-      type: 'rider_registered',
-      message: 'New rider "John Doe" registered and pending verification',
-      time: '12 minutes ago',
-      icon: ExclamationCircleIcon,
-      iconColor: 'text-yellow-500'
-    },
-    {
-      id: 4,
-      type: 'vendor_suspended',
-      message: 'Vendor "Burger Hub" has been suspended for policy violation',
-      time: '25 minutes ago',
-      icon: XCircleIcon,
-      iconColor: 'text-red-500'
-    },
-    {
-      id: 5,
-      type: 'order_completed',
-      message: 'Order #ORD-12340 completed successfully',
-      time: '32 minutes ago',
-      icon: CheckCircleIcon,
-      iconColor: 'text-green-500'
-    },
-    {
-      id: 6,
-      type: 'user_registered',
-      message: 'New user "Sarah Wilson" registered',
-      time: '1 hour ago',
-      icon: CheckCircleIcon,
-      iconColor: 'text-primary-500'
-    }
-  ];
+interface Props {
+  filters?: ActivityFilters;
+}
 
-  return (
-    <div 
-      className="bg-surface-0 rounded-card shadow-soft border border-border-light p-4 sm:p-6"
-      role="region"
-      aria-label="Recent activities"
-    >
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h3 className="text-lg font-semibold text-text-primary">
-          Recent Activities
-        </h3>
-        <button 
-          className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 focus:ring-2 focus:ring-primary-500 rounded px-2 py-1 self-start sm:self-auto"
-          aria-label="View all activities"
-        >
-          View All
-        </button>
-      </div>
+const iconMap: Record<string, any> = {
+  'UserPlusIcon': '👤',
+  'CheckCircleIcon': '✅',
+  'XCircleIcon': '❌',
+  'ShoppingBagIcon': '🛍️',
+  'TruckIcon': '🚛',
+  'XMarkIcon': '❌',
+  'UserIcon': '👤',
+  'CreditCardIcon': '💳',
+  'ExclamationTriangleIcon': '⚠️',
+  'InformationCircleIcon': 'ℹ️',
+};
 
-      <div 
-        className="space-y-3 sm:space-y-4"
-        role="list"
-        aria-label="Activity list"
-      >
-        {activities.map((activity) => {
-          const Icon = activity.icon;
-          return (
-            <div 
-              key={activity.id} 
-              className="flex items-start space-x-3 p-2 rounded-card hover:bg-surface-100 transition-colors"
-              role="listitem"
-            >
-              <div 
-                className={`flex-shrink-0 ${activity.iconColor} p-1`}
-                role="img"
-                aria-label={`${activity.type} activity`}
-              >
-                <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-text-primary leading-relaxed">
-                  {activity.message}
-                </p>
-                <div className="flex items-center mt-1">
-                  <ClockIcon className="h-3 w-3 text-gray-400 mr-1 flex-shrink-0" aria-hidden="true" />
-                  <span 
-                    className="text-xs text-text-tertiary"
-                    role="status"
-                    aria-label={`Activity occurred ${activity.time}`}
-                  >
-                    {activity.time}
-                  </span>
+export default function RecentActivities({ filters }: Props) {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<{
+    type: 'user' | 'entity';
+    userId?: string;
+    userName?: string;
+    entityType?: string;
+    entityId?: string;
+    entityName?: string;
+  } | null>(null);
+
+  const queryFilters = {
+    ...filters,
+    pageSize: 10, // Limit to 10 for dashboard display
+  };
+
+  const { data: activitiesData, isLoading, error, refetch } = useRecentActivities(queryFilters);
+
+  const handleViewUserActivities = (userId: string, userName: string) => {
+    setSelectedActivity({
+      type: 'user',
+      userId,
+      userName,
+    });
+    setShowModal(true);
+  };
+
+  const handleViewEntityActivities = (entityType: string, entityId: string, entityName: string) => {
+    setSelectedActivity({
+      type: 'entity',
+      entityType,
+      entityId,
+      entityName,
+    });
+    setShowModal(true);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded mb-6 w-40"></div>
+          <div className="space-y-4">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="flex items-start space-x-3 p-2">
+                <div className="w-8 h-8 bg-gray-200 rounded"></div>
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 rounded mb-2 w-3/4"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+        <div className="bg-red-50 border border-red-200 rounded p-4">
+          <div className="flex items-center justify-between">
+            <p className="text-red-600">Failed to load recent activities: {error.message}</p>
+            <button
+              onClick={() => refetch()}
+              className="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded text-sm transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const activities = activitiesData?.data || [];
+
+  return (
+    <>
+      <div
+        className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6"
+        role="region"
+        aria-label="Recent activities"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Recent Activities
+          </h3>
+          <button
+            className="text-sm text-blue-600 hover:text-blue-700 focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 self-start sm:self-auto transition-colors"
+            aria-label="View all activities"
+          >
+            View All
+          </button>
+        </div>
+
+        {activities.length === 0 ? (
+          <div className="bg-gray-50 border border-gray-200 rounded p-8 text-center">
+            <p className="text-gray-500">No recent activities</p>
+          </div>
+        ) : (
+          <div
+            className="space-y-3 sm:space-y-4"
+            role="list"
+            aria-label="Activity list"
+          >
+            {activities.map((activity) => (
+              <div
+                key={activity.id}
+                className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group"
+                role="listitem"
+              >
+                <div
+                  className={`flex-shrink-0 ${activity.iconColor} p-1`}
+                  role="img"
+                  aria-label={`${activity.type} activity`}
+                >
+                  <span className="text-lg">{iconMap[activity.icon] || 'ℹ️'}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-900 leading-relaxed">
+                        {activity.description}
+                      </p>
+                      <div className="flex items-center mt-1">
+                        <ClockIcon className="h-3 w-3 text-gray-400 mr-1 flex-shrink-0" aria-hidden="true" />
+                        <span
+                          className="text-xs text-gray-500"
+                          role="status"
+                          aria-label={`Activity occurred ${activity.timeAgo}`}
+                        >
+                          {activity.timeAgo}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {activity.userId && activity.userName && (
+                        <button
+                          onClick={() => handleViewUserActivities(activity.userId!, activity.userName!)}
+                          className="p-1 text-gray-400 hover:text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                          title={`View ${activity.userName}'s activities`}
+                        >
+                          <EyeIcon className="h-4 w-4" />
+                        </button>
+                      )}
+                      {activity.entityId && activity.entityType && activity.entityName && (
+                        <button
+                          onClick={() => handleViewEntityActivities(
+                            activity.entityType!,
+                            activity.entityId!,
+                            activity.entityName!
+                          )}
+                          className="p-1 text-gray-400 hover:text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                          title={`View ${activity.entityName} audit trail`}
+                        >
+                          <EyeIcon className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-6 pt-4 border-t border-gray-200">
+          <button
+            className="w-full text-center text-sm text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-blue-500 rounded py-2 transition-colors"
+            aria-label="Load more activities"
+          >
+            Load More Activities
+          </button>
+        </div>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-border-light">
-        <button 
-          className="w-full text-center text-sm text-text-tertiary hover:text-text-primary focus:ring-2 focus:ring-primary-500 rounded py-2 transition-colors"
-          aria-label="Load more activities"
-        >
-          Load More Activities
-        </button>
-      </div>
-    </div>
+      {selectedActivity && (
+        <ActivityModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          type={selectedActivity.type}
+          userId={selectedActivity.userId}
+          userName={selectedActivity.userName}
+          entityType={selectedActivity.entityType}
+          entityId={selectedActivity.entityId}
+          entityName={selectedActivity.entityName}
+        />
+      )}
+    </>
   );
 }

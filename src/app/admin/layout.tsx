@@ -2,10 +2,12 @@ import { ReactNode } from "react";
 import AdminSidebar from "../components/admin/layout/AdminSidebar";
 import AdminHeader from "../components/admin/layout/AdminHeader";
 import AdminProtectedRoute from "../components/admin/layout/AdminProtectedRoute";
+import NavigationProgress from "../components/admin/shared/NavigationProgress";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <AdminProtectedRoute>
+      <NavigationProgress />
       <div className="min-h-screen bg-background-primary">
         <div className="flex h-screen">
           <AdminSidebar />

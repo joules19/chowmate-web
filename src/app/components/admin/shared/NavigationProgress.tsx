@@ -46,13 +46,13 @@ export default function NavigationProgress() {
   return (
     <div className="fixed top-0 left-0 right-0 z-[100] h-1">
       <div
-        className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-300 ease-out shadow-sm"
+        className="h-full bg-gradient-to-r from-primary-300 to-primary-400 transition-all duration-300 ease-out"
         style={{
           width: `${progress}%`,
-          boxShadow: progress > 0 ? '0 0 10px rgba(255, 193, 7, 0.5)' : 'none'
+          boxShadow: progress > 0 ? '0 0 6px rgba(255, 193, 7, 0.2)' : 'none'
         }}
       />
-      <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-primary-600/20 to-transparent" />
+      <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-primary-400/10 to-transparent" />
     </div>
   );
 }
