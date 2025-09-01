@@ -1,8 +1,13 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { AuthService } from '../auth/auth-service';
 
 // Base API configuration
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://chowmate-db2u.onrender.com';
+
+// Define custom request config interface
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({
@@ -30,7 +35,7 @@ apiClient.interceptors.request.use(
 
     return config;
   },
-  (error) => {
+  (error: AxiosError) => {
     console.error('Request interceptor error:', error);
     return Promise.reject(error);
   }
@@ -46,7 +51,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    const originalRequest = error.config as any;
+    const originalRequest = error.config as CustomAxiosRequestConfig;
 
     // Log errors in development
     if (process.env.NODE_ENV === 'development') {
@@ -56,14 +61,16 @@ apiClient.interceptors.response.use(
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
       // Avoid infinite loop by checking if this is already a retry
-      if (!originalRequest._retry) {
-        originalRequest._retry = true;
+      if (!originalRequest?._retry) {
+        if (originalRequest) {
+          originalRequest._retry = true;
+        }
 
         try {
           // Try to refresh the token
           const refreshSuccess = await AuthService.refreshToken();
 
-          if (refreshSuccess) {
+          if (refreshSuccess && originalRequest) {
             // Retry the original request with the new token
             const newToken = AuthService.getToken();
             if (newToken) {
@@ -103,11 +110,20 @@ apiClient.interceptors.response.use(
 );
 
 // Generic API response type
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   statusCode: number;
   message: string;
   data: T;
-  errors: any;
+  errors: Record<string, unknown> | null;
+  success?: boolean;
+}
+
+// Paginated response structure from API
+interface PaginatedApiResponse {
+  items: unknown[];
+  pageNumber: number;
+  pageSize: number;
+  totalCount: number;
 }
 
 // API client instance
@@ -117,11 +133,33 @@ export default apiClient;
 export const handleApiResponse = <T>(response: AxiosResponse<ApiResponse<T>>): T => {
   const { data } = response;
 
+  // Check if response has success field (new format)
+  if ('success' in data) {
+    if (!data.success) {
+      throw new Error(data.message || 'API request failed');
+    }
+    return data.data as T;
+  }
+
+  // Handle current API format
   if (data.statusCode !== 200) {
     throw new Error(data.message || 'API request failed');
   }
 
-  return data.data;
+  const responseData = data.data;
+
+  // Transform paginated responses if they have 'items' field
+  if (responseData && typeof responseData === 'object' && 'items' in responseData) {
+    const paginatedData = responseData as unknown as PaginatedApiResponse;
+    return {
+      items: paginatedData.items,
+      pageNumber: paginatedData.pageNumber,
+      pageSize: paginatedData.pageSize,
+      totalCount: paginatedData.totalCount
+    } as T;
+  }
+
+  return responseData;
 };
 
 // Helper function for making API requests with error handling
@@ -130,6 +168,16 @@ export const apiRequest = async <T>(
 ): Promise<T> => {
   try {
     const response = await requestFn();
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 Raw API Response Structure:', {
+        status: response.status,
+        data: response.data,
+        dataType: typeof response.data,
+        dataKeys: Object.keys(response.data || {}),
+      });
+    }
+
     return handleApiResponse(response);
   } catch (error) {
     if (axios.isAxiosError(error)) {

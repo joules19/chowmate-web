@@ -3,8 +3,7 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, EnvelopeIcon, PhoneIcon, MapPinIcon, CalendarIcon } from '@heroicons/react/24/outline';
-import { Customer } from '../../../data/types/customer';
-import { useCustomer, useCustomerOrders, useCustomerActivities } from '@/app/lib/hooks/api-hooks.ts/use-customer';
+import { useCustomer, useCustomerOrders } from '@/app/lib/hooks/api-hooks.ts/use-customer';
 
 interface CustomerModalProps {
     customerId: string;
@@ -15,7 +14,7 @@ interface CustomerModalProps {
 export default function CustomerModal({ customerId, isOpen, onClose }: CustomerModalProps) {
     const { data: customer, isLoading: customerLoading, error: customerError } = useCustomer(customerId);
     const { data: ordersData, isLoading: ordersLoading } = useCustomerOrders(customerId, { pageSize: 5 });
-    const { data: activities, isLoading: activitiesLoading } = useCustomerActivities(customerId, 10);
+    // const { data: activities, isLoading: activitiesLoading } = useCustomerActivities(customerId, 10);
 
     const getStatusBadge = (status: string) => {
         const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";

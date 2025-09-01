@@ -1,117 +1,143 @@
 import { BaseRepository } from "../base-repository";
-import { Rider, RiderStatus } from "../../../data/types/entities";
-import { ApiResponse } from "../../../data/types/api";
+import { Rider, RiderStatus, RiderSummary } from "../../../data/types/rider";
+import { PaginatedResponse } from "../../../data/types/api";
+import { AvailableRiderDto } from "@/app/data/types/order";
+
+// Zone assignment interfaces for riders
+export interface RiderZoneAssignment {
+  id: string;
+  riderId: string;
+  riderName: string;
+  zoneId: string;
+  zoneName: string;
+  zoneDescription?: string;
+  canDeliverTo: boolean;
+  customDeliveryFee?: number;
+  customDeliveryTime?: string; // TimeSpan as string "HH:mm:ss"
+  isActive: boolean;
+  assignedAt: string;
+  assignedBy: string;
+  assignedByName: string;
+}
+
+export interface AssignRiderToZoneRequest extends Record<string, unknown> {
+  zoneId: string;
+  canDeliverTo?: boolean;
+  customDeliveryFee?: number;
+  customDeliveryTime?: string; // TimeSpan as string "HH:mm:ss"
+}
+
+// Request DTOs to match API
+export interface ApproveRiderRequest extends Record<string, unknown> {
+  notes?: string;
+  notifyRider?: boolean;
+}
+
+export interface SuspendRiderRequest extends Record<string, unknown> {
+  reason: string;
+  suspensionEndDate?: string; // ISO date string
+  notifyRider?: boolean;
+}
+
+export interface RiderManagementResultDto {
+  riderId: string;
+  riderName: string;
+  oldStatus: RiderStatus;
+  newStatus: RiderStatus;
+  action: string;
+  actionDate: string;
+  adminUser: string;
+  reason?: string;
+  success: boolean;
+  message: string;
+}
+
+export interface RiderFilters {
+  search?: string;
+  status?: RiderStatus;
+  isOnline?: boolean;
+  page?: number;
+  limit?: number;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
 
 export class RiderRepository extends BaseRepository<Rider> {
   constructor() {
-    super('/api/admin/riders');
+    super('api/admin/riders');
   }
 
-  async approve(id: string, notes?: string): Promise<Rider> {
-    const response = await this.request<Rider>(`/${id}/approve`, {
-      method: 'POST',
-      body: JSON.stringify({ notes }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to approve rider');
+  async getAllRiders(filters?: RiderFilters): Promise<PaginatedResponse<RiderSummary>> {
+    const queryParams = new URLSearchParams();
+
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.append(key, value.toString());
+        }
+      });
     }
-    
-    return response.data;
+
+    const endpoint = queryParams.toString() ? `/all-riders?${queryParams}` : '/all-riders';
+    return this.get<PaginatedResponse<RiderSummary>>(endpoint);
+  }
+
+  /**
+ * Get all riders that don't have active assignments
+ */
+  async getAvailableRiders(): Promise<AvailableRiderDto[]> {
+    return this.get<AvailableRiderDto[]>('/available-riders');
+  }
+
+  // async getAvailableRiders(): Promise<Rider[]> {
+  //   return this.get<Rider[]>('/available-riders');
+  // }
+
+  async approve(id: string, request: ApproveRiderRequest): Promise<RiderManagementResultDto> {
+    return this.put<RiderManagementResultDto>(`/${id}/approve`, request);
   }
 
   async reject(id: string, reason: string): Promise<Rider> {
-    const response = await this.request<Rider>(`/${id}/reject`, {
-      method: 'POST',
-      body: JSON.stringify({ reason }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to reject rider');
-    }
-    
-    return response.data;
+    return this.post<Rider>(`/${id}/reject`, { reason });
   }
 
-  async suspend(id: string, reason: string): Promise<Rider> {
-    const response = await this.request<Rider>(`/${id}/suspend`, {
-      method: 'POST',
-      body: JSON.stringify({ reason }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to suspend rider');
-    }
-    
-    return response.data;
+  async suspend(id: string, request: SuspendRiderRequest): Promise<RiderManagementResultDto> {
+    return this.put<RiderManagementResultDto>(`/${id}/suspend`, request);
   }
 
   async activate(id: string): Promise<Rider> {
-    const response = await this.request<Rider>(`/${id}/activate`, {
-      method: 'POST',
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to activate rider');
-    }
-    
-    return response.data;
+    return this.put<Rider>(`/${id}/activate`, {});
   }
 
   async updateStatus(id: string, status: RiderStatus, notes?: string): Promise<Rider> {
-    const response = await this.request<Rider>(`/${id}/status`, {
-      method: 'PATCH',
-      body: JSON.stringify({ status, notes }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to update rider status');
-    }
-    
-    return response.data;
+    return this.put<Rider>(`/${id}/status`, { status, notes });
   }
 
   async getLocation(id: string): Promise<any> {
-    const response = await this.request<any>(`/${id}/location`);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch rider location');
-    }
-    
-    return response.data;
+    return this.get<any>(`/${id}/location`);
   }
 
   async getOnlineRiders(): Promise<Rider[]> {
-    const response = await this.request<Rider[]>('/online');
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch online riders');
-    }
-    
-    return response.data;
+    return this.get<Rider[]>('/online');
   }
 
   async getPerformanceMetrics(id: string, dateRange?: { from: string; to: string }): Promise<any> {
     const queryParams = new URLSearchParams();
-    
+
     if (dateRange) {
       queryParams.append('from', dateRange.from);
       queryParams.append('to', dateRange.to);
     }
 
     const endpoint = `/${id}/performance${queryParams.toString() ? `?${queryParams}` : ''}`;
-    const response = await this.request<any>(endpoint);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch performance metrics');
-    }
-    
-    return response.data;
+    return this.get<any>(endpoint);
   }
 
   async getDeliveryHistory(id: string, filters?: any): Promise<any> {
     const queryParams = new URLSearchParams();
-    
+
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -121,12 +147,19 @@ export class RiderRepository extends BaseRepository<Rider> {
     }
 
     const endpoint = `/${id}/deliveries${queryParams.toString() ? `?${queryParams}` : ''}`;
-    const response = await this.request<any>(endpoint);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch delivery history');
-    }
-    
-    return response.data;
+    return this.get<any>(endpoint);
+  }
+
+  // Zone assignment methods
+  async getRiderZoneAssignments(riderId: string): Promise<RiderZoneAssignment[]> {
+    return this.get<RiderZoneAssignment[]>(`/${riderId}/zones`);
+  }
+
+  async assignRiderToZone(riderId: string, request: AssignRiderToZoneRequest): Promise<RiderZoneAssignment> {
+    return this.post<RiderZoneAssignment>(`/${riderId}/assign-zone`, request);
+  }
+
+  async removeRiderFromZone(riderId: string, zoneId: string): Promise<void> {
+    return this.deleteRequest<void>(`/${riderId}/zones/${zoneId}`);
   }
 }

@@ -10,12 +10,12 @@ interface Props {
   filters?: ActivityFilters;
 }
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, string> = {
   'UserPlusIcon': '👤',
   'CheckCircleIcon': '✅',
   'XCircleIcon': '❌',
   'ShoppingBagIcon': '🛍️',
-  'TruckIcon': '🚛',
+  'TruckIcon': '🚲',
   'XMarkIcon': '❌',
   'UserIcon': '👤',
   'CreditCardIcon': '💳',

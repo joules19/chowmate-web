@@ -8,7 +8,8 @@ import {
     CustomerStats,
     SuspendCustomerRequest,
     UpdateCustomerStatusRequest,
-    DeleteCustomerRequest
+    DeleteCustomerRequest,
+    CustomerActionRequest
 } from '@/app/data/types/customer';
 import { PaginatedResponse } from '@/app/data/types/api';
 
@@ -21,7 +22,7 @@ export const CUSTOMER_QUERY_KEYS = {
     list: (filters?: CustomerFilters) => [...CUSTOMER_QUERY_KEYS.lists(), filters] as const,
     details: () => [...CUSTOMER_QUERY_KEYS.all, 'detail'] as const,
     detail: (id: string) => [...CUSTOMER_QUERY_KEYS.details(), id] as const,
-    orders: (id: string, filters?: any) => [...CUSTOMER_QUERY_KEYS.detail(id), 'orders', filters] as const,
+    orders: (id: string, filters?: Record<string, unknown>) => [...CUSTOMER_QUERY_KEYS.detail(id), 'orders', filters] as const,
     activities: (id: string, limit?: number) => [...CUSTOMER_QUERY_KEYS.detail(id), 'activities', limit] as const,
     stats: (dateFrom?: string, dateTo?: string) => [...CUSTOMER_QUERY_KEYS.all, 'stats', dateFrom, dateTo] as const,
 };
@@ -47,7 +48,7 @@ export function useCustomer(customerId: string): UseQueryResult<Customer, Error>
     });
 }
 
-export function useCustomerOrders(customerId: string, filters?: any): UseQueryResult<PaginatedResponse<CustomerOrderHistory>, Error> {
+export function useCustomerOrders(customerId: string, filters?: Record<string, unknown>): UseQueryResult<PaginatedResponse<CustomerOrderHistory>, Error> {
     return useQuery({
         queryKey: CUSTOMER_QUERY_KEYS.orders(customerId, filters),
         queryFn: () => customerRepo.getCustomerOrders(customerId, filters),
@@ -97,7 +98,7 @@ export function useActivateCustomer() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ customerId, request }: { customerId: string; request?: any }) =>
+        mutationFn: ({ customerId, request }: { customerId: string; request?: CustomerActionRequest }) =>
             customerRepo.activateCustomer(customerId, request),
         onSuccess: (data, variables) => {
             queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.lists() });
@@ -125,8 +126,8 @@ export function useDeleteCustomer() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ customerId, request }: { customerId: string; request: DeleteCustomerRequest }) =>
-            customerRepo.deleteCustomer(customerId, request),
+        mutationFn: ({ customerId }: { customerId: string; request: DeleteCustomerRequest }) =>
+            customerRepo.deleteCustomer(customerId),
         onSuccess: (data, variables) => {
             queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.lists() });
             queryClient.removeQueries({ queryKey: CUSTOMER_QUERY_KEYS.detail(variables.customerId) });

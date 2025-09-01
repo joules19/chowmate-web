@@ -6,11 +6,32 @@ import {
     CustomerStats,
     SuspendCustomerRequest,
     UpdateCustomerStatusRequest,
-    DeleteCustomerRequest,
     CustomerActionRequest
 } from '@/app/data/types/customer';
 import { BaseRepository } from '../base-repository';
 import { PaginatedResponse } from '@/app/data/types/api';
+
+// Define customer order filters interface
+interface CustomerOrderFilters {
+    status?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    pageNumber?: number;
+    pageSize?: number;
+    sortBy?: string;
+    sortOrder?: string;
+}
+
+// Define activity log type for better type safety
+interface CustomerActivityLog {
+    id: string;
+    customerId: string;
+    action: string;
+    description: string;
+    performedBy: string;
+    performedAt: string;
+    metadata?: Record<string, unknown>;
+}
 
 export class CustomerRepository extends BaseRepository<Customer> {
     constructor() {
@@ -38,15 +59,7 @@ export class CustomerRepository extends BaseRepository<Customer> {
 
     async getCustomerOrders(
         customerId: string,
-        filters?: {
-            status?: string;
-            dateFrom?: string;
-            dateTo?: string;
-            pageNumber?: number;
-            pageSize?: number;
-            sortBy?: string;
-            sortOrder?: string;
-        }
+        filters?: CustomerOrderFilters
     ): Promise<PaginatedResponse<CustomerOrderHistory>> {
         const queryParams = new URLSearchParams();
 
@@ -74,8 +87,8 @@ export class CustomerRepository extends BaseRepository<Customer> {
         return this.put<Customer>(`/${customerId}/status`, request);
     }
 
-    async deleteCustomer(customerId: string, request: DeleteCustomerRequest): Promise<boolean> {
-        await this.delete(`/${customerId}`);
+    async deleteCustomer(customerId: string): Promise<boolean> {
+        await this.deleteRequest<void>(`/${customerId}`);
         return true;
     }
 
@@ -89,8 +102,8 @@ export class CustomerRepository extends BaseRepository<Customer> {
         return this.get<CustomerStats>(endpoint);
     }
 
-    async getCustomerActivities(customerId: string, limit: number = 20): Promise<any[]> {
-        return this.get<any[]>(`/${customerId}/activities?limit=${limit}`);
+    async getCustomerActivities(customerId: string, limit: number = 20): Promise<CustomerActivityLog[]> {
+        return this.get<CustomerActivityLog[]>(`/${customerId}/activities?limit=${limit}`);
     }
 
     // Convenience methods for common actions
@@ -108,5 +121,18 @@ export class CustomerRepository extends BaseRepository<Customer> {
             reason,
             notifyCustomer
         });
+    }
+
+    // Additional convenience methods for bulk operations
+    async bulkSuspend(customerIds: string[], reason: string): Promise<void> {
+        return this.bulkAction('suspend', customerIds, { reason });
+    }
+
+    async bulkActivate(customerIds: string[], reason?: string): Promise<void> {
+        return this.bulkAction('activate', customerIds, { reason });
+    }
+
+    async bulkDelete(customerIds: string[], reason?: string): Promise<void> {
+        return this.bulkAction('delete', customerIds, { reason });
     }
 }

@@ -1,104 +1,122 @@
-import { BaseRepository } from "../base-repository";
-import { Vendor, VendorStatus } from "../../../data/types/entities";
-import { ApiResponse } from "../../../data/types/api";
+import {
+  Vendor,
+  VendorFilters,
+  VendorSummary,
+  VendorDetails,
+  ApproveVendorRequest,
+  RejectVendorRequest,
+  SuspendVendorRequest,
+  ActivateVendorRequest,
+  UpdateVendorStatusRequest,
+  VendorZoneAssignment,
+  AssignVendorToZoneRequest,
+  SendInstructionRequest,
+  VendorStats
+} from '@/app/data/types/vendor';
+import { BaseRepository } from '../base-repository';
+import { PaginatedResponse } from '@/app/data/types/api';
+import { Zone } from '@/app/data/types/location';
+
+// Define activity log type
+interface ActivityLog {
+  id: string;
+  entityType: string;
+  entityId: string;
+  action: string;
+  description: string;
+  performedBy: string;
+  performedAt: string;
+  metadata?: Record<string, unknown>;
+}
 
 export class VendorRepository extends BaseRepository<Vendor> {
   constructor() {
-    super('/api/admin/vendors');
+    super('api/admin/vendors');
   }
 
-  async approve(id: string, notes?: string): Promise<Vendor> {
-    const response = await this.request<Vendor>(`/${id}/approve`, {
-      method: 'POST',
-      body: JSON.stringify({ notes }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to approve vendor');
-    }
-    
-    return response.data;
-  }
-
-  async reject(id: string, reason: string): Promise<Vendor> {
-    const response = await this.request<Vendor>(`/${id}/reject`, {
-      method: 'POST',
-      body: JSON.stringify({ reason }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to reject vendor');
-    }
-    
-    return response.data;
-  }
-
-  async suspend(id: string, reason: string): Promise<Vendor> {
-    const response = await this.request<Vendor>(`/${id}/suspend`, {
-      method: 'POST',
-      body: JSON.stringify({ reason }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to suspend vendor');
-    }
-    
-    return response.data;
-  }
-
-  async activate(id: string): Promise<Vendor> {
-    const response = await this.request<Vendor>(`/${id}/activate`, {
-      method: 'POST',
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to activate vendor');
-    }
-    
-    return response.data;
-  }
-
-  async updateStatus(id: string, status: VendorStatus, notes?: string): Promise<Vendor> {
-    const response = await this.request<Vendor>(`/${id}/status`, {
-      method: 'PATCH',
-      body: JSON.stringify({ status, notes }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to update vendor status');
-    }
-    
-    return response.data;
-  }
-
-  async getAnalytics(id: string): Promise<any> {
-    const response = await this.request<any>(`/${id}/analytics`);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch vendor analytics');
-    }
-    
-    return response.data;
-  }
-
-  async getOrderHistory(id: string, filters?: any): Promise<any> {
+  async getAllVendors(filters?: VendorFilters): Promise<PaginatedResponse<VendorSummary>> {
     const queryParams = new URLSearchParams();
-    
+
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
+        if (value !== undefined && value !== null && value !== '') {
           queryParams.append(key, value.toString());
         }
       });
     }
 
-    const endpoint = `/${id}/orders${queryParams.toString() ? `?${queryParams}` : ''}`;
-    const response = await this.request<any>(endpoint);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch order history');
-    }
-    
-    return response.data;
+    const endpoint = queryParams.toString() ? `?${queryParams}` : '';
+    return this.get<PaginatedResponse<VendorSummary>>(endpoint);
+  }
+
+  async getVendorById(vendorId: string): Promise<VendorDetails> {
+    return this.get<VendorDetails>(`/${vendorId}`);
+  }
+
+  async approveVendor(vendorId: string, request: ApproveVendorRequest): Promise<Vendor> {
+    return this.put<Vendor>(`/${vendorId}/approve`, request);
+  }
+
+  async rejectVendor(vendorId: string, request: RejectVendorRequest): Promise<Vendor> {
+    return this.put<Vendor>(`/${vendorId}/reject`, request);
+  }
+
+  async suspendVendor(vendorId: string, request: SuspendVendorRequest): Promise<Vendor> {
+    return this.put<Vendor>(`/${vendorId}/suspend`, request);
+  }
+
+  async activateVendor(vendorId: string, request: ActivateVendorRequest): Promise<Vendor> {
+    return this.put<Vendor>(`/${vendorId}/activate`, request);
+  }
+
+  async updateVendorStatus(vendorId: string, request: UpdateVendorStatusRequest): Promise<Vendor> {
+    return this.put<Vendor>(`/${vendorId}/status`, request);
+  }
+
+  async getVendorZoneAssignments(vendorId: string): Promise<VendorZoneAssignment[]> {
+    return this.get<VendorZoneAssignment[]>(`/${vendorId}/zones`);
+  }
+
+  async getAvailableZones(): Promise<Zone[]> {
+    return this.get<Zone[]>('/zones/available');
+  }
+
+  async assignVendorToZone(vendorId: string, request: AssignVendorToZoneRequest): Promise<VendorZoneAssignment> {
+    return this.post<VendorZoneAssignment>(`/${vendorId}/assign-zone`, request);
+  }
+
+  async removeVendorFromZone(vendorId: string, zoneId: string): Promise<void> {
+    return this.deleteRequest<void>(`/${vendorId}/zones/${zoneId}`);
+  }
+
+  async sendInstruction(vendorId: string, request: SendInstructionRequest): Promise<void> {
+    return this.post<void>(`/${vendorId}/instructions`, request);
+  }
+
+  async getVendorStats(dateFrom?: string, dateTo?: string): Promise<VendorStats> {
+    const queryParams = new URLSearchParams();
+
+    if (dateFrom) queryParams.append('dateFrom', dateFrom);
+    if (dateTo) queryParams.append('dateTo', dateTo);
+
+    const endpoint = `/stats${queryParams.toString() ? `?${queryParams}` : ''}`;
+    return this.get<VendorStats>(endpoint);
+  }
+
+  async getVendorActivities(vendorId: string, limit: number = 20): Promise<ActivityLog[]> {
+    return this.get<ActivityLog[]>(`/${vendorId}/activities?limit=${limit}`);
+  }
+
+  // Convenience methods for common actions
+  async bulkApprove(vendorIds: string[], reason?: string): Promise<void> {
+    return this.bulkAction('approve', vendorIds, { reason });
+  }
+
+  async bulkReject(vendorIds: string[], reason: string): Promise<void> {
+    return this.bulkAction('reject', vendorIds, { reason });
+  }
+
+  async bulkSuspend(vendorIds: string[], reason: string): Promise<void> {
+    return this.bulkAction('suspend', vendorIds, { reason });
   }
 }

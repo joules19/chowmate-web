@@ -3,6 +3,7 @@
 import { RevenueDataFilters } from "@/app/lib/api/repositories/dashboard-repository";
 import { useRevenueData } from "@/app/lib/hooks/api-hooks.ts/use-dashboard";
 import { useState } from "react";
+import { formatCurrency } from "@/app/lib/utils/currency";
 
 interface Props {
   filters?: RevenueDataFilters;
@@ -114,9 +115,9 @@ export default function RevenueChart({ filters: propFilters }: Props) {
                 <div
                   className="w-full bg-blue-500 rounded-t-sm transition-all duration-300 hover:bg-blue-600 group-focus-within:ring-2 group-focus-within:ring-blue-500"
                   style={{ height: `${height}%`, minHeight: height > 0 ? '20px' : '0px' }}
-                  title={`${item.day}: $${item.revenue.toLocaleString()}`}
+                  title={`${item.day}: ${formatCurrency(item.revenue)}`}
                   role="img"
-                  aria-label={`${item.day}: $${item.revenue.toLocaleString()}`}
+                  aria-label={`${item.day}: ${formatCurrency(item.revenue)}`}
                   tabIndex={0}
                 />
                 <span className="text-xs text-gray-500 mt-2 truncate max-w-full">
@@ -130,7 +131,7 @@ export default function RevenueChart({ filters: propFilters }: Props) {
 
       <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm">
         <span className="text-gray-500">
-          Total: ${data.reduce((sum, item) => sum + item.revenue, 0).toLocaleString()}
+          Total: {formatCurrency(data.reduce((sum, item) => sum + item.revenue, 0))}
         </span>
         <span
           className="text-green-600 font-medium"

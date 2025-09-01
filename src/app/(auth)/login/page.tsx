@@ -21,16 +21,14 @@ const AdminLogin: React.FC = () => {
   // Check if user is already authenticated as admin
   useEffect(() => {
     const checkAuth = async () => {
-      try {
+   
         const user = await AuthService.initializeAuth();
         if (user && AuthService.hasAdminAccess()) {
           const targetUrl = redirectUrl || '/admin/dashboard';
           router.replace(targetUrl);
         }
-      } catch (error) {
-        // User not authenticated, stay on login page
       }
-    };
+    
 
     checkAuth();
   }, [router, redirectUrl]);
@@ -70,7 +68,7 @@ const AdminLogin: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const user = await AuthService.login(email, password);
+      await AuthService.login(email, password);
       
       if (!AuthService.hasAdminAccess()) {
         message.error('Access denied. Admin privileges required.');
@@ -83,9 +81,14 @@ const AdminLogin: React.FC = () => {
       const targetUrl = redirectUrl || '/admin/dashboard';
       router.replace(targetUrl);
 
-    } catch (err: any) {
-      console.error("Admin login failed:", err);
-      message.error(err.message || 'Login failed. Please verify your admin credentials.');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Admin login failed:", err);
+        message.error(err.message || 'Login failed. Please verify your admin credentials.');
+      } else {
+        console.error("Admin login failed with an unknown error:", err);
+        message.error('An unknown error occurred. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }

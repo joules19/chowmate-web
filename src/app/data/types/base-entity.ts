@@ -1,4 +1,4 @@
-export interface BaseEntity {
+export interface BaseEntity extends Record<string, unknown> {
   id: string;
   createdAt: string;
   createdBy?: string;

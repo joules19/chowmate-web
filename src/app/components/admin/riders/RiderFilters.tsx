@@ -2,7 +2,7 @@
 
 import { MagnifyingGlassIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import { SearchFilters } from "../../../data/types/api";
-import { RiderStatus } from "../../../data/types/entities";
+import { RiderStatus } from "@/app/data/types/rider";
 
 interface Props {
   filters: SearchFilters;
@@ -47,10 +47,12 @@ export default function RiderFilters({ filters, onFiltersChange }: Props) {
             className="w-full border border-border-default rounded-input px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary"
           >
             <option value="">All Statuses</option>
-            <option value={RiderStatus.PendingVerification}>Pending Verification</option>
-            <option value={RiderStatus.Active}>Active</option>
-            <option value={RiderStatus.Suspended}>Suspended</option>
-            <option value={RiderStatus.Inactive}>Inactive</option>
+            <option value="PendingVerification">Pending Verification</option>
+            <option value="Available">Available</option>
+            <option value="Busy">Busy</option>
+            <option value="Offline">Offline</option>
+            <option value="OnBreak">On Break</option>
+            <option value="Suspended">Suspended</option>
           </select>
         </div>
       </div>

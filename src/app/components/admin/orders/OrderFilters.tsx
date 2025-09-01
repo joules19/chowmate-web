@@ -2,7 +2,7 @@
 
 import { MagnifyingGlassIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import { SearchFilters } from "../../../data/types/api";
-import { OrderStatus } from "../../../data/types/entities";
+import { OrderStatus } from "../../../data/types/order";
 
 interface Props {
   filters: SearchFilters;
@@ -22,9 +22,9 @@ export default function OrderFilters({ filters, onFiltersChange }: Props) {
     onFiltersChange({ ...filters, dateFrom: dateFrom || undefined, page: 1 });
   };
 
-  const handleDateToChange = (dateTo: string) => {
-    onFiltersChange({ ...filters, dateTo: dateTo || undefined, page: 1 });
-  };
+  // const handleDateToChange = (dateTo: string) => {
+  //   onFiltersChange({ ...filters, dateTo: dateTo || undefined, page: 1 });
+  // };
 
   return (
     <div className="bg-surface-0 rounded-card shadow-soft border border-border-light p-6">
@@ -55,13 +55,13 @@ export default function OrderFilters({ filters, onFiltersChange }: Props) {
             className="w-full border border-border-default rounded-input px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary"
           >
             <option value="">All Statuses</option>
-            <option value={OrderStatus.Pending}>Pending</option>
-            <option value={OrderStatus.Preparing}>Preparing</option>
-            <option value={OrderStatus.RiderAssigned}>Rider Assigned</option>
-            <option value={OrderStatus.RiderArrived}>Rider Arrived</option>
-            <option value={OrderStatus.OutForDelivery}>Out for Delivery</option>
-            <option value={OrderStatus.Completed}>Completed</option>
-            <option value={OrderStatus.Cancelled}>Cancelled</option>
+            <option value="Pending">Pending</option>
+            <option value="Preparing">Preparing</option>
+            <option value="RiderAssigned">Rider Assigned</option>
+            <option value="RiderArrived">Rider Arrived</option>
+            <option value="OutForDelivery">Out for Delivery</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
           </select>
         </div>
 

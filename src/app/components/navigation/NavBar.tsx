@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -45,13 +46,12 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <img
-              src={ChowmateLogo.src}
-              width={190}
-              alt="Chowmate Logo"
-            />
-          </Link>
+          <Image
+            src={ChowmateLogo}
+            width={190}
+            height={50}
+            alt="Chowmate Logo"
+          />
 
           {/* Desktop Navigation */}
 

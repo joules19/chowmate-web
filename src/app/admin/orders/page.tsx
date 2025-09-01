@@ -4,6 +4,7 @@ import { useState } from "react";
 import OrderManagementTable from "../../components/admin/orders/OrderManagementTable";
 import OrderFilters from "../../components/admin/orders/OrderFilters";
 import OrderTrackingMap from "../../components/admin/orders/OrderTrackingMap";
+import PendingOrdersTable from "../../components/admin/orders/PendingOrdersTable";
 import { SearchFilters } from "../../data/types/api";
 
 export default function OrdersPage() {
@@ -14,7 +15,7 @@ export default function OrdersPage() {
     sortOrder: 'desc'
   });
   
-  const [viewMode, setViewMode] = useState<'table' | 'tracking'>('table');
+  const [viewMode, setViewMode] = useState<'table' | 'tracking' | 'pending'>('table');
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -48,7 +49,7 @@ export default function OrdersPage() {
           >
             <button
               onClick={() => setViewMode('table')}
-              className={`flex-1 xs:flex-none px-3 sm:px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:ring-primary-500 ${
+              className={`flex-1 xs:flex-none px-2 sm:px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:ring-primary-500 ${
                 viewMode === 'table' 
                   ? 'bg-primary-500 text-text-inverse' 
                   : 'bg-surface-0 text-text-secondary hover:bg-surface-50'
@@ -61,8 +62,22 @@ export default function OrdersPage() {
               <span className="sm:hidden">List</span>
             </button>
             <button
+              onClick={() => setViewMode('pending')}
+              className={`flex-1 xs:flex-none px-2 sm:px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:ring-primary-500 ${
+                viewMode === 'pending' 
+                  ? 'bg-primary-500 text-text-inverse' 
+                  : 'bg-surface-0 text-text-secondary hover:bg-surface-50'
+              }`}
+              role="tab"
+              aria-selected={viewMode === 'pending'}
+              aria-label="Switch to pending assignment view"
+            >
+              <span className="hidden sm:inline">Pending Assignment</span>
+              <span className="sm:hidden">Pending</span>
+            </button>
+            <button
               onClick={() => setViewMode('tracking')}
-              className={`flex-1 xs:flex-none px-3 sm:px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:ring-primary-500 ${
+              className={`flex-1 xs:flex-none px-2 sm:px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:ring-primary-500 ${
                 viewMode === 'tracking' 
                   ? 'bg-primary-500 text-text-inverse' 
                   : 'bg-surface-0 text-text-secondary hover:bg-surface-50'
@@ -95,6 +110,8 @@ export default function OrdersPage() {
           <OrderManagementTable filters={filters} />
         </>
       )}
+
+      {viewMode === 'pending' && <PendingOrdersTable />}
 
       {viewMode === 'tracking' && <OrderTrackingMap />}
     </div>

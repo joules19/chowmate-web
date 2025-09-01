@@ -7,11 +7,11 @@ import {
   ChartBarIcon,
   UsersIcon,
   BuildingStorefrontIcon,
-  TruckIcon,
   ShoppingBagIcon,
   ChevronLeftIcon,
   ChevronRightIcon
 } from "@heroicons/react/24/outline";
+import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
 import { Permission } from "../../../data/types/permissions";
 import Image from "next/image";
@@ -40,7 +40,7 @@ const menuItems = [
   {
     name: "Riders",
     href: "/admin/riders",
-    icon: TruckIcon,
+    icon: Bike,
     permission: Permission.VIEW_RIDERS
   },
   {

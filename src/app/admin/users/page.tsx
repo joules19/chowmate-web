@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { PlusIcon } from "@heroicons/react/24/outline";
+// import { PlusIcon } from "@heroicons/react/24/outline";
 import { useCustomerStats } from "@/app/lib/hooks/api-hooks.ts/use-customer";
 import CustomerFilters from "@/app/components/admin/customers/CustomerFilters";
 import CustomerTable from "@/app/components/admin/customers/CustomerTable";
 import { CustomerFilters as CustomerFiltersType } from "../../data/types/customer";
+import { formatCurrency } from "@/app/lib/utils/currency";
 
 
 export default function CustomersPage() {
@@ -53,15 +54,7 @@ export default function CustomersPage() {
           )}
         </div>
 
-        {/* Action Button */}
-        <button
-          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
-          aria-label="Add new customer"
-        >
-          <PlusIcon className="h-5 w-5 mr-2" />
-          <span className="hidden sm:inline">Add Customer</span>
-          <span className="sm:hidden">Add</span>
-        </button>
+
       </div>
 
       {/* Stats Cards */}
@@ -71,7 +64,7 @@ export default function CustomersPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">${stats.totalRevenue.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalRevenue)}</p>
               </div>
               <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
                 <span className="text-green-600 text-lg">💰</span>
@@ -83,7 +76,7 @@ export default function CustomersPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Avg Order Value</p>
-                <p className="text-2xl font-bold text-gray-900">${stats.averageOrderValue.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.averageOrderValue)}</p>
               </div>
               <div className="h-12 w-12 bg-primary-50 rounded-lg flex items-center justify-center">
                 <span className="text-primary-600 text-lg">📊</span>

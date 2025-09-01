@@ -11,7 +11,7 @@ export interface ActivityLog {
     entityName?: string;
     severity: string;
     ipAddress?: string;
-    additionalData?: any;
+    additionalData?: Record<string, unknown>;
     timestamp: string;
     timeAgo: string;
     icon: string;

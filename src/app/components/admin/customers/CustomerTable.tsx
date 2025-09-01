@@ -46,6 +46,15 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
     } | null>(null);
 
     const { data: customersData, isLoading, error, refetch } = useCustomers(filters);
+    
+    // Debug logging to see what data we're getting
+    console.log('🔍 Customer Table Data:', {
+        customersData,
+        isLoading,
+        error,
+        customersArray: customersData?.data,
+        customersCount: customersData?.data?.length
+    });
     const suspendMutation = useSuspendCustomer();
     const activateMutation = useActivateCustomer();
     const deleteMutation = useDeleteCustomer();
@@ -141,12 +150,11 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
         );
     }
 
-    const customers = customersData?.data || [];
+    const customers = customersData?.items || [];
     const pagination = customersData ? {
-        page: customersData.page,
-        limit: customersData.limit,
-        total: customersData.total,
-        totalPages: customersData.totalPages
+        pageNumber: customersData.pageNumber,
+        pageSize: customersData.pageSize,
+        totalCount: customersData.totalCount
     } : null;
 
     const getSortIcon = (column: string) => {
@@ -162,7 +170,7 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
                 {/* Table Header */}
                 <div className="px-6 py-4 border-b border-gray-200 bg-background-tertiary">
                     <h3 className="text-lg font-semibold text-gray-900">
-                        Customers ({pagination?.total || 0})
+                        Customers ({pagination?.totalCount || 0})
                     </h3>
                 </div>
 

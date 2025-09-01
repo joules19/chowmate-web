@@ -22,7 +22,7 @@ const iconMap: Record<string, string> = {
     'CheckCircleIcon': '✅',
     'XCircleIcon': '❌',
     'ShoppingBagIcon': '🛍️',
-    'TruckIcon': '🚛',
+    'TruckIcon': '🚲',
     'XMarkIcon': '❌',
     'UserIcon': '👤',
     'CreditCardIcon': '💳',

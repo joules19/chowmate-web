@@ -13,7 +13,7 @@ export default function UnauthorizedPage() {
             Access Denied
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            You don't have permission to access the admin panel.
+            You do not have permission to access the admin panel.
           </p>
         </div>
 
@@ -33,7 +33,7 @@ export default function UnauthorizedPage() {
                 >
                   Go to Homepage
                 </Link>
-                
+
                 <Link
                   href="/login"
                   className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"

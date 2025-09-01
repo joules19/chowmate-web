@@ -1,4 +1,4 @@
-import { BaseEntity } from "./base-entity";
+import { BaseEntity } from "./base-entity.js";
 import { ApplicationUser } from "./entities";
 
 export interface Customer extends BaseEntity {
@@ -94,6 +94,7 @@ export interface CustomerFilters {
 export interface CustomerActionRequest {
     reason?: string;
     notifyCustomer?: boolean;
+    [key: string]: unknown;
 }
 
 export interface SuspendCustomerRequest extends CustomerActionRequest {

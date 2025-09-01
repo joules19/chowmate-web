@@ -22,7 +22,7 @@ export class UserService extends BaseRepository<User> {
   async getUserByEmail(email: string): Promise<User | null> {
     try {
       return await this.get<User>(`/email/${encodeURIComponent(email)}`);
-    } catch (error) {
+    } catch {
       // If user not found, return null instead of throwing
       return null;
     }

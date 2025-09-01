@@ -1,6 +1,13 @@
 import { PaginatedResponse, SearchFilters } from "../../data/types/api";
 import apiClient, { ApiResponse, apiRequest } from "./axios-config";
-import { AxiosResponse } from "axios";
+
+// Define common data types for repository operations
+interface BulkActionRequest {
+  action: string;
+  ids: string[];
+  data?: Record<string, unknown>;
+  [key: string]: unknown; // Add index signature to conform to Record<string, unknown>
+}
 
 export abstract class BaseRepository<T> {
   protected endpoint: string;
@@ -15,13 +22,19 @@ export abstract class BaseRepository<T> {
     );
   }
 
-  protected async post<U>(path: string = '', data?: any): Promise<U> {
+  protected async post<U>(
+    path: string = '',
+    data?: Record<string, unknown> | FormData | string
+  ): Promise<U> {
     return apiRequest(() =>
       apiClient.post<ApiResponse<U>>(`${this.endpoint}${path}`, data)
     );
   }
 
-  protected async put<U>(path: string = '', data?: any): Promise<U> {
+  protected async put<U>(
+    path: string = '',
+    data?: Record<string, unknown> | FormData | string
+  ): Promise<U> {
     return apiRequest(() =>
       apiClient.put<ApiResponse<U>>(`${this.endpoint}${path}`, data)
     );
@@ -53,18 +66,23 @@ export abstract class BaseRepository<T> {
   }
 
   async create(data: Partial<T>): Promise<T> {
-    return this.post<T>('', data);
+    return this.post<T>('', data as Record<string, unknown>);
   }
 
   async update(id: string, data: Partial<T>): Promise<T> {
-    return this.put<T>(`/${id}`, data);
+    return this.put<T>(`/${id}`, data as Record<string, unknown>);
   }
 
   async delete(id: string): Promise<void> {
     return this.deleteRequest<void>(`/${id}`);
   }
 
-  async bulkAction(action: string, ids: string[], data?: any): Promise<void> {
-    return this.post<void>('/bulk-action', { action, ids, data });
+  async bulkAction(
+    action: string,
+    ids: string[],
+    data?: Record<string, unknown>
+  ): Promise<void> {
+    const requestData: BulkActionRequest = { action, ids, data };
+    return this.post<void>('/bulk-action', requestData);
   }
 }

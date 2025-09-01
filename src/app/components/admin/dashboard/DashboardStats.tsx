@@ -2,7 +2,8 @@
 
 import { DashboardStatsFilters } from "@/app/lib/api/repositories/dashboard-repository";
 import { useDashboardStats } from "@/app/lib/hooks/api-hooks.ts/use-dashboard";
-import { UsersIcon, BuildingStorefrontIcon, TruckIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { UsersIcon, BuildingStorefrontIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { Bike } from 'lucide-react';
 
 interface Props {
   filters?: DashboardStatsFilters;
@@ -75,7 +76,7 @@ export default function DashboardStats({ filters }: Props) {
     {
       name: "Total Riders",
       value: stats.totalRiders.toLocaleString(),
-      icon: TruckIcon,
+      icon: Bike,
       color: "bg-purple-500",
       change: "+15%",
       ariaLabel: `Total riders: ${stats.totalRiders.toLocaleString()}, increased by 15% from last month`
@@ -97,7 +98,7 @@ export default function DashboardStats({ filters }: Props) {
       role="region"
       aria-label="Dashboard statistics overview"
     >
-      {statItems.map((item, index) => {
+      {statItems.map((item) => {
         const Icon = item.icon;
         return (
           <div

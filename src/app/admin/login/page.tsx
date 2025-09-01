@@ -5,9 +5,8 @@ import Image from "next/image";
 import Logo from "../../assets/images/chowmate-light.png";
 import Illustration from "../../assets/images/illustration.png";
 import { Button, message } from "antd";
-import { LinkIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
+import { ShieldCheckIcon } from "@heroicons/react/24/outline";
 import { AuthService } from "../../lib/auth/auth-service";
-import { Permission } from "../../data/types/permissions";
 import InputField from "../../components/ui/InputField";
 
 const AdminLogin: React.FC = () => {
@@ -23,17 +22,14 @@ const AdminLogin: React.FC = () => {
   // Check if user is already authenticated as admin
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const user = await AuthService.initializeAuth();
-        if (user && AuthService.hasAdminAccess()) {
-          // Admin is already authenticated, redirect to admin dashboard
-          const targetUrl = redirectUrl || '/admin/dashboard';
-          router.replace(targetUrl);
-        }
-      } catch (error) {
-        // User not authenticated, stay on login page
+      const user = await AuthService.initializeAuth();
+      if (user && AuthService.hasAdminAccess()) {
+        // Admin is already authenticated, redirect to admin dashboard
+        const targetUrl = redirectUrl || '/admin/dashboard';
+        router.replace(targetUrl);
       }
-    };
+    }
+
 
     checkAuth();
   }, [router, redirectUrl]);
@@ -65,7 +61,7 @@ const AdminLogin: React.FC = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -74,17 +70,17 @@ const AdminLogin: React.FC = () => {
 
     try {
       // Use actual AuthService.login with real API
-      const user = await AuthService.login(email, password);
-      
+      await AuthService.login(email, password);
+
       // Check if user has admin access
       if (!AuthService.hasAdminAccess()) {
         message.error('Access denied. Admin privileges required.');
         await AuthService.logout();
         return;
       }
-      
+
       message.success('Admin login successful!');
-      
+
       // Redirect to admin dashboard
       const targetUrl = redirectUrl || '/admin/dashboard';
       router.replace(targetUrl);

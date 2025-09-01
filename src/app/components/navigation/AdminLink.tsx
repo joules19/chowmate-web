@@ -15,7 +15,7 @@ export default function AdminLink() {
         if (user && AuthService.hasAdminAccess()) {
           setHasAdminAccess(true);
         }
-      } catch (error) {
+      } catch {
         // User not authenticated or no admin access
         setHasAdminAccess(false);
       }

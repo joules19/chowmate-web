@@ -1,99 +1,97 @@
 import { BaseRepository } from "../base-repository";
-import { Order, OrderStatus } from "../../../data/types/entities";
-import { ApiResponse } from "../../../data/types/api";
+import { AllOrdersDto, AssignmentResultDto, AssignRiderToOrderRequest, AvailableRiderDto, Order, OrderStatus, PendingOrderDto } from "../../../data/types/order";
+import { PaginatedResponse } from "../../../data/types/api";
+
+export interface OrderFilters {
+  search?: string;
+  status?: OrderStatus | string;
+  dateFrom?: string;
+  dateTo?: string;
+  page?: number;
+  limit?: number;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
 
 export class OrderRepository extends BaseRepository<Order> {
   constructor() {
-    super('/api/admin/orders');
+    super('api/admin/orders');
+  }
+
+  /**
+   * Get all orders with full details using AllOrdersDto structure
+   */
+  async getAllOrders(filters?: OrderFilters): Promise<PaginatedResponse<AllOrdersDto>> {
+    const queryParams = new URLSearchParams();
+
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+
+    const endpoint = queryParams.toString() ? `?${queryParams}` : '';
+    return this.get<PaginatedResponse<AllOrdersDto>>(endpoint);
+  }
+
+  /**
+   * Get all orders that are currently in preparing or noriderfound status
+   */
+  async getOrdersPendingAssignment(): Promise<PendingOrderDto[]> {
+    return this.get<PendingOrderDto[]>('/pending-assignment');
+  }
+
+
+
+  /**
+   * Manually assign a rider to an order
+   */
+  async assignRiderToOrder(request: AssignRiderToOrderRequest): Promise<AssignmentResultDto> {
+    return this.post<AssignmentResultDto>('/assign-rider', request);
+  }
+
+  async replaceOrderRider(request: AssignRiderToOrderRequest): Promise<AssignmentResultDto> {
+    return this.post<AssignmentResultDto>('/replace-rider', request);
   }
 
   async updateStatus(id: string, status: OrderStatus, notes?: string): Promise<Order> {
-    const response = await this.request<Order>(`/${id}/status`, {
-      method: 'PATCH',
-      body: JSON.stringify({ status, notes }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to update order status');
-    }
-    
-    return response.data;
+    return this.put<Order>(`/${id}/status`, { status, notes });
   }
 
   async assignRider(id: string, riderId: string): Promise<Order> {
-    const response = await this.request<Order>(`/${id}/assign-rider`, {
-      method: 'POST',
-      body: JSON.stringify({ riderId }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to assign rider');
-    }
-    
-    return response.data;
+    return this.post<Order>(`/${id}/assign-rider`, { riderId });
   }
 
   async cancel(id: string, reason: string): Promise<Order> {
-    const response = await this.request<Order>(`/${id}/cancel`, {
-      method: 'POST',
-      body: JSON.stringify({ reason }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to cancel order');
-    }
-    
-    return response.data;
+    return this.post<Order>(`/${id}/cancel`, { reason });
   }
 
   async refund(id: string, amount?: number, reason?: string): Promise<Order> {
-    const response = await this.request<Order>(`/${id}/refund`, {
-      method: 'POST',
-      body: JSON.stringify({ amount, reason }),
-    });
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to process refund');
-    }
-    
-    return response.data;
+    return this.post<Order>(`/${id}/refund`, { amount, reason });
   }
 
   async getTracking(id: string): Promise<any> {
-    const response = await this.request<any>(`/${id}/tracking`);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch tracking data');
-    }
-    
-    return response.data;
+    return this.get<any>(`/${id}/tracking`);
   }
 
   async getLiveOrders(): Promise<Order[]> {
-    const response = await this.request<Order[]>('/live');
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch live orders');
-    }
-    
-    return response.data;
+    return this.get<Order[]>('/live');
   }
 
   async getOrderAnalytics(dateRange?: { from: string; to: string }): Promise<any> {
     const queryParams = new URLSearchParams();
-    
+
     if (dateRange) {
       queryParams.append('from', dateRange.from);
       queryParams.append('to', dateRange.to);
     }
 
     const endpoint = `/analytics${queryParams.toString() ? `?${queryParams}` : ''}`;
-    const response = await this.request<any>(endpoint);
-    
-    if (!response.success || !response.data) {
-      throw new Error(response.message || 'Failed to fetch order analytics');
-    }
-    
-    return response.data;
+    return this.get<any>(endpoint);
   }
 }
