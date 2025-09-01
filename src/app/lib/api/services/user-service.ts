@@ -1,5 +1,5 @@
 import { BaseRepository } from "../base-repository";
-import { User } from "../../../data/types/entities";
+import { User } from "../../../data/types/application-user";
 
 export class UserService extends BaseRepository<User> {
   constructor() {

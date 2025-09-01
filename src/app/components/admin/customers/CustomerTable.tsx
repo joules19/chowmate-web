@@ -52,8 +52,8 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
         customersData,
         isLoading,
         error,
-        customersArray: customersData?.data,
-        customersCount: customersData?.data?.length
+        customersArray: customersData?.items,
+        customersCount: customersData?.items?.length
     });
     const suspendMutation = useSuspendCustomer();
     const activateMutation = useActivateCustomer();
@@ -154,7 +154,11 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
     const pagination = customersData ? {
         pageNumber: customersData.pageNumber,
         pageSize: customersData.pageSize,
-        totalCount: customersData.totalCount
+        totalCount: customersData.totalCount,
+        totalPages: Math.ceil(customersData.totalCount / customersData.pageSize),
+        page: customersData.pageNumber, // Alias for compatibility
+        limit: customersData.pageSize, // Alias for compatibility
+        total: customersData.totalCount // Alias for compatibility
     } : null;
 
     const getSortIcon = (column: string) => {

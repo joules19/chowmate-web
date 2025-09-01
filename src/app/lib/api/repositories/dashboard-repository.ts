@@ -2,7 +2,7 @@ import { AdminDashboardStats, DashboardAnalytics, OrderStatusData, RevenueData }
 import { BaseRepository } from '../base-repository';
 import { ActivityFilters, ActivityLog, PaginatedActivities } from '@/app/data/types/activities';
 
-export interface DashboardStatsFilters {
+export interface DashboardStatsFilters extends Record<string, unknown> {
     startDate?: string;
     endDate?: string;
 }

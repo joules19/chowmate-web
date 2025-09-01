@@ -1,5 +1,5 @@
 import { BaseRepository } from "../base-repository";
-import { Vendor } from "../../../data/types/entities";
+import { Vendor } from "../../../data/types/vendor";
 
 export class VendorService extends BaseRepository<Vendor> {
   constructor() {

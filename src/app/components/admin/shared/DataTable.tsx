@@ -51,7 +51,7 @@ export default function DataTable<T extends Record<string, unknown>>({
     if (column.render) {
       return column.render(item);
     }
-    return item[column.key];
+    return item[column.key] as React.ReactNode;
   };
 
   if (loading) {

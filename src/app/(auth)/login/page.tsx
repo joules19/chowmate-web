@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Logo from "../../assets/images/chowmate-dark-mont.png";
 import {  message } from "antd";
@@ -8,7 +8,8 @@ import { AuthService } from "../../lib/auth/auth-service";
 import InputField from "../../components/ui/InputField";
 import Image from "next/image";
 
-const AdminLogin: React.FC = () => {
+// Component that uses searchParams - needs to be wrapped in Suspense
+const LoginContent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -278,6 +279,15 @@ const AdminLogin: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// Main component with Suspense boundary
+const AdminLogin: React.FC = () => {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 };
 

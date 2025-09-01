@@ -204,9 +204,9 @@ export default function CustomerModal({ customerId, isOpen, onClose }: CustomerM
                                                             <div key={i} className="h-12 bg-gray-200 rounded animate-pulse"></div>
                                                         ))}
                                                     </div>
-                                                ) : ordersData?.data && ordersData.data.length > 0 ? (
+                                                ) : ordersData?.items && ordersData.items.length > 0 ? (
                                                     <div className="space-y-2">
-                                                        {ordersData.data.slice(0, 5).map((order) => (
+                                                        {ordersData.items.slice(0, 5).map((order: any) => (
                                                             <div key={order.orderId} className="border border-gray-200 rounded-lg p-3">
                                                                 <div className="flex items-center justify-between">
                                                                     <div>

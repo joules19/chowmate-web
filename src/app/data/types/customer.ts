@@ -1,5 +1,5 @@
 import { BaseEntity } from "./base-entity.js";
-import { ApplicationUser } from "./entities";
+import { ApplicationUser } from "./application-user";
 
 export interface Customer extends BaseEntity {
     id: string;
