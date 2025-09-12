@@ -93,6 +93,12 @@ export class VendorRepository extends BaseRepository<Vendor> {
     return this.post<void>(`/${vendorId}/instructions`, request);
   }
 
+  async sendBackToPending(vendorId: string, message: string): Promise<void> {
+    return this.post<void>(`/${vendorId}/send-back-to-pending`, {
+      message: message.trim()
+    });
+  }
+
   async getVendorStats(dateFrom?: string, dateTo?: string): Promise<VendorStats> {
     const queryParams = new URLSearchParams();
 

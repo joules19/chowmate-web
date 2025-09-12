@@ -178,6 +178,19 @@ export const useRemoveRiderFromZone = () => {
   });
 };
 
+// Hook for sending rider back to pending
+export const useSendRiderBackToPending = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ riderId, message }: { riderId: string; message: string }) =>
+      riderRepository.sendBackToPending(riderId, message),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['riders'] });
+    },
+  });
+};
+
 // Hook for fetching available zones (reuse from vendor)
 export const useAvailableZones = () => {
   return useQuery({

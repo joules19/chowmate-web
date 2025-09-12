@@ -84,42 +84,56 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
         text: 'text-yellow-700',
         border: 'border-yellow-200',
         dot: 'bg-yellow-500',
-        label: 'Pending'
+        label: 'Pending Verification'
       },
-      [1]: { // Available
+      [1]: { // UnderReview
+        bg: 'bg-orange-50',
+        text: 'text-orange-700',
+        border: 'border-orange-200',
+        dot: 'bg-orange-500',
+        label: 'Under Review'
+      },
+      [2]: { // Available
         bg: 'bg-success-50',
         text: 'text-success-700',
         border: 'border-success-200',
         dot: 'bg-success-500',
         label: 'Available'
       },
-      [2]: { // Busy
+      [3]: { // Busy
         bg: 'bg-warning-50',
         text: 'text-warning-700',
         border: 'border-warning-200',
         dot: 'bg-warning-500',
         label: 'Busy'
       },
-      [3]: { // Offline
+      [4]: { // Offline
         bg: 'bg-gray-50',
         text: 'text-gray-700',
         border: 'border-gray-200',
         dot: 'bg-gray-400',
         label: 'Offline'
       },
-      [4]: { // OnBreak
+      [5]: { // OnBreak
         bg: 'bg-blue-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
         dot: 'bg-blue-500',
         label: 'On Break'
       },
-      [5]: { // Suspended
+      [6]: { // Suspended
         bg: 'bg-danger-50',
         text: 'text-danger-700',
         border: 'border-danger-200',
         dot: 'bg-danger-500',
         label: 'Suspended'
+      },
+      [7]: { // Rejected
+        bg: 'bg-red-50',
+        text: 'text-red-700',
+        border: 'border-red-200',
+        dot: 'bg-red-500',
+        label: 'Rejected'
       }
     };
 
@@ -242,8 +256,8 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
                         <div
                           key={rider.id}
                           className={`relative p-3 sm:p-4 cursor-pointer transition-all duration-200 hover:bg-surface-50 hover:shadow-sm ${selectedRider?.id === rider.id
-                              ? 'bg-primary-50 border-l-4 border-l-primary-500 shadow-sm'
-                              : ''
+                            ? 'bg-primary-50 border-l-4 border-l-primary-500 shadow-sm'
+                            : ''
                             }`}
                           onClick={() => setSelectedRider(rider)}
                         >

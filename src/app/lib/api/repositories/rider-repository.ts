@@ -162,4 +162,10 @@ export class RiderRepository extends BaseRepository<Rider> {
   async removeRiderFromZone(riderId: string, zoneId: string): Promise<void> {
     return this.deleteRequest<void>(`/${riderId}/zones/${zoneId}`);
   }
+
+  async sendBackToPending(riderId: string, message: string): Promise<void> {
+    return this.post<void>(`/${riderId}/send-back-to-pending`, {
+      message: message.trim()
+    });
+  }
 }

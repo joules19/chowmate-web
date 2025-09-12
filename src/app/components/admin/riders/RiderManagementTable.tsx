@@ -8,16 +8,20 @@ import {
   PauseIcon, 
   PlayIcon,
   ExclamationTriangleIcon,
-  MapPinIcon
+  MapPinIcon,
+  ArrowUturnLeftIcon
 } from "@heroicons/react/24/outline";
 import DataTable, { Column } from "../shared/DataTable";
 import { SearchFilters } from "../../../data/types/api";
 import { RiderSummary } from "@/app/data/types/rider";
-import { useRiders, useApproveRider, useSuspendRider, useActivateRider } from "@/app/lib/hooks/api-hooks.ts/use-rider";
+import { useRiders, useApproveRider, useRejectRider, useSuspendRider, useActivateRider, useSendRiderBackToPending } from "@/app/lib/hooks/api-hooks.ts/use-rider";
 import { RiderFilters, ApproveRiderRequest, SuspendRiderRequest } from "@/app/lib/api/repositories/rider-repository";
 import RiderDetailsModal from "./RiderDetailsModal";
 import ConfirmDialog from "../../ui/ConfirmDialog";
 import RiderZoneAssignmentModal from "./RiderZoneAssignmentModal";
+import RiderApproveModal from "./RiderApproveModal";
+import RiderRejectModal from "./RiderRejectModal";
+import RiderSendBackToPendingModal from "./RiderSendBackToPendingModal";
 
 interface Props {
   filters: SearchFilters;
@@ -29,11 +33,14 @@ export default function RiderManagementTable({ filters }: Props) {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showZoneModal, setShowZoneModal] = useState(false);
   const [riderForZoneAssignment, setRiderForZoneAssignment] = useState<RiderSummary | null>(null);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showSendBackModal, setShowSendBackModal] = useState(false);
   
   // Confirmation dialog states
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
-    type: 'approve' | 'suspend' | 'activate';
+    type: 'approve' | 'suspend' | 'activate' | 'reject';
     rider: RiderSummary | null;
     reason?: string;
   }>({
@@ -59,21 +66,16 @@ export default function RiderManagementTable({ filters }: Props) {
   
   // Mutation hooks
   const approveRiderMutation = useApproveRider();
+  const rejectRiderMutation = useRejectRider();
   const suspendRiderMutation = useSuspendRider();
   const activateRiderMutation = useActivateRider();
+  const sendBackToPendingMutation = useSendRiderBackToPending();
 
   const handleViewRider = (rider: RiderSummary) => {
     setSelectedRider(rider);
     setShowDetailsModal(true);
   };
 
-  const handleApproveRider = (rider: RiderSummary) => {
-    setConfirmDialog({
-      isOpen: true,
-      type: 'approve',
-      rider
-    });
-  };
 
   const handleSuspendRider = (rider: RiderSummary) => {
     setSuspendReason('Suspended by admin for review');
@@ -95,6 +97,75 @@ export default function RiderManagementTable({ filters }: Props) {
   const handleZoneAssignment = (rider: RiderSummary) => {
     setRiderForZoneAssignment(rider);
     setShowZoneModal(true);
+  };
+
+  const handleRejectRider = (rider: RiderSummary) => {
+    setSelectedRider(rider);
+    setShowRejectModal(true);
+  };
+
+  const handleSendBackToPending = (rider: RiderSummary) => {
+    setSelectedRider(rider);
+    setShowSendBackModal(true);
+  };
+
+  const handleConfirmApprove = async (data: { zoneIds: string[]; notes: string; notifyRider: boolean }) => {
+    if (!selectedRider) return;
+    
+    try {
+      // TODO: Update this to include zone assignment once the API is ready
+      const approveRequest: ApproveRiderRequest = {
+        notes: data.notes,
+        notifyRider: data.notifyRider
+        // zoneIds: data.zoneIds // Add this when backend supports it
+      };
+      
+      await approveRiderMutation.mutateAsync({ 
+        id: selectedRider.id, 
+        request: approveRequest
+      });
+      
+      // TODO: Assign zones separately if needed
+      console.log('Zone assignment needed:', data.zoneIds);
+      
+    } catch (error) {
+      console.error('Failed to approve rider:', error);
+    } finally {
+      setShowApproveModal(false);
+      setSelectedRider(null);
+    }
+  };
+
+  const handleConfirmReject = async (data: { reason: string; notifyRider: boolean }) => {
+    if (!selectedRider) return;
+    
+    try {
+      await rejectRiderMutation.mutateAsync({
+        id: selectedRider.id,
+        reason: data.reason
+      });
+    } catch (error) {
+      console.error('Failed to reject rider:', error);
+    } finally {
+      setShowRejectModal(false);
+      setSelectedRider(null);
+    }
+  };
+
+  const handleConfirmSendBackToPending = async (message: string) => {
+    if (!selectedRider) return;
+    
+    try {
+      await sendBackToPendingMutation.mutateAsync({
+        riderId: selectedRider.id,
+        message: message
+      });
+    } catch (error) {
+      console.error('Failed to send rider back to pending:', error);
+    } finally {
+      setShowSendBackModal(false);
+      setSelectedRider(null);
+    }
   };
 
   const handleConfirmAction = async () => {
@@ -148,11 +219,13 @@ export default function RiderManagementTable({ filters }: Props) {
   const getStatusBadge = (status: number | string) => {
     const statusConfig: Record<string, { color: string; label: string }> = {
       'PendingVerification': { color: 'bg-yellow-100 text-yellow-800', label: 'Pending' },
+      'UnderReview': { color: 'bg-blue-100 text-blue-800', label: 'Under Review' },
       'Available': { color: 'bg-green-100 text-green-800', label: 'Available' },
       'Busy': { color: 'bg-orange-100 text-orange-800', label: 'Busy' },
       'Offline': { color: 'bg-gray-100 text-gray-800', label: 'Offline' },
       'OnBreak': { color: 'bg-blue-100 text-blue-800', label: 'On Break' },
-      'Suspended': { color: 'bg-red-100 text-red-800', label: 'Suspended' }
+      'Suspended': { color: 'bg-red-100 text-red-800', label: 'Suspended' },
+      'Rejected': { color: 'bg-gray-100 text-gray-800', label: 'Rejected' }
     };
 
     const config = statusConfig[status as string] || statusConfig['Offline'];
@@ -241,21 +314,53 @@ export default function RiderManagementTable({ filters }: Props) {
             <EyeIcon className="h-4 w-4" />
           </button>
 
-          {rider.statusText === 'PendingVerification' && (
+          {rider.statusText === 'UnderReview' && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedRider(rider);
+                  setShowApproveModal(true);
+                }}
+                disabled={approveRiderMutation.isPending}
+                className="text-success-600 hover:text-success-700 p-1 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Approve Rider"
+              >
+                <CheckIcon className="h-4 w-4" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRejectRider(rider);
+                }}
+                className="text-danger-600 hover:text-danger-700 p-1 rounded transition-colors"
+                title="Reject Rider"
+              >
+                <XMarkIcon className="h-4 w-4" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSendBackToPending(rider);
+                }}
+                className="text-orange-600 hover:text-orange-700 p-1 rounded transition-colors"
+                title="Send Back to Pending"
+              >
+                <ArrowUturnLeftIcon className="h-4 w-4" />
+              </button>
+            </>
+          )}
+
+          {(rider.statusText === 'Rejected') && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                handleApproveRider(rider);
+                handleSendBackToPending(rider);
               }}
-              disabled={approveRiderMutation.isPending}
-              className="text-success-600 hover:text-success-700 p-1 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              title={approveRiderMutation.isPending ? "Approving..." : "Approve Rider"}
+              className="text-orange-600 hover:text-orange-700 p-1 rounded transition-colors"
+              title="Send Back to Pending"
             >
-              {approveRiderMutation.isPending ? (
-                <div className="animate-spin h-4 w-4 border-2 border-success-600 border-t-transparent rounded-full" />
-              ) : (
-                <CheckIcon className="h-4 w-4" />
-              )}
+              <ArrowUturnLeftIcon className="h-4 w-4" />
             </button>
           )}
 
@@ -380,6 +485,39 @@ export default function RiderManagementTable({ filters }: Props) {
           }}
         />
       )}
+
+      <RiderApproveModal
+        isOpen={showApproveModal}
+        onClose={() => {
+          setShowApproveModal(false);
+          setSelectedRider(null);
+        }}
+        onConfirm={handleConfirmApprove}
+        rider={selectedRider}
+        isLoading={approveRiderMutation.isPending}
+      />
+
+      <RiderRejectModal
+        isOpen={showRejectModal}
+        onClose={() => {
+          setShowRejectModal(false);
+          setSelectedRider(null);
+        }}
+        onConfirm={handleConfirmReject}
+        rider={selectedRider}
+        isLoading={rejectRiderMutation.isPending}
+      />
+
+      <RiderSendBackToPendingModal
+        isOpen={showSendBackModal}
+        onClose={() => {
+          setShowSendBackModal(false);
+          setSelectedRider(null);
+        }}
+        onConfirm={handleConfirmSendBackToPending}
+        rider={selectedRider}
+        isLoading={sendBackToPendingMutation.isPending}
+      />
 
       {/* Confirmation Dialogs */}
       {confirmDialog.isOpen && confirmDialog.type === 'approve' && (

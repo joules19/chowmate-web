@@ -188,3 +188,18 @@ export function useSendInstructionToVendor() {
         },
     });
 }
+
+export function useSendBackToPending() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ vendorId, message }: { vendorId: string; message: string }) =>
+            vendorRepo.sendBackToPending(vendorId, message),
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.lists() });
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.detail(variables.vendorId) });
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.stats() });
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.activities(variables.vendorId) });
+        },
+    });
+}

@@ -11,7 +11,8 @@ import {
   ChatBubbleLeftEllipsisIcon,
   ChevronUpIcon,
   ChevronDownIcon,
-  StarIcon
+  StarIcon,
+  ArrowUturnLeftIcon
 } from "@heroicons/react/24/outline";
 import { VendorFilters, VendorSummary, VendorStatus, ApproveVendorRequest, RejectVendorRequest, SuspendVendorRequest, ActivateVendorRequest } from "../../../data/types/vendor";
 
@@ -35,10 +36,11 @@ const getVendorStatus = (status: VendorStatus | number): VendorStatus => {
 type VendorActionData = ApproveVendorRequest | RejectVendorRequest | SuspendVendorRequest | ActivateVendorRequest;
 
 import ZoneAssignmentModal from './ZoneAssignmentModal';
-import { useVendors, useApproveVendor, useRejectVendor, useSuspendVendor, useActivateVendor } from '@/app/lib/hooks/api-hooks.ts/use-vendor';
+import { useVendors, useApproveVendor, useRejectVendor, useSuspendVendor, useActivateVendor, useSendBackToPending } from '@/app/lib/hooks/api-hooks.ts/use-vendor';
 import InstructionModal from './SendInstructionModal';
 import VendorActionModal from './VendorActionModal';
 import VendorDetailsModal from './VendorDetailsModal';
+import SendBackToPendingModal from './SendBackToPendingModal';
 import { formatCurrency } from '@/app/lib/utils/currency';
 
 interface Props {
@@ -98,6 +100,7 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   const [showActionModal, setShowActionModal] = useState(false);
   const [showZoneModal, setShowZoneModal] = useState(false);
   const [showInstructionModal, setShowInstructionModal] = useState(false);
+  const [showSendBackModal, setShowSendBackModal] = useState(false);
   const [actionType, setActionType] = useState<'approve' | 'reject' | 'suspend' | 'activate'>('approve');
 
   const { data: vendorsData, isLoading, error, refetch } = useVendors(filters);
@@ -105,6 +108,7 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   const rejectMutation = useRejectVendor();
   const suspendMutation = useSuspendVendor();
   const activateMutation = useActivateVendor();
+  const sendBackToPendingMutation = useSendBackToPending();
 
   // Move vendors declaration here, before it's used
   const vendors = vendorsData?.items || [];
@@ -151,6 +155,31 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   const handleSendInstruction = (vendor: VendorSummary) => {
     setSelectedVendor(vendor);
     setShowInstructionModal(true);
+  };
+
+  const handleSendBackToPending = (vendor: VendorSummary) => {
+    console.log('Send back to pending clicked for vendor:', vendor);
+    setSelectedVendor(vendor);
+    setShowSendBackModal(true);
+  };
+
+  const handleConfirmSendBackToPending = async (message: string) => {
+    if (!selectedVendor) return;
+    
+    console.log('Confirming send back to pending:', { vendorId: selectedVendor.id, message });
+    
+    try {
+      await sendBackToPendingMutation.mutateAsync({
+        vendorId: selectedVendor.id,
+        message: message
+      });
+      console.log('Successfully sent vendor back to pending');
+    } catch (error) {
+      console.error('Failed to send vendor back to pending:', error);
+    } finally {
+      setShowSendBackModal(false);
+      setSelectedVendor(null);
+    }
   };
 
   const handleSelectAll = (checked: boolean) => {
@@ -446,7 +475,7 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                           <EyeIcon className="h-4 w-4" />
                         </button>
 
-                        {getVendorStatus(vendor.status) === VendorStatus.PendingApproval && (
+                        {getVendorStatus(vendor.status) === VendorStatus.UnderReview && (
                           <>
                             <button
                               onClick={(e) => {
@@ -467,6 +496,16 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                               title="Reject Vendor"
                             >
                               <XMarkIcon className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSendBackToPending(vendor);
+                              }}
+                              className="text-orange-600 hover:text-orange-700 p-1 rounded transition-colors"
+                              title="Send Back to Pending"
+                            >
+                              <ArrowUturnLeftIcon className="h-4 w-4" />
                             </button>
                           </>
                         )}
@@ -509,16 +548,31 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                           </button>
                         )}
 
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSendInstruction(vendor);
-                          }}
-                          className="text-purple-600 hover:text-purple-700 p-1 rounded transition-colors"
-                          title="Send Instruction"
-                        >
-                          <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
-                        </button>
+                        {getVendorStatus(vendor.status) === VendorStatus.Rejected && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSendBackToPending(vendor);
+                            }}
+                            className="text-orange-600 hover:text-orange-700 p-1 rounded transition-colors"
+                            title="Send Back to Pending"
+                          >
+                            <ArrowUturnLeftIcon className="h-4 w-4" />
+                          </button>
+                        )}
+
+                        {getVendorStatus(vendor.status) !== VendorStatus.PendingApproval && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSendInstruction(vendor);
+                            }}
+                            className="text-purple-600 hover:text-purple-700 p-1 rounded transition-colors"
+                            title="Send Instruction"
+                          >
+                            <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -652,6 +706,19 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
             setShowInstructionModal(false);
             setSelectedVendor(null);
           }}
+        />
+      )}
+
+      {selectedVendor && showSendBackModal && (
+        <SendBackToPendingModal
+          isOpen={showSendBackModal}
+          vendorName={selectedVendor.businessName}
+          onClose={() => {
+            setShowSendBackModal(false);
+            setSelectedVendor(null);
+          }}
+          onConfirm={handleConfirmSendBackToPending}
+          isLoading={sendBackToPendingMutation.isPending}
         />
       )}
     </>

@@ -3,11 +3,13 @@ import { BaseEntity } from "./base-entity.js";
 
 export enum RiderStatus {
     PendingVerification = 'PendingVerification',
+    UnderReview = 'UnderReview',
     Available = 'Available',
     Busy = 'Busy',
     Offline = 'Offline',
     OnBreak = 'OnBreak',
-    Suspended = 'Suspended'
+    Suspended = 'Suspended',
+    Rejected = 'Rejected'
 }
 
 export interface Rider extends BaseEntity {
