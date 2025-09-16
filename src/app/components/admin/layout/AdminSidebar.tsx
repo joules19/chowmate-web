@@ -9,7 +9,9 @@ import {
   BuildingStorefrontIcon,
   ShoppingBagIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  MegaphoneIcon,
+  LightBulbIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -48,6 +50,18 @@ const menuItems = [
     href: "/admin/orders",
     icon: ShoppingBagIcon,
     permission: Permission.VIEW_ORDERS
+  },
+  {
+    name: "Advertisements",
+    href: "/admin/advertisements",
+    icon: MegaphoneIcon,
+    permission: Permission.VIEW_ADVERTISEMENTS
+  },
+  {
+    name: "Feature Requests",
+    href: "/admin/feature-requests",
+    icon: LightBulbIcon,
+    permission: Permission.VIEW_FEATURE_REQUESTS
   },
   // {
   //   name: "Analytics",

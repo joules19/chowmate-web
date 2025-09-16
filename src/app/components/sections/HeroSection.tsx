@@ -88,11 +88,11 @@ const HeroSection = () => {
                             className="inline-flex items-center gap-3 bg-white px-5 py-3 rounded-full shadow-lg"
                         >
                             <div className="relative">
-                                <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                                <div className="absolute inset-0 w-3 h-3 bg-yellow-500 rounded-full animate-ping"></div>
+                                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
                             </div>
                             <span className="text-sm font-semibold text-[#282828]">
-                                Launching Soon! Stay Tuned 🚀
+                                Now Live! Order Today 🚀
                             </span>
                         </motion.div>
 
@@ -155,53 +155,21 @@ const HeroSection = () => {
                         </div>
 
                         {/* CTA Buttons */}
-                        <div className="flex flex-wrap gap-4">
-                            <div className="relative">
-                                <Button
-                                    buttonText="Order Now"
-                                    mode="solid"
-                                    className="bg-[#FFC107] text-[#282828] px-8 py-4 rounded-full font-semibold hover:bg-[#FFD54F] hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
-                                >
-                                    Order Now <ArrowRight className="w-5 h-5" />
-                                </Button>
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.8, rotate: -12 }}
-                                    animate={{ opacity: 1, scale: 1, rotate: -12 }}
-                                    transition={{ delay: 0.5, type: "spring" }}
-                                    className="absolute -top-2 -right-2 bg-gradient-to-r from-[#282828] to-[#333333] text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg"
-                                >
-                                    <span className="flex items-center gap-1">
-                                        <span className="relative flex h-2 w-2">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                                        </span>
-                                        Coming Soon
-                                    </span>
-                                </motion.div>
-                            </div>
+                        {/* <div className="flex flex-wrap gap-4">
+                            <Button
+                                buttonText="Order Now"
+                                mode="solid"
+                                className="bg-[#FFC107] text-[#282828] px-8 py-4 rounded-full font-semibold hover:bg-[#FFD54F] hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
+                            >
+                                Order Now <ArrowRight className="w-5 h-5" />
+                            </Button>
 
-                            <div className="relative">
-                                <Button
-                                    buttonText="Become a Rider"
-                                    mode="outline"
-                                    className="border-2 border-[#282828] text-[#282828] px-8 py-4 rounded-full font-semibold hover:bg-[#282828] hover:text-white transition-all duration-200"
-                                />
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.8, rotate: 12 }}
-                                    animate={{ opacity: 1, scale: 1, rotate: 12 }}
-                                    transition={{ delay: 0.6, type: "spring" }}
-                                    className="absolute -top-2 -right-2 bg-gradient-to-r from-[#FFD54F] to-[#FFC107] text-[#282828] px-3 py-1 rounded-full text-xs font-bold shadow-lg"
-                                >
-                                    <span className="flex items-center gap-1">
-                                        <span className="relative flex h-2 w-2">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#282828] opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#282828]"></span>
-                                        </span>
-                                        Coming Soon
-                                    </span>
-                                </motion.div>
-                            </div>
-                        </div>
+                            <Button
+                                buttonText="Become a Rider"
+                                mode="outline"
+                                className="border-2 border-[#282828] text-[#282828] px-8 py-4 rounded-full font-semibold hover:bg-[#282828] hover:text-white transition-all duration-200"
+                            />
+                        </div> */}
 
                         {/* Features */}
                         <motion.div

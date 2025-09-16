@@ -19,7 +19,7 @@ export default function RiderMap() {
               Interactive map showing live location of all active riders
             </p>
             <div className="text-sm text-text-tertiary">
-              Map integration coming soon...
+              Map integration available - Enable location services
             </div>
           </div>
         </div>

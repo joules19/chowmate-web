@@ -28,7 +28,10 @@ export default function CTASection() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                        <motion.button
+                        <motion.a
+                            href="https://apps.apple.com/us/app/chowmate/id6751146155"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="bg-[#282828] text-white px-8 py-4 rounded-full flex items-center justify-center space-x-3 hover:bg-black transition-colors duration-200"
@@ -38,9 +41,12 @@ export default function CTASection() {
                                 <div className="text-xs">Download on the</div>
                                 <div className="text-lg font-semibold">App Store</div>
                             </div>
-                        </motion.button>
+                        </motion.a>
 
-                        <motion.button
+                        <motion.a
+                            href="https://play.google.com/store/apps/details?id=com.chowmate.app"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="bg-[#282828] text-white px-8 py-4 rounded-full flex items-center justify-center space-x-3 hover:bg-black transition-colors duration-200"
@@ -50,7 +56,7 @@ export default function CTASection() {
                                 <div className="text-xs">Get it on</div>
                                 <div className="text-lg font-semibold">Google Play</div>
                             </div>
-                        </motion.button>
+                        </motion.a>
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-[#282828]">

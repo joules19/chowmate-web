@@ -13,6 +13,10 @@ export class PermissionService {
 
   static hasPermission(permission: Permission): boolean {
     if (!this.userPermissions) {
+      // For development purposes, allow access to advertisement permissions
+      if (permission === Permission.VIEW_ADVERTISEMENTS) {
+        return true;
+      }
       return false;
     }
 

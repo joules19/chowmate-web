@@ -80,9 +80,9 @@ export default function SimpleFooter() {
                     <p className="text-sm text-[#A1A1A1]">
                         © {new Date().getFullYear()} Chowmate. All rights reserved.
                     </p>
-                    <p className="text-sm text-[#A1A1A1] italic">
+                    {/* <p className="text-sm text-[#A1A1A1] italic">
                         Launching Soon 🚀
-                    </p>
+                    </p> */}
                 </div>
             </div>
         </footer>

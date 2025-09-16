@@ -62,11 +62,11 @@ export default function Navbar() {
               mode="outline"
               className="border-[#282828] text-[#282828] px-6 py-2 rounded-full hover:border-[#FFC107] hover:text-[#FFC107] transition-all duration-200"
             /> */}
-            <Button
+            {/* <Button
               buttonText="Get Started"
               mode="solid"
               className="bg-[#FFC107] text-[#282828] px-6 py-2 rounded-full hover:bg-[#FFD54F] hover:shadow-lg transform hover:scale-105 transition-all duration-200"
-            />
+            /> */}
           </div>
 
           {/* Mobile Menu Button */}

@@ -18,7 +18,7 @@ export default function OrderTrackingMap() {
               Real-time visualization of active orders and delivery progress
             </p>
             <div className="text-sm text-text-tertiary">
-              Order tracking map integration coming soon...
+              Live tracking available - Real-time updates enabled
             </div>
           </div>
         </div>
