@@ -203,3 +203,15 @@ export function useSendBackToPending() {
         },
     });
 }
+
+export function useForceCloseAllVendorStores() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => vendorRepo.forceCloseAllVendorStores(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.lists() });
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.stats() });
+        },
+    });
+}

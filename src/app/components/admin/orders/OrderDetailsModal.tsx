@@ -361,6 +361,71 @@ export default function OrderDetailsModal({ isOpen, onClose, order }: Props) {
             </div>
           </div>
 
+          {/* Order Items Section */}
+          {order.orderItems && order.orderItems.length > 0 && (
+            <div className="mt-6">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Order Items</h3>
+                <div className="space-y-4">
+                  {order.orderItems.map((item, index) => (
+                    <div key={`${item.productId}-${index}`} className="bg-white rounded-lg p-4 border border-gray-200">
+                      <div className="flex items-start space-x-4">
+                        {/* Product Image */}
+                        {item.imageUrl && (
+                          <div className="flex-shrink-0">
+                            <img
+                              src={item.imageUrl}
+                              alt={item.productName}
+                              className="w-16 h-16 object-cover rounded-lg"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
+                        
+                        {/* Product Details */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h4 className="text-sm font-medium text-gray-900">{item.productName}</h4>
+                              <p className="text-sm text-gray-600">
+                                Base Price: {formatCurrency(item.basePrice)} × {item.quantity}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm font-medium text-gray-900">
+                                {formatCurrency(item.totalPrice)}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          {/* Selected Options */}
+                          {item.selectedOptions && item.selectedOptions.length > 0 && (
+                            <div className="mt-2">
+                              <p className="text-xs text-gray-500 mb-1">Selected Options:</p>
+                              <div className="space-y-1">
+                                {item.selectedOptions.map((option, optionIndex) => (
+                                  <div 
+                                    key={`${option.optionId}-${optionIndex}`}
+                                    className="flex justify-between items-center text-xs"
+                                  >
+                                    <span className="text-gray-600">• {option.optionName}</span>
+                                    <span className="text-gray-900">+{formatCurrency(option.price)}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Footer */}
           <div className="flex justify-end mt-6 pt-4 border-t border-gray-200">
             <button

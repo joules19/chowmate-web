@@ -125,4 +125,8 @@ export class VendorRepository extends BaseRepository<Vendor> {
   async bulkSuspend(vendorIds: string[], reason: string): Promise<void> {
     return this.bulkAction('suspend', vendorIds, { reason });
   }
+
+  async forceCloseAllVendorStores(): Promise<void> {
+    return this.post<void>('/force-close-all', {});
+  }
 }

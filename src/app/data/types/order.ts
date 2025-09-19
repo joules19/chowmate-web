@@ -49,6 +49,22 @@ export interface RiderInfo {
   rating: number;
 }
 
+export interface OptionDto {
+  optionId: string;
+  optionName: string;
+  price: number;
+}
+
+export interface OrderItemDetailsDto {
+  productId: string;
+  productName: string;
+  basePrice: number;
+  quantity: number;
+  totalPrice: number;
+  selectedOptions: OptionDto[];
+  imageUrl?: string;
+}
+
 export interface AllOrdersDto extends Record<string, unknown> {
   id: string;
   orderId: string;
@@ -84,6 +100,9 @@ export interface AllOrdersDto extends Record<string, unknown> {
   // Additional info
   assignmentAttempts: number;
   orderDuration?: string;
+  
+  // Order items
+  orderItems: OrderItemDetailsDto[];
 }
 
 export interface Order extends BaseEntity {
