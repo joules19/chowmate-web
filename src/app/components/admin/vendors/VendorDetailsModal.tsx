@@ -186,6 +186,10 @@ export default function VendorDetailsModal({ vendorId, isOpen, onClose }: Props)
                                                         <label className="text-sm font-medium text-text-secondary">Zone Assigned</label>
                                                         <p className="text-text-primary">{vendor.isZoneAssigned ? 'Yes' : 'No'}</p>
                                                     </div>
+                                                    <div>
+                                                        <label className="text-sm font-medium text-text-secondary">RC Number</label>
+                                                        <p className="text-text-primary">{vendor.rcNumber || 'N/A'}</p>
+                                                    </div>
                                                 </div>
                                             </div>
 

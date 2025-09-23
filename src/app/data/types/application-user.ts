@@ -23,4 +23,6 @@ export interface User extends BaseEntity {
     permissions: string[];
     profileImageUrl?: string;
     profileImagePublicId?: string;
+    hasActiveOrders?: boolean;
+    hasActiveDeliveries?: boolean;
 }

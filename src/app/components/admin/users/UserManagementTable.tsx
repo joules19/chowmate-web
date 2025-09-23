@@ -1,136 +1,281 @@
 "use client";
 
-import { useState } from "react";
-import { PlusIcon } from "@heroicons/react/24/outline";
-import CustomerTable from "../../../components/admin/customers/CustomerTable";
-import CustomerFilters from "../../../components/admin/customers/CustomerFilters";
-import { CustomerFilters as CustomerFiltersType } from "../../../data/types/customer";
-import { useCustomerStats } from "@/app/lib/hooks/api-hooks.ts/use-customer";
+import { useState, useEffect } from 'react';
+import { 
+  UserIcon, 
+  EnvelopeIcon, 
+  PhoneIcon,
+  CheckBadgeIcon,
+  XMarkIcon,
+  EyeIcon,
+  ArrowPathRoundedSquareIcon
+} from '@heroicons/react/24/outline';
+import { userService } from '@/app/lib/api/services/user-service';
+import { UserSummaryDto, GetAllUsersRequest } from '@/app/data/types/vendor';
+import { PaginatedResponse } from '@/app/data/types/api';
 
-export default function CustomersPage() {
-  const [filters, setFilters] = useState<CustomerFiltersType>({
-    pageNumber: 1,
-    pageSize: 10,
-    sortBy: 'createdAt',
-    sortOrder: 'desc'
-  });
+interface Props {
+  filters: GetAllUsersRequest;
+  onFiltersChange: (filters: GetAllUsersRequest) => void;
+  onUserSelect?: (user: UserSummaryDto) => void;
+}
 
-  const { data: stats, isLoading: statsLoading } = useCustomerStats();
+export default function UserManagementTable({ filters, onFiltersChange, onUserSelect }: Props) {
+  const [users, setUsers] = useState<PaginatedResponse<UserSummaryDto> | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>('');
+
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const response = await userService.getAllUsers(filters);
+      setUsers(response);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch users');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, [filters]);
+
+  const handlePageChange = (page: number) => {
+    onFiltersChange({ ...filters, pageNumber: page });
+  };
+
+  const getRoleColor = (role: string) => {
+    switch (role) {
+      case 'Customer':
+        return 'bg-blue-100 text-blue-700';
+      case 'Vendor':
+        return 'bg-green-100 text-green-700';
+      case 'Rider':
+        return 'bg-purple-100 text-purple-700';
+      case 'Admin':
+        return 'bg-red-100 text-red-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'active':
+      case 'approved':
+        return 'text-green-600';
+      case 'suspended':
+      case 'rejected':
+        return 'text-red-600';
+      case 'pending':
+      case 'pendingapproval':
+        return 'text-yellow-600';
+      default:
+        return 'text-gray-600';
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="bg-surface-0 rounded-card border border-border-light">
+        <div className="p-6">
+          <div className="animate-pulse space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-16 bg-surface-100 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-surface-0 rounded-card border border-border-light p-6">
+        <div className="text-center">
+          <p className="text-danger-600 mb-4">{error}</p>
+          <button
+            onClick={fetchUsers}
+            className="px-4 py-2 bg-primary-500 text-white rounded-button hover:bg-primary-600"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6 p-6 bg-background-primary min-h-screen">
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-        <div className="flex-1 min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
-            Customer Management
-          </h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Manage customer accounts and monitor their activity
-          </p>
-
-          {/* Quick Stats */}
-          {stats && !statsLoading && (
-            <div className="flex items-center space-x-6 mt-4">
-              <div className="text-sm">
-                <span className="font-medium text-gray-900">{stats.totalCustomers.toLocaleString()}</span>
-                <span className="text-gray-500 ml-1">Total</span>
-              </div>
-              <div className="text-sm">
-                <span className="font-medium text-green-600">{stats.activeCustomers.toLocaleString()}</span>
-                <span className="text-gray-500 ml-1">Active</span>
-              </div>
-              <div className="text-sm">
-                <span className="font-medium text-yellow-600">{stats.suspendedCustomers.toLocaleString()}</span>
-                <span className="text-gray-500 ml-1">Suspended</span>
-              </div>
-              <div className="text-sm">
-                <span className="font-medium text-primary-600">{stats.newCustomersThisMonth.toLocaleString()}</span>
-                <span className="text-gray-500 ml-1">New this month</span>
-              </div>
-            </div>
-          )}
+    <div className="bg-surface-0 rounded-card border border-border-light">
+      {/* Table Header */}
+      <div className="px-6 py-4 border-b border-border-light">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-text-primary">
+            All Users ({users?.totalCount || 0})
+          </h3>
+          <button
+            onClick={fetchUsers}
+            className="p-2 text-text-tertiary hover:text-text-primary hover:bg-surface-100 rounded-button"
+          >
+            <ArrowPathRoundedSquareIcon className="h-5 w-5" />
+          </button>
         </div>
-
-        {/* Action Button */}
-        <button
-          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
-          aria-label="Add new customer"
-        >
-          <PlusIcon className="h-5 w-5 mr-2" />
-          <span className="hidden sm:inline">Add Customer</span>
-          <span className="sm:hidden">Add</span>
-        </button>
       </div>
 
-      {/* Stats Cards */}
-      {stats && !statsLoading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-background-secondary rounded-lg shadow-sm border border-gray-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">${stats.totalRevenue.toLocaleString()}</p>
-              </div>
-              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <span className="text-green-600 text-lg">💰</span>
-              </div>
-            </div>
-          </div>
+      {/* Table Content */}
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-surface-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                User
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                Role & Status
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                Contact
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                Activity
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                Verification
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-text-secondary uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border-light">
+            {users?.items?.map((user) => (
+              <tr key={user.id} className="hover:bg-surface-50 transition-colors">
+                <td className="px-6 py-4">
+                  <div className="flex items-center">
+                    <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                      <UserIcon className="h-5 w-5 text-primary-600" />
+                    </div>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-text-primary">
+                        {user.fullName}
+                      </div>
+                      <div className="text-sm text-text-tertiary">
+                        {user.businessName || `Member since ${user.memberSince}`}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="space-y-1">
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getRoleColor(user.role)}`}>
+                      {user.role}
+                    </span>
+                    <div className={`text-sm font-medium ${getStatusColor(user.status)}`}>
+                      {user.status}
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center text-sm text-text-primary">
+                      <EnvelopeIcon className="h-4 w-4 mr-2 text-text-tertiary" />
+                      {user.email}
+                    </div>
+                    <div className="flex items-center text-sm text-text-primary">
+                      <PhoneIcon className="h-4 w-4 mr-2 text-text-tertiary" />
+                      {user.phoneNumber}
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="space-y-1">
+                    <div className="text-sm text-text-primary">
+                      {user.lastActivity}
+                    </div>
+                    <div className="text-xs text-text-tertiary">
+                      {user.totalOrders ? `${user.totalOrders} orders` : 'No orders'}
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex space-x-2">
+                    {user.isEmailVerified ? (
+                      <CheckBadgeIcon className="h-4 w-4 text-success-600" title="Email verified" />
+                    ) : (
+                      <XMarkIcon className="h-4 w-4 text-danger-600" title="Email not verified" />
+                    )}
+                    {user.isPhoneVerified ? (
+                      <CheckBadgeIcon className="h-4 w-4 text-success-600" title="Phone verified" />
+                    ) : (
+                      <XMarkIcon className="h-4 w-4 text-danger-600" title="Phone not verified" />
+                    )}
+                  </div>
+                  {(user.hasActiveOrders || user.hasActiveDeliveries) && (
+                    <div className="text-xs text-warning-600 mt-1">
+                      Has active {user.hasActiveOrders ? 'orders' : 'deliveries'}
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <button
+                    onClick={() => onUserSelect?.(user)}
+                    className="inline-flex items-center px-3 py-1 border border-border-light rounded-button text-sm text-text-primary hover:bg-surface-100 transition-colors"
+                  >
+                    <EyeIcon className="h-4 w-4 mr-1" />
+                    View
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-          <div className="bg-background-secondary rounded-lg shadow-sm border border-gray-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Avg Order Value</p>
-                <p className="text-2xl font-bold text-gray-900">${stats.averageOrderValue.toFixed(2)}</p>
-              </div>
-              <div className="h-12 w-12 bg-primary-50 rounded-lg flex items-center justify-center">
-                <span className="text-primary-600 text-lg">📊</span>
-              </div>
+      {/* Pagination */}
+      {users && users.totalCount > users.pageSize && (
+        <div className="px-6 py-4 border-t border-border-light">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-text-tertiary">
+              Showing {((users.pageNumber - 1) * users.pageSize) + 1} to{' '}
+              {Math.min(users.pageNumber * users.pageSize, users.totalCount)} of{' '}
+              {users.totalCount} users
             </div>
-          </div>
-
-          <div className="bg-background-secondary rounded-lg shadow-sm border border-gray-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Active Rate</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {stats.totalCustomers > 0 ? Math.round((stats.activeCustomers / stats.totalCustomers) * 100) : 0}%
-                </p>
-              </div>
-              <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span className="text-blue-600 text-lg">✅</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-background-secondary rounded-lg shadow-sm border border-gray-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Growth Rate</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  +{stats.totalCustomers > 0 ? Math.round((stats.newCustomersThisMonth / stats.totalCustomers) * 100) : 0}%
-                </p>
-              </div>
-              <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <span className="text-purple-600 text-lg">📈</span>
-              </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => handlePageChange(users.pageNumber - 1)}
+                disabled={users.pageNumber <= 1}
+                className="px-3 py-1 border border-border-light rounded-button text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-100"
+              >
+                Previous
+              </button>
+              <span className="px-3 py-1 text-sm">
+                Page {users.pageNumber} of {Math.ceil(users.totalCount / users.pageSize)}
+              </span>
+              <button
+                onClick={() => handlePageChange(users.pageNumber + 1)}
+                disabled={users.pageNumber >= Math.ceil(users.totalCount / users.pageSize)}
+                className="px-3 py-1 border border-border-light rounded-button text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-100"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Filters */}
-      <CustomerFilters
-        filters={filters}
-        onFiltersChange={setFilters}
-      />
-
-      {/* Customer Table */}
-      <CustomerTable
-        filters={filters}
-        onFiltersChange={setFilters}
-      />
+      {/* Empty State */}
+      {users && users.items.length === 0 && (
+        <div className="text-center py-12">
+          <UserIcon className="h-12 w-12 mx-auto text-text-tertiary opacity-50 mb-4" />
+          <h3 className="text-lg font-medium text-text-primary mb-2">No users found</h3>
+          <p className="text-text-tertiary">
+            Try adjusting your filters or search criteria.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

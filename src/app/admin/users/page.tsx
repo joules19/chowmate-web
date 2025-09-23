@@ -5,7 +5,9 @@ import { useState } from "react";
 import { useCustomerStats } from "@/app/lib/hooks/api-hooks.ts/use-customer";
 import CustomerFilters from "@/app/components/admin/customers/CustomerFilters";
 import CustomerTable from "@/app/components/admin/customers/CustomerTable";
+import UserRoleSwitcher from "@/app/components/admin/users/UserRoleSwitcher";
 import { CustomerFilters as CustomerFiltersType } from "../../data/types/customer";
+import { RoleSwitchResponse } from "../../data/types/vendor";
 import { formatCurrency } from "@/app/lib/utils/currency";
 
 
@@ -18,6 +20,17 @@ export default function CustomersPage() {
   });
 
   const { data: stats, isLoading: statsLoading } = useCustomerStats();
+  const [lastSwitchResult, setLastSwitchResult] = useState<RoleSwitchResponse | null>(null);
+
+  const handleRoleSwitchSuccess = (result: RoleSwitchResponse) => {
+    setLastSwitchResult(result);
+    // You can add toast notifications here
+  };
+
+  const handleRoleSwitchError = (error: string) => {
+    // You can add error notifications here
+    console.error('Role switch failed:', error);
+  };
 
   return (
     <div className="space-y-6 p-6 bg-background-primary min-h-screen">
@@ -54,8 +67,42 @@ export default function CustomersPage() {
           )}
         </div>
 
-
+        {/* Role Switcher */}
+        <UserRoleSwitcher
+          onSuccess={handleRoleSwitchSuccess}
+          onError={handleRoleSwitchError}
+        />
       </div>
+
+      {/* Role Switch Success Notification */}
+      {lastSwitchResult && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3 flex-1">
+              <h3 className="text-sm font-medium text-green-800">Role Switch Successful</h3>
+              <div className="mt-1 text-sm text-green-700">
+                <p>User {lastSwitchResult.userId} switched from {lastSwitchResult.fromRole} to {lastSwitchResult.toRole}</p>
+                <p className="text-xs text-green-600 mt-1">Switched at {new Date(lastSwitchResult.switchedAt).toLocaleString()}</p>
+              </div>
+            </div>
+            <div className="ml-3 flex-shrink-0">
+              <button
+                onClick={() => setLastSwitchResult(null)}
+                className="inline-flex text-green-400 hover:text-green-500 focus:outline-none"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Stats Cards */}
       {stats && !statsLoading && (
@@ -113,6 +160,7 @@ export default function CustomersPage() {
           </div>
         </div>
       )}
+
 
       {/* Filters */}
       <CustomerFilters

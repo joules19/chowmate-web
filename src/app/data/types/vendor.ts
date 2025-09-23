@@ -197,6 +197,7 @@ export interface VendorDetails extends Vendor {
     rating: number;
     reviewCount: number;
     vendorSince: string;
+    rcNumber: string;
     lastActivity?: string;
     complianceScore: number;
     performanceMetrics: {
@@ -371,4 +372,84 @@ export interface OperatingStatus {
     nextOpenTime?: string;
     nextCloseTime?: string;
     todaySchedule?: DaySchedule;
+}
+
+// Role switching types
+export type UserRole = 'Customer' | 'Vendor' | 'Rider';
+
+export interface RoleSwitchRequest extends Record<string, unknown> {
+    fromRole: UserRole;
+    toRole: UserRole;
+    reason?: string;
+    notifyUser: boolean;
+}
+
+export interface RoleSwitchResponse {
+    userId: string;
+    fromRole: string;
+    toRole: string;
+    switchedAt: string;
+    switchedBy: string;
+    reason?: string;
+}
+
+export interface UserSummaryDto {
+    id: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    dateOfBirth?: string;
+    city?: string;
+    state?: string;
+    role: string; // Primary role
+    status: string; // Role-specific status
+    isEmailVerified: boolean;
+    isPhoneVerified: boolean;
+    createdAt: string;
+    lastLoginAt?: string;
+    // Role-specific data
+    businessName?: string; // For vendors
+    totalOrders?: number; // For customers/vendors
+    totalSpent?: number; // For customers
+    totalEarnings?: number; // For vendors/riders
+    isOnline?: boolean; // For riders
+    rating?: number; // For vendors/riders
+    // Status indicators
+    hasActiveOrders: boolean;
+    hasActiveDeliveries: boolean;
+    suspensionReason?: string;
+    suspendedAt?: string;
+    // Calculated fields
+    lastActivity: string;
+    memberSince: string;
+}
+
+export interface UserForRoleSwitch {
+    userId: string;
+    name: string;
+    email: string;
+    phone: string;
+    currentRole: UserRole;
+    status: string;
+    hasActiveOrders?: boolean;
+    hasActiveDeliveries?: boolean;
+}
+
+export interface GetAllUsersRequest extends Record<string, unknown> {
+    search?: string;
+    role?: string; // Filter by role: Customer, Vendor, Rider, Admin
+    status?: string; // Filter by status
+    dateFrom?: string;
+    dateTo?: string;
+    isEmailVerified?: boolean;
+    isPhoneVerified?: boolean;
+    isActive?: boolean;
+    city?: string;
+    state?: string;
+    pageNumber?: number;
+    pageSize?: number;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
 }
