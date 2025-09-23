@@ -7,11 +7,11 @@ import {
     ExclamationTriangleIcon,
     UserIcon
 } from '@heroicons/react/24/outline';
-import { 
-    UserForRoleSwitch, 
-    RoleSwitchRequest, 
-    RoleSwitchResponse, 
-    UserRole 
+import {
+    UserForRoleSwitch,
+    RoleSwitchRequest,
+    RoleSwitchResponse,
+    UserRole
 } from '@/app/data/types/vendor';
 import { userService } from '@/app/lib/api/services/user-service';
 
@@ -29,7 +29,7 @@ export default function RoleSwitchModal({ user, isOpen, onClose, onSuccess }: Pr
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>('');
 
-    const availableRoles: UserRole[] = ['Customer', 'Vendor', 'Rider'].filter(
+    const availableRoles: UserRole[] = (['Customer', 'Vendor', 'Rider'] as UserRole[]).filter(
         role => role !== user.currentRole
     );
 
@@ -129,7 +129,7 @@ export default function RoleSwitchModal({ user, isOpen, onClose, onSuccess }: Pr
                                             <p><span className="font-medium">Name:</span> {user.name}</p>
                                             <p><span className="font-medium">Email:</span> {user.email}</p>
                                             <p><span className="font-medium">Phone:</span> {user.phone}</p>
-                                            <p><span className="font-medium">Current Role:</span> 
+                                            <p><span className="font-medium">Current Role:</span>
                                                 <span className="ml-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs">
                                                     {user.currentRole}
                                                 </span>
@@ -144,8 +144,8 @@ export default function RoleSwitchModal({ user, isOpen, onClose, onSuccess }: Pr
                                                 <ExclamationTriangleIcon className="h-5 w-5 text-warning-600 mr-2 mt-0.5 flex-shrink-0" />
                                                 <div className="text-sm text-warning-800">
                                                     <p className="font-medium">Warning</p>
-                                                    <p>This user has active {user.hasActiveOrders ? 'orders' : 'deliveries'}. 
-                                                       Role switching will fail until these are completed.</p>
+                                                    <p>This user has active {user.hasActiveOrders ? 'orders' : 'deliveries'}.
+                                                        Role switching will fail until these are completed.</p>
                                                 </div>
                                             </div>
                                         </div>
