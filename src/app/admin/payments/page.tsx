@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import {
     CreditCardIcon,
     MagnifyingGlassIcon,
@@ -10,12 +11,22 @@ import {
 } from '@heroicons/react/24/outline';
 import { UserForRoleSwitch } from '@/app/data/types/vendor';
 import UserSearchModal from '@/app/components/admin/users/UserSearchModal';
-import WalletFundingModal from '@/app/components/admin/payments/WalletFundingModal';
+
+// Dynamically import WalletFundingModal to prevent SSR issues
+const WalletFundingModal = dynamic(
+    () => import('@/app/components/admin/payments/WalletFundingModal'),
+    { ssr: false }
+);
 
 export default function PaymentsPage() {
     const [isUserSearchOpen, setIsUserSearchOpen] = useState(false);
     const [isFundingModalOpen, setIsFundingModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<UserForRoleSwitch | null>(null);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const handleUserSelect = (user: UserForRoleSwitch) => {
         setSelectedUser(user);
@@ -145,7 +156,7 @@ export default function PaymentsPage() {
             />
 
             {/* Wallet Funding Modal */}
-            {selectedUser && (
+            {isMounted && selectedUser && (
                 <WalletFundingModal
                     isOpen={isFundingModalOpen}
                     onClose={handleFundingCancel}

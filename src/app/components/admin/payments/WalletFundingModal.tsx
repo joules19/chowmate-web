@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import {
     XMarkIcon,
@@ -9,9 +9,15 @@ import {
     CheckCircleIcon,
     UserIcon
 } from '@heroicons/react/24/outline';
-import { PaystackButton } from 'react-paystack';
+import dynamic from 'next/dynamic';
 import { UserForRoleSwitch } from '@/app/data/types/vendor';
 import { paymentService } from '@/app/lib/api/services/payment-service';
+
+// Dynamically import PaystackButton to prevent SSR issues
+const PaystackButton = dynamic(
+    () => import('react-paystack').then(mod => ({ default: mod.PaystackButton })),
+    { ssr: false }
+);
 
 interface Props {
     isOpen: boolean;
@@ -34,9 +40,14 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
     const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle');
     const [paymentReference, setPaymentReference] = useState<string>('');
     const [verificationData, setVerificationData] = useState<any>(null);
+    const [isMounted, setIsMounted] = useState(false);
     
     // This should come from your environment variables
     const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_test_your_public_key_here';
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const getStatusText = (status: number): string => {
         switch (status) {
@@ -349,16 +360,25 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
                                                     )}
                                                 </button>
                                             ) : (
-                                                <PaystackButton
-                                                    reference={paymentReference}
-                                                    email={user.email}
-                                                    amount={Math.round(parseFloat(amount) * 100)} // Convert to kobo
-                                                    publicKey={PAYSTACK_PUBLIC_KEY}
-                                                    text="Pay with Paystack"
-                                                    onSuccess={handlePaymentSuccess}
-                                                    onClose={handlePaymentClose}
-                                                    className="flex-1 py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-button transition-colors flex items-center justify-center"
-                                                />
+                                                isMounted ? (
+                                                    <PaystackButton
+                                                        reference={paymentReference}
+                                                        email={user.email}
+                                                        amount={Math.round(parseFloat(amount) * 100)} // Convert to kobo
+                                                        publicKey={PAYSTACK_PUBLIC_KEY}
+                                                        text="Pay with Paystack"
+                                                        onSuccess={handlePaymentSuccess}
+                                                        onClose={handlePaymentClose}
+                                                        className="flex-1 py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-button transition-colors flex items-center justify-center"
+                                                    />
+                                                ) : (
+                                                    <button
+                                                        disabled
+                                                        className="flex-1 py-3 px-4 bg-gray-400 text-white rounded-button transition-colors flex items-center justify-center cursor-not-allowed"
+                                                    >
+                                                        Loading Payment...
+                                                    </button>
+                                                )
                                             )}
                                         </div>
                                     </div>
