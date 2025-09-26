@@ -11,7 +11,8 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MegaphoneIcon,
-  LightBulbIcon
+  LightBulbIcon,
+  CreditCardIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -50,6 +51,12 @@ const menuItems = [
     href: "/admin/orders",
     icon: ShoppingBagIcon,
     permission: Permission.VIEW_ORDERS
+  },
+  {
+    name: "Payments",
+    href: "/admin/payments",
+    icon: CreditCardIcon,
+    permission: Permission.VIEW_PAYMENTS
   },
   {
     name: "Advertisements",
