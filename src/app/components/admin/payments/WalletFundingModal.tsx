@@ -41,9 +41,9 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
     const [paymentReference, setPaymentReference] = useState<string>('');
     const [verificationData, setVerificationData] = useState<any>(null);
     const [isMounted, setIsMounted] = useState(false);
-    
+
     // This should come from your environment variables
-    const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_test_your_public_key_here';
+    const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_live_ba9bd7fd1c1e9cf86e738007ba2d7875cecd16cd';
 
     useEffect(() => {
         setIsMounted(true);
@@ -66,7 +66,7 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
             // Verify the payment with your backend
             const verificationResult = await paymentService.verifyWalletFundingForWeb(reference.reference, user.userId);
             console.log('Verification Result:', verificationResult);
-            
+
             if (verificationResult.isSuccess && verificationResult.statusCode === 200) {
                 // Check if the transaction status is Completed (1)
                 if (verificationResult.data.status === 1) {
@@ -321,7 +321,7 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
                                             {/* Payment Info */}
                                             <div className="bg-primary-50 border border-primary-200 rounded-card p-4 mb-6">
                                                 <p className="text-sm text-primary-800">
-                                                    <strong>Note:</strong> You will be redirected to Paystack to complete the payment securely. 
+                                                    <strong>Note:</strong> You will be redirected to Paystack to complete the payment securely.
                                                     The funds will be credited to the user's wallet immediately after successful payment.
                                                 </p>
                                             </div>
@@ -340,7 +340,7 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
                                             >
                                                 Cancel
                                             </button>
-                                            
+
                                             {!paymentReference ? (
                                                 <button
                                                     onClick={handleFundWallet}
