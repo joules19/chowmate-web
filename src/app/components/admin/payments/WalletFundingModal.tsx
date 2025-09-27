@@ -321,7 +321,7 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
                                             {/* Payment Info */}
                                             <div className="bg-primary-50 border border-primary-200 rounded-card p-4 mb-6">
                                                 <p className="text-sm text-primary-800">
-                                                    <strong>Note:</strong> You will be redirected to Paystack to complete the payment securely.
+                                                    <strong>Note:</strong> You will be redirected to the payment portal to complete the payment securely.
                                                     The funds will be credited to the user's wallet immediately after successful payment.
                                                 </p>
                                             </div>

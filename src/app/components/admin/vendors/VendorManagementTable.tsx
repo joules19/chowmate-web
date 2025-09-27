@@ -328,6 +328,9 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                 <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
                   Location
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                  Status
+                </th>
                 <th
                   className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider cursor-pointer hover:bg-surface-100 transition-colors"
                   onClick={() => handleSort('rating')}
@@ -372,7 +375,7 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
             <tbody className="bg-surface-0 divide-y divide-border-light">
               {vendors.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-6 py-12 text-center">
+                  <td colSpan={10} className="px-6 py-12 text-center">
                     <div className="text-text-tertiary">
                       <p className="text-lg font-medium">No vendors found</p>
                       <p className="text-sm mt-1">Try adjusting your search filters</p>
@@ -443,6 +446,14 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                       <div>
                         <div className="font-medium">{vendor.city}</div>
                         <div className="text-xs text-text-tertiary">{vendor.state}</div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-2">
+                        <div className={`h-2 w-2 rounded-full ${vendor.isCurrentlyOpen ? 'bg-success-500' : 'bg-danger-500'}`}></div>
+                        <span className={`text-sm font-medium ${vendor.isCurrentlyOpen ? 'text-success-600' : 'text-danger-600'}`}>
+                          {vendor.isCurrentlyOpen ? 'Open' : 'Closed'}
+                        </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

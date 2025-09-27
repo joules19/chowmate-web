@@ -187,6 +187,15 @@ export default function VendorDetailsModal({ vendorId, isOpen, onClose }: Props)
                                                         <p className="text-text-primary">{vendor.isZoneAssigned ? 'Yes' : 'No'}</p>
                                                     </div>
                                                     <div>
+                                                        <label className="text-sm font-medium text-text-secondary">Currently Open</label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <div className={`h-2 w-2 rounded-full ${vendor.isOpen ? 'bg-success-500' : 'bg-danger-500'}`}></div>
+                                                            <span className={`text-sm ${vendor.isOpen ? 'text-success-600' : 'text-danger-600'}`}>
+                                                                {vendor.isOpen ? 'Open' : 'Closed'}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
                                                         <label className="text-sm font-medium text-text-secondary">RC Number</label>
                                                         <p className="text-text-primary">{vendor.rcNumber || 'N/A'}</p>
                                                     </div>
