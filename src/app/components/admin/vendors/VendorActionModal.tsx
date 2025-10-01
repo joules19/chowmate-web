@@ -32,6 +32,8 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
     const [suspensionEndDate, setSuspensionEndDate] = useState('');
     const [allowReapplication, setAllowReapplication] = useState(true);
     const [sendWelcomePackage, setSendWelcomePackage] = useState(true);
+    const [commissionRate, setCommissionRate] = useState('');
+    const [deliveryFee, setDeliveryFee] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Fetch available zones for approval
@@ -50,7 +52,9 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
                     notifyVendor,
                     autoAssignZone,
                     zoneId: selectedZoneId || undefined,
-                    sendWelcomePackage
+                    sendWelcomePackage,
+                    commissionRate: commissionRate ? parseFloat(commissionRate) : undefined,
+                    deliveryFee: deliveryFee ? parseFloat(deliveryFee) : undefined
                 } as ApproveVendorRequest;
                 break;
             case 'reject':
@@ -101,6 +105,8 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
             setSuspensionEndDate('');
             setAllowReapplication(true);
             setSendWelcomePackage(true);
+            setCommissionRate('');
+            setDeliveryFee('');
         } catch (err) {
             // Show error notification
             const errorMessages = {
@@ -310,6 +316,43 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
                                                         <p className="text-xs text-text-tertiary mt-1">
                                                             Zone assignment is required for vendor approval
                                                         </p>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label className="block text-sm font-medium text-text-secondary mb-2">
+                                                                Commission Rate (%)
+                                                            </label>
+                                                            <input
+                                                                type="number"
+                                                                value={commissionRate}
+                                                                onChange={(e) => setCommissionRate(e.target.value)}
+                                                                placeholder="e.g., 15"
+                                                                min="0"
+                                                                max="100"
+                                                                step="0.1"
+                                                                className="w-full border border-border-default rounded-input px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary"
+                                                            />
+                                                            <p className="text-xs text-text-tertiary mt-1">
+                                                                Platform commission percentage
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-sm font-medium text-text-secondary mb-2">
+                                                                Delivery Fee ($)
+                                                            </label>
+                                                            <input
+                                                                type="number"
+                                                                value={deliveryFee}
+                                                                onChange={(e) => setDeliveryFee(e.target.value)}
+                                                                placeholder="e.g., 5.99"
+                                                                min="0"
+                                                                step="0.01"
+                                                                className="w-full border border-border-default rounded-input px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary"
+                                                            />
+                                                            <p className="text-xs text-text-tertiary mt-1">
+                                                                Base delivery fee amount
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                     <div className="flex items-center">
                                                         <input
