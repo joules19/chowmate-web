@@ -80,7 +80,9 @@ export class UserService extends BaseRepository<User> {
       currentRole: user.role as any, // Type assertion since we know it's a valid role
       status: user.status,
       hasActiveOrders: user.hasActiveOrders,
-      hasActiveDeliveries: user.hasActiveDeliveries
+      hasActiveDeliveries: user.hasActiveDeliveries,
+      walletId: user.walletId,
+      walletBalance: user.walletBalance
     }));
   }
 

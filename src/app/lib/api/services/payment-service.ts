@@ -6,7 +6,11 @@ import {
     WalletTransaction,
     InitializeWalletFundingDto,
     VerifyWalletFundingForWebDto,
-    WalletFundingResponse
+    WalletFundingResponse,
+    WalletTransactionDto,
+    WalletTransactionType,
+    PaginatedResult,
+    ApiResponse
 } from '../../../data/types/payment';
 
 export class PaymentService extends BaseRepository<WalletTransaction> {
@@ -52,6 +56,43 @@ export class PaymentService extends BaseRepository<WalletTransaction> {
 
     async getUserWalletTransactions(userId: string): Promise<WalletTransaction[]> {
         return this.get<WalletTransaction[]>(`/user/${userId}/wallet/transactions`);
+    }
+
+    async getAllWalletTransactions(
+        pageNumber: number = 1,
+        pageSize: number = 20,
+        transactionType?: WalletTransactionType
+    ): Promise<ApiResponse<PaginatedResult<WalletTransactionDto>>> {
+        const params = new URLSearchParams({
+            pageNumber: pageNumber.toString(),
+            pageSize: pageSize.toString()
+        });
+        
+        if (transactionType) {
+            params.append('transactionType', transactionType);
+        }
+
+        const response = await apiClient.get(`${this.endpoint}/wallet-transactions/all?${params.toString()}`);
+        return response.data;
+    }
+
+    async getWalletTransactionsByUserId(
+        userId: string,
+        pageNumber: number = 1,
+        pageSize: number = 20,
+        transactionType?: WalletTransactionType
+    ): Promise<ApiResponse<PaginatedResult<WalletTransactionDto>>> {
+        const params = new URLSearchParams({
+            pageNumber: pageNumber.toString(),
+            pageSize: pageSize.toString()
+        });
+        
+        if (transactionType) {
+            params.append('transactionType', transactionType);
+        }
+
+        const response = await apiClient.get(`${this.endpoint}/wallet-transactions/user/${userId}?${params.toString()}`);
+        return response.data;
     }
 }
 

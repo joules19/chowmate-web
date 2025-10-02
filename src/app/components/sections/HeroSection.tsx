@@ -229,11 +229,15 @@ const HeroSection = () => {
 
                                 {/* Rider Movement */}
                                 <motion.g
-                                    initial={{ offsetDistance: "0%" }}
-                                    animate={{ offsetDistance: "100%" }}
-                                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                                    style={{
-                                        offsetPath: "path('M 100 100 Q 200 200 200 300 T 300 500')",
+                                    animate={{
+                                        x: [100, 200, 200, 300],
+                                        y: [100, 200, 300, 500],
+                                    }}
+                                    transition={{ 
+                                        duration: 4, 
+                                        repeat: Infinity, 
+                                        ease: "linear",
+                                        times: [0, 0.33, 0.66, 1]
                                     }}
                                 >
                                     <circle r="20" fill="#FFC107" className="drop-shadow-lg">

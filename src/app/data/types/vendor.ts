@@ -424,6 +424,9 @@ export interface UserSummaryDto {
     // Calculated fields
     lastActivity: string;
     memberSince: string;
+    // Wallet information
+    walletId?: string;
+    walletBalance?: number;
 }
 
 export interface UserForRoleSwitch {
@@ -435,6 +438,8 @@ export interface UserForRoleSwitch {
     status: string;
     hasActiveOrders?: boolean;
     hasActiveDeliveries?: boolean;
+    walletId?: string;
+    walletBalance?: number;
 }
 
 export interface GetAllUsersRequest extends Record<string, unknown> {

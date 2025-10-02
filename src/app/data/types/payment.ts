@@ -149,6 +149,49 @@ export enum WalletTransactionStatus {
     Cancelled = 'Cancelled'
 }
 
+export enum WalletTransactionType {
+    Credit = 'Credit',
+    Debit = 'Debit',
+    Transfer = 'Transfer',
+    Refund = 'Refund',
+    Funding = 'Funding'
+}
+
+export interface WalletTransactionDto {
+    id: string;
+    walletId: string;
+    walletCode: string;
+    amount: number;
+    transactionType?: string;
+    balanceBefore: number;
+    balanceAfter: number;
+    reference?: string;
+    narration?: string;
+    status?: string;
+    createdAt: string;
+    fullName?: string;
+    phone?: string;
+    email?: string;
+}
+
+export interface PaginatedResult<T> {
+    items: T[];
+    totalCount: number;
+    pageNumber: number;
+    pageSize: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+}
+
+export interface ApiResponse<T> {
+    statusCode: number;
+    message: string;
+    data: T;
+    errors?: any;
+    isSuccess: boolean;
+}
+
 export interface PaystackConfig {
     publicKey: string;
     email: string;
