@@ -104,19 +104,19 @@ export default function CreateEditAdvertisementModal({ isOpen, onClose, advertis
           formData.append('description', description.trim());
           formData.append('image', imageFile);
           formData.append('vendorId', vendorId.trim());
-          // Convert userType to number if backend expects enum as number
-          const userTypeValue = userType === 'customer' ? '0' : userType === 'vendor' ? '1' : '2'; // rider = 2
+          // Convert userType to backend enum values (Customer=1, Vendor=2, Rider=3)
+          const userTypeValue = userType === 'customer' ? '1' : userType === 'vendor' ? '2' : '3';
           formData.append('userType', userTypeValue);
-          // Convert backgroundColor to number if backend expects enum as number
+          // Convert backgroundColor to backend enum values (Default=1, Blue=2, Green=3, Orange=4, Purple=5, Pink=6)
           const backgroundColorMap = {
-            'default': '0',
-            'blue': '1',
-            'green': '2',
-            'orange': '3',
-            'purple': '4',
-            'pink': '5'
+            'default': '1',
+            'blue': '2',
+            'green': '3',
+            'orange': '4',
+            'purple': '5',
+            'pink': '6'
           };
-          const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '0';
+          const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '1';
           formData.append('advertismentBackgroundColor', backgroundColorValue);
 
           // Debug: Log FormData contents
@@ -136,19 +136,19 @@ export default function CreateEditAdvertisementModal({ isOpen, onClose, advertis
           formData.append('title', title.trim());
           formData.append('description', description.trim());
           formData.append('vendorId', vendorId.trim());
-          // Convert userType to number if backend expects enum as number
-          const userTypeValue = userType === 'customer' ? '0' : userType === 'vendor' ? '1' : '2'; // rider = 2
+          // Convert userType to backend enum values (Customer=1, Vendor=2, Rider=3)
+          const userTypeValue = userType === 'customer' ? '1' : userType === 'vendor' ? '2' : '3';
           formData.append('userType', userTypeValue);
-          // Convert backgroundColor to number if backend expects enum as number
+          // Convert backgroundColor to backend enum values (Default=1, Blue=2, Green=3, Orange=4, Purple=5, Pink=6)
           const backgroundColorMap = {
-            'default': '0',
-            'blue': '1',
-            'green': '2',
-            'orange': '3',
-            'purple': '4',
-            'pink': '5'
+            'default': '1',
+            'blue': '2',
+            'green': '3',
+            'orange': '4',
+            'purple': '5',
+            'pink': '6'
           };
-          const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '0';
+          const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '1';
           formData.append('advertismentBackgroundColor', backgroundColorValue);
 
           console.log('Update FormData (no image) being sent:');
@@ -169,23 +169,23 @@ export default function CreateEditAdvertisementModal({ isOpen, onClose, advertis
         }
 
         const formData = new FormData();
-        formData.append('title', title.trim());
-        formData.append('description', description.trim());
-        formData.append('image', imageFile);
+        formData.append('Title', title.trim());
+        formData.append('Description', description.trim());
+        formData.append('Image', imageFile);
         formData.append('vendorId', vendorId.trim());
-        // Convert userType to number if backend expects enum as number
-        const userTypeValue = userType === 'customer' ? '0' : userType === 'vendor' ? '1' : '2'; // rider = 2
+        // Convert userType to backend enum values (Customer=1, Vendor=2, Rider=3)
+        const userTypeValue = userType === 'customer' ? '1' : userType === 'vendor' ? '2' : '3';
         formData.append('userType', userTypeValue);
-        // Convert backgroundColor to number if backend expects enum as number
+        // Convert backgroundColor to backend enum values (Default=1, Blue=2, Green=3, Orange=4, Purple=5, Pink=6)
         const backgroundColorMap = {
-          'default': '0',
-          'blue': '1',
-          'green': '2',
-          'orange': '3',
-          'purple': '4',
-          'pink': '5'
+          'default': '1',
+          'blue': '2',
+          'green': '3',
+          'orange': '4',
+          'purple': '5',
+          'pink': '6'
         };
-        const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '0';
+        const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '1';
         formData.append('advertismentBackgroundColor', backgroundColorValue);
 
         // Debug: Log FormData contents
