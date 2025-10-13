@@ -25,7 +25,7 @@ export default function SurveyInterface({ survey }: SurveyInterfaceProps) {
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // React Query mutation for submitting survey
   const submitSurveyMutation = useSubmitSurveyResponse();
 
@@ -40,7 +40,7 @@ export default function SurveyInterface({ survey }: SurveyInterfaceProps) {
   useEffect(() => {
     if (currentQuestion && answers[currentQuestion.id]) {
       const answer = answers[currentQuestion.id];
-      
+
       // Auto-advance for single-choice questions (not multi-select)
       // Type 3 = MultipleChoice, Type 6 = YesNo
       if (currentQuestion.type === 3 || currentQuestion.type === 6) {
@@ -92,19 +92,19 @@ export default function SurveyInterface({ survey }: SurveyInterfaceProps) {
   const canGoNext = (): boolean => {
     if (isWelcomeScreen) return true;
     if (!currentQuestion) return false;
-    
+
     const answer = answers[currentQuestion.id];
-    
+
     if (currentQuestion.isRequired && !answer) return false;
     if (currentQuestion.isRequired && answer?.value === '') return false;
     if (currentQuestion.isRequired && Array.isArray(answer?.value) && answer.value.length === 0) return false;
-    
+
     return true;
   };
 
   const handleNext = () => {
     if (isCompleteScreen) return;
-    
+
     if (isWelcomeScreen) {
       setCurrentStep(0);
     } else if (currentStep < totalSteps - 1) {
@@ -117,7 +117,7 @@ export default function SurveyInterface({ survey }: SurveyInterfaceProps) {
 
   const handlePrevious = () => {
     if (isWelcomeScreen) return;
-    
+
     if (currentStep === 0) {
       setCurrentStep(-1);
     } else {
@@ -135,13 +135,13 @@ export default function SurveyInterface({ survey }: SurveyInterfaceProps) {
           questionId: answer.questionId,
           answerText: answer.text || (typeof answer.value === 'string' ? answer.value : ''),
           selectedOptions: Array.isArray(answer.value) ? answer.value : [],
-          numericValue: typeof answer.value === 'number' ? answer.value : null
+          numericValue: typeof answer.value === 'number' ? answer.value : undefined
         }))
       };
 
       // Submit using React Query mutation
       const result = await submitSurveyMutation.mutateAsync(submissionData);
-      
+
       if (result.success) {
         console.log('Survey submitted successfully:', result.data);
         setCurrentStep(totalSteps);
@@ -166,16 +166,16 @@ export default function SurveyInterface({ survey }: SurveyInterfaceProps) {
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50 overflow-auto"
       style={{ fontFamily: 'Montserrat, sans-serif' }}
     >
       {/* Progress Bar */}
       {!isWelcomeScreen && (
-        <ProgressBar 
-          progress={getProgress()} 
-          currentStep={Math.max(0, currentStep + 1)} 
+        <ProgressBar
+          progress={getProgress()}
+          currentStep={Math.max(0, currentStep + 1)}
           totalSteps={totalSteps}
         />
       )}
@@ -254,11 +254,10 @@ export default function SurveyInterface({ survey }: SurveyInterfaceProps) {
                   <button
                     onClick={handleNext}
                     disabled={!canGoNext() || isSubmitting}
-                    className={`group flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all transform focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 ${
-                      canGoNext() && !isSubmitting
+                    className={`group flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all transform focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 ${canGoNext() && !isSubmitting
                         ? 'bg-yellow-500 text-white hover:bg-yellow-600 hover:scale-105 shadow-lg hover:shadow-xl'
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
+                      }`}
                     aria-label={currentStep === totalSteps - 1 ? 'Submit survey' : 'Next question'}
                   >
                     <span>

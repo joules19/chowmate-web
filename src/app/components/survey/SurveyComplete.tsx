@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { CheckCircleIcon, GiftIcon, HeartIcon, SparklesIcon } from '@heroicons/react/24/solid';
-import { ShareIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ShareIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { useEffect } from 'react';
