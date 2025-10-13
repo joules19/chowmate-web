@@ -147,6 +147,9 @@ export default function SurveyComplete({ survey }: SurveyCompleteProps) {
           <p className="text-sm text-green-600">
             * Check your email for more information. Valid for 30 days from today!
           </p>
+          <p className="text-sm text-green-600">
+            P.S: For registered users only
+          </p>
         </motion.div>
       )}
 

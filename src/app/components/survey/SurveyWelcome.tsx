@@ -29,7 +29,7 @@ export default function SurveyWelcome({ survey, onStart }: SurveyWelcomeProps) {
         transition={{ duration: 0.6 }}
         className="flex justify-center mb-8"
       >
-        <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-100 flex items-center justify-center shadow-xl">
+        <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-100 to-yellow-50 flex items-center justify-center shadow-xl">
           <Image
             src="/assets/images/icon/icon.png"
             alt="Chowmate"

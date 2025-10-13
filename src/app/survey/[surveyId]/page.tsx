@@ -4,7 +4,6 @@ import { useParams, useRouter } from 'next/navigation';
 import SurveyInterface from '@/app/components/survey/SurveyInterface';
 import LoadingState from '@/app/components/ui/LoadingState';
 import { useActiveSurveys } from '@/app/lib/hooks/api-hooks.ts/use-survey';
-import { Survey } from '@/app/lib/api/repositories/survey-repository';
 
 export default function SurveyPage() {
   const params = useParams();
@@ -63,7 +62,7 @@ export default function SurveyPage() {
         text: 'Enter your email to receive your free delivery reward',
         type: 1,
         isRequired: true,
-        description: "We'll send your free delivery instructions to this email",
+        description: "We'll send your free delivery instructions to this email. Use the email you registered with!",
         options: [],
         validationRules: null,
         order: 4
