@@ -141,7 +141,7 @@ export default function Footer() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <div className="flex items-center space-x-3">
                             <Mail className="w-5 h-5 text-[#FFC107]" />
-                            <span className="text-sm text-[#A1A1A1]">support@chowmate.com</span>
+                            <span className="text-sm text-[#A1A1A1]">support@chowmate.app</span>
                         </div>
                         <div className="flex items-center space-x-3">
                             <Phone className="w-5 h-5 text-[#FFC107]" />

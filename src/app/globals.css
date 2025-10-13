@@ -28,3 +28,88 @@ body {
   border: 8px solid #F1F1F1;
   /* Creates spacing by making thumb smaller inside track */
 }
+
+/* Survey-specific styles */
+.survey-container {
+  scroll-behavior: smooth;
+}
+
+/* Custom focus states for better accessibility */
+.survey-input:focus {
+  @apply ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Smooth transitions for survey questions */
+.survey-question-enter {
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.survey-question-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+}
+
+.survey-question-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.survey-question-exit-active {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+}
+
+/* Typeform-like smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom button animations */
+@keyframes pulse-gentle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .survey-question-enter-active,
+  .survey-question-exit-active {
+    transition: none;
+  }
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 640px) {
+  .survey-container {
+    padding: 1rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .survey-input {
+    border-width: 2px;
+  }
+}
+
+/* Custom keyboard shortcuts indicator */
+kbd {
+  @apply px-2 py-1 bg-gray-100 border border-gray-300 rounded text-xs font-mono;
+}

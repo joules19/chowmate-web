@@ -150,7 +150,7 @@ const AdminLogin: React.FC = () => {
                   name="email"
                   type="email"
                   label="Admin Email"
-                  placeholder="admin@chowmate.com"
+                  placeholder="admin@chowmate.app"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   error={emailError}

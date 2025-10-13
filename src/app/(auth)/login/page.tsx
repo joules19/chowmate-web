@@ -218,7 +218,7 @@ const LoginContent: React.FC = () => {
                   name="email"
                   type="email"
                   label="Email"
-                  placeholder="admin@chowmate.com"
+                  placeholder="admin@chowmate.app"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   error={emailError}

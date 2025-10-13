@@ -50,7 +50,7 @@ export default function SimpleFooter() {
                     <div className="flex flex-col items-center lg:items-end space-y-4">
                         <h3 className="text-white font-semibold text-lg mb-2">Get in Touch</h3>
                         <a
-                            href="mailto:support@chowmate.com"
+                            href="mailto:support@chowmate.app"
                             className="flex items-center space-x-3 text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200"
                         >
                             <Mail className="w-5 h-5 text-[#FFC107]" />

@@ -233,7 +233,7 @@ export default function AdminSidebar() {
                     Admin User
                   </p>
                   <p className="text-xs text-text-tertiary truncate">
-                    admin@chowmate.com
+                    admin@chowmate.app
                   </p>
                 </div>
               )}
