@@ -46,12 +46,14 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Image
-            src={ChowmateLogo}
-            width={190}
-            height={50}
-            alt="Chowmate Logo"
-          />
+          <Link href="/" className="cursor-pointer">
+            <Image
+              src={ChowmateLogo}
+              width={190}
+              height={50}
+              alt="Chowmate Logo"
+            />
+          </Link>
 
           {/* Desktop Navigation */}
 

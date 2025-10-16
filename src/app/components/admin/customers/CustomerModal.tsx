@@ -16,6 +16,17 @@ export default function CustomerModal({ customerId, isOpen, onClose }: CustomerM
     const { data: ordersData, isLoading: ordersLoading } = useCustomerOrders(customerId, { pageSize: 5 });
     // const { data: activities, isLoading: activitiesLoading } = useCustomerActivities(customerId, 10);
 
+    // Debug logging to check customer data
+    if (customer && process.env.NODE_ENV === 'development') {
+        console.log('Customer data:', {
+            id: customer.id,
+            fullName: customer.fullName,
+            totalOrders: customer.totalOrders,
+            totalSpent: customer.totalSpent,
+            status: customer.status
+        });
+    }
+
     const getStatusBadge = (status: string) => {
         const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
 
@@ -182,11 +193,11 @@ export default function CustomerModal({ customerId, isOpen, onClose }: CustomerM
                                                 <h3 className="text-lg font-medium text-gray-900 mb-4">Statistics</h3>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div className="bg-background-primary p-4 rounded-lg">
-                                                        <div className="text-2xl font-bold text-gray-900">{customer.totalOrders}</div>
+                                                        <div className="text-2xl font-bold text-gray-900">{customer.totalOrders || 0}</div>
                                                         <div className="text-sm text-gray-500">Total Orders</div>
                                                     </div>
                                                     <div className="bg-background-primary p-4 rounded-lg">
-                                                        <div className="text-2xl font-bold text-gray-900">${customer.totalSpent.toLocaleString()}</div>
+                                                        <div className="text-2xl font-bold text-gray-900">₦{(customer.totalSpent || 0).toLocaleString()}</div>
                                                         <div className="text-sm text-gray-500">Total Spent</div>
                                                     </div>
                                                 </div>
@@ -219,7 +230,7 @@ export default function CustomerModal({ customerId, isOpen, onClose }: CustomerM
                                                                     </div>
                                                                     <div className="text-right">
                                                                         <div className="text-sm font-medium text-gray-900">
-                                                                            ${order.totalAmount.toLocaleString()}
+                                                                            ₦{order.totalAmount.toLocaleString()}
                                                                         </div>
                                                                         <div className="text-xs text-gray-500">{order.status}</div>
                                                                     </div>

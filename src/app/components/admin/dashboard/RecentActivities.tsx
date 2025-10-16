@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ClockIcon, EyeIcon } from "@heroicons/react/24/outline";
-import { ActivityFilters } from '@/app/data/types/activities';
+import { ActivityFilters, ActivityLog } from '@/app/data/types/activities';
 import { useRecentActivities } from '@/app/lib/hooks/api-hooks.ts/use-dashboard';
 import ActivityModal from '../activities/ActivityModal';
 
@@ -21,6 +21,11 @@ const iconMap: Record<string, string> = {
   'CreditCardIcon': '💳',
   'ExclamationTriangleIcon': '⚠️',
   'InformationCircleIcon': 'ℹ️',
+};
+
+// Helper function to convert dollar signs to naira
+const convertCurrencyToNaira = (text: string): string => {
+  return text.replace(/\$([0-9,]+\.?[0-9]*)/g, '₦$1');
 };
 
 export default function RecentActivities({ filters }: Props) {
@@ -99,7 +104,7 @@ export default function RecentActivities({ filters }: Props) {
     );
   }
 
-  const activities = activitiesData?.data || [];
+  const activities = activitiesData?.items || [];
 
   return (
     <>
@@ -130,7 +135,7 @@ export default function RecentActivities({ filters }: Props) {
             role="list"
             aria-label="Activity list"
           >
-            {activities.map((activity) => (
+            {activities.map((activity: ActivityLog) => (
               <div
                 key={activity.id}
                 className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group"
@@ -147,7 +152,7 @@ export default function RecentActivities({ filters }: Props) {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <p className="text-sm text-gray-900 leading-relaxed">
-                        {activity.description}
+                        {convertCurrencyToNaira(activity.description)}
                       </p>
                       <div className="flex items-center mt-1">
                         <ClockIcon className="h-3 w-3 text-gray-400 mr-1 flex-shrink-0" aria-hidden="true" />
@@ -161,6 +166,7 @@ export default function RecentActivities({ filters }: Props) {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {/* Show user activities button if user info is available */}
                       {activity.userId && activity.userName && (
                         <button
                           onClick={() => handleViewUserActivities(activity.userId!, activity.userName!)}
@@ -170,7 +176,8 @@ export default function RecentActivities({ filters }: Props) {
                           <EyeIcon className="h-4 w-4" />
                         </button>
                       )}
-                      {activity.entityId && activity.entityType && activity.entityName && (
+                      {/* Show entity activities button only if user info is NOT available but entity info is */}
+                      {!activity.userId && activity.entityId && activity.entityType && activity.entityName && (
                         <button
                           onClick={() => handleViewEntityActivities(
                             activity.entityType!,

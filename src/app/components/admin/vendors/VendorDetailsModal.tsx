@@ -275,7 +275,7 @@ export default function VendorDetailsModal({ vendorId, isOpen, onClose }: Props)
                                                     </div>
                                                     <div className="flex justify-between">
                                                         <span className="text-text-secondary">Total Revenue</span>
-                                                        <span className="font-medium text-text-primary">${vendor.totalRevenue?.toLocaleString() || 0}</span>
+                                                        <span className="font-medium text-text-primary">₦{vendor.totalRevenue?.toLocaleString() || 0}</span>
                                                     </div>
                                                     <div className="flex justify-between">
                                                         <span className="text-text-secondary">Compliance Score</span>

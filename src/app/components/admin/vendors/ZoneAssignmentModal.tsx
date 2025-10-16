@@ -423,7 +423,7 @@ export default function ZoneAssignmentModal({ vendorId, isOpen, onClose }: Props
                                                                 Custom Delivery Fee (Optional)
                                                             </label>
                                                             <div className="relative">
-                                                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-tertiary">$</span>
+                                                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-tertiary">₦</span>
                                                                 <input
                                                                     type="number"
                                                                     step="0.01"

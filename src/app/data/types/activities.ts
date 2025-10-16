@@ -28,9 +28,9 @@ export interface ActivityFilters {
 }
 
 export interface PaginatedActivities {
-    data: ActivityLog[];
+    items: ActivityLog[];
     totalCount: number;
     pageNumber: number;
     pageSize: number;
-    totalPages: number;
+    totalPages?: number;
 }

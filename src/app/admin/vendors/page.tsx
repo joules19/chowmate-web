@@ -73,7 +73,7 @@ export default function VendorManagementPage() {
 
   const getStatCard = (title: string, value: number | string, icon: string, color: string, onClick?: () => void) => (
     <div
-      className={`bg-surface-0 rounded-card shadow-soft border border-border-light p-6 ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
+      className={`bg-surface-0 rounded-card shadow-soft border border-border-light px-3 py-6 ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
       onClick={onClick}
     >
       <div className="flex items-center justify-between">
@@ -173,7 +173,7 @@ export default function VendorManagementPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
           {getStatCard(
             "Total Revenue",
-            `${stats.totalRevenue.toLocaleString()}`,
+            `₦${stats.totalRevenue.toLocaleString()}`,
             "💰",
             "bg-green-100 text-green-600",
             () => setFilters({ ...filters, sortBy: 'totalRevenue', sortOrder: 'desc' })
@@ -288,7 +288,7 @@ export default function VendorManagementPage() {
               <div>
                 <p className="text-sm font-medium text-text-secondary">Avg Compliance</p>
                 <p className="text-xl font-bold text-text-primary">
-                  {stats.averageComplianceScore ? `${stats.averageComplianceScore}%` : 'N/A'}
+                  {stats.averageComplianceScore ? `${stats.averageComplianceScore.toFixed()}%` : 'N/A'}
                 </p>
               </div>
               <div className="h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center">

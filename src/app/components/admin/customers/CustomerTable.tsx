@@ -278,7 +278,7 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
                                             {customer.totalOrders}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            ${customer.totalSpent.toLocaleString()}
+                                            ₦{customer.totalSpent.toLocaleString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {new Date(customer.createdAt).toLocaleDateString()}

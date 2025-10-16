@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone } from "lucide-react";
+import { Facebook, Instagram, Mail } from "lucide-react";
 import chowmateLogo from "../../assets/images/chowmate-light-mont.png";
 
 const socialLinks = [
-    { icon: Facebook, href: "#" },
-    { icon: Twitter, href: "#" },
-    { icon: Instagram, href: "#" },
-    { icon: Linkedin, href: "#" },
+    { icon: Facebook, href: "https://www.facebook.com/share/1DLRZWJKbN/?mibextid=wwXIfr" },
+    // { icon: Twitter, href: "https://twitter.com/chowmate_official" },
+    { icon: Instagram, href: "https://instagram.com/officialchowmate" },
+    // { icon: Linkedin, href: "#" },
 ];
 
 export default function SimpleFooter() {
@@ -56,13 +56,13 @@ export default function SimpleFooter() {
                             <Mail className="w-5 h-5 text-[#FFC107]" />
                             <span>support@chowmate.app</span>
                         </a>
-                        <a
+                        {/* <a
                             href="tel:+2341234567890"
                             className="flex items-center space-x-3 text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200"
                         >
                             <Phone className="w-5 h-5 text-[#FFC107]" />
                             <span>+234 903 8073 651</span>
-                        </a>
+                        </a> */}
                         {/* <div className="flex items-center space-x-3 text-[#A1A1A1]">
                             <MapPin className="w-5 h-5 text-[#FFC107]" />
                             <span className="text-center lg:text-left">
@@ -80,9 +80,14 @@ export default function SimpleFooter() {
                     <p className="text-sm text-[#A1A1A1]">
                         © {new Date().getFullYear()} Chowmate. All rights reserved.
                     </p>
-                    {/* <p className="text-sm text-[#A1A1A1] italic">
-                        Launching Soon 🚀
-                    </p> */}
+                    <div className="flex items-center space-x-6">
+                        <Link
+                            href="/docs/privacy"
+                            className="text-sm text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200"
+                        >
+                            Privacy Policy
+                        </Link>
+                    </div>
                 </div>
             </div>
         </footer>

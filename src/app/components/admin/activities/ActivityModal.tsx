@@ -30,6 +30,11 @@ const iconMap: Record<string, string> = {
     'InformationCircleIcon': 'ℹ️',
 };
 
+// Helper function to convert dollar signs to naira
+const convertCurrencyToNaira = (text: string): string => {
+    return text.replace(/\$([0-9,]+\.?[0-9]*)/g, '₦$1');
+};
+
 export default function ActivityModal({
     isOpen,
     onClose,
@@ -74,7 +79,7 @@ export default function ActivityModal({
                     </span>
                 </div>
                 <p className="text-sm text-gray-600 leading-relaxed mb-2">
-                    {activity.description}
+                    {convertCurrencyToNaira(activity.description)}
                 </p>
                 <div className="flex items-center text-xs text-gray-400">
                     <ClockIcon className="h-3 w-3 mr-1" />

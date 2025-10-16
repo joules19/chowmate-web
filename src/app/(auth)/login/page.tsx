@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import Logo from "../../assets/images/chowmate-dark-mont.png";
 import {  message } from "antd";
 import { ShieldCheckIcon } from "@heroicons/react/24/outline";
@@ -170,7 +171,9 @@ const LoginContent: React.FC = () => {
     <div className="min-h-screen max-w-[1400px] mx-auto px-2 sm:px-2 md:px-4">
       <div className="w-full flex flex-col">
         <div className="logo-section pt-6">
-          <Image src={Logo} alt="Chowmate Logo" width={190} />
+          <Link href="/">
+            <Image src={Logo} alt="Chowmate Logo" width={190} className="cursor-pointer" />
+          </Link>
         </div>
 
         <div className="w-full flex flex-col p-0 lg:flex-row mt-4">

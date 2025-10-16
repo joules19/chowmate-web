@@ -80,21 +80,46 @@ const HeroSection = () => {
                         transition={{ duration: 0.8 }}
                         className="space-y-6"
                     >
-                        {/* Live Orders Badge */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-3 bg-white px-5 py-3 rounded-full shadow-lg"
-                        >
-                            <div className="relative">
-                                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                                <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
-                            </div>
-                            <span className="text-sm font-semibold text-[#282828]">
-                                Now Live! Order Today 🚀
-                            </span>
-                        </motion.div>
+                        {/* Live Orders Badge & Download App Button */}
+                        <div className="flex flex-wrap items-center gap-3">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="inline-flex items-center gap-3 bg-white/95 backdrop-blur-sm px-4 py-2.5 rounded-full shadow-lg border border-white/20"
+                            >
+                                <div className="relative">
+                                    <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
+                                    <div className="absolute inset-0 w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></div>
+                                </div>
+                                <span className="text-xs font-semibold text-[#282828]">
+                                    Now Live! Order Today 🚀
+                                </span>
+                            </motion.div>
+
+                            <motion.button
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4 }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => {
+                                    document.querySelector('section:has([href*="apps.apple.com"])')?.scrollIntoView({
+                                        behavior: 'smooth'
+                                    });
+                                }}
+                                className="group relative overflow-hidden bg-gradient-to-r from-[#FFC107] via-[#FFD54F] to-[#FFC107] text-[#282828] px-5 py-2.5 rounded-full font-semibold hover:shadow-lg backdrop-blur-sm border border-[#FFC107]/30 transition-all duration-300 flex items-center gap-2.5 w-fit"
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#FFD54F] via-[#FFC107] to-[#FFD54F] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div className="relative flex items-center gap-2.5">
+                                    <div className="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                        <span className="text-sm">📱</span>
+                                    </div>
+                                    <span className="text-xs font-bold">Download App</span>
+                                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-300" />
+                                </div>
+                            </motion.button>
+                        </div>
 
                         <h1 className="text-5xl lg:text-7xl font-bold text-[#282828] leading-tight">
                             Delivery in
@@ -233,9 +258,9 @@ const HeroSection = () => {
                                         x: [100, 200, 200, 300],
                                         y: [100, 200, 300, 500],
                                     }}
-                                    transition={{ 
-                                        duration: 4, 
-                                        repeat: Infinity, 
+                                    transition={{
+                                        duration: 4,
+                                        repeat: Infinity,
                                         ease: "linear",
                                         times: [0, 0.33, 0.66, 1]
                                     }}
@@ -329,7 +354,7 @@ const HeroSection = () => {
                             >
                                 <div className="bg-white opacity-85 rounded-xl mt-[-10px] p-4 shadow-lg">
                                     <div className="flex items-center justify-between ">
-                                        <span className="text-sm text-[#A1A1A1]">Rider: John D.</span>
+                                        <span className="text-sm text-[#A1A1A1]">Rider: Emmanuel O.</span>
                                         <div className="flex items-center gap-1">
                                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                                             <span className="text-sm font-semibold text-green-500">Online</span>

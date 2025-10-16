@@ -146,13 +146,16 @@ export default function AdminSidebar() {
           <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
             {!collapsed && (
               <div className="flex items-center">
-                <Image
-                  src={ChowmateLogo}
-                  alt="Chowmate Admin"
-                  width={150}
-                  height={150}
-                  priority
-                />
+                <Link href="/admin/dashboard">
+                  <Image
+                    src={ChowmateLogo}
+                    alt="Chowmate Admin"
+                    width={150}
+                    height={150}
+                    priority
+                    className="cursor-pointer"
+                  />
+                </Link>
               </div>
             )}
             <button

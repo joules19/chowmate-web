@@ -338,7 +338,7 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
                                                         </div>
                                                         <div>
                                                             <label className="block text-sm font-medium text-text-secondary mb-2">
-                                                                Delivery Fee ($)
+                                                                Delivery Fee (₦)
                                                             </label>
                                                             <input
                                                                 type="number"
