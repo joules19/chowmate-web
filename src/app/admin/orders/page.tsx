@@ -5,7 +5,9 @@ import OrderManagementTable from "../../components/admin/orders/OrderManagementT
 import OrderFilters from "../../components/admin/orders/OrderFilters";
 import OrderTrackingMap from "../../components/admin/orders/OrderTrackingMap";
 import PendingOrdersTable from "../../components/admin/orders/PendingOrdersTable";
+import PermissionGuard from "../../components/admin/guards/PermissionGuard";
 import { SearchFilters } from "../../data/types/api";
+import { Permission } from "../../data/types/permissions";
 
 export default function OrdersPage() {
   const [filters, setFilters] = useState<SearchFilters>({
@@ -18,7 +20,8 @@ export default function OrdersPage() {
   const [viewMode, setViewMode] = useState<'table' | 'tracking' | 'pending'>('table');
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <PermissionGuard permission={Permission.VIEW_ORDERS}>
+      <div className="space-y-4 sm:space-y-6">
       {/* Header Section - Mobile Responsive */}
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
@@ -114,6 +117,7 @@ export default function OrdersPage() {
       {viewMode === 'pending' && <PendingOrdersTable />}
 
       {viewMode === 'tracking' && <OrderTrackingMap />}
-    </div>
+      </div>
+    </PermissionGuard>
   );
 }

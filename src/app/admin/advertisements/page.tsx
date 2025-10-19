@@ -4,7 +4,9 @@ import { useState } from "react";
 import AdvertisementManagementTable from "../../components/admin/advertisements/AdvertisementManagementTable";
 import AdvertisementFiltersComponent from "../../components/admin/advertisements/AdvertisementFilters";
 import CreateEditAdvertisementModal from "../../components/admin/advertisements/CreateEditAdvertisementModal";
+import PermissionGuard from "../../components/admin/guards/PermissionGuard";
 import { AdvertisementFilters, Advertisement } from "../../data/types/advertisement";
+import { Permission } from "../../data/types/permissions";
 import { useAdvertisements } from "@/app/lib/hooks/api-hooks.ts/use-advertisement";
 
 export default function AdvertisementManagementPage() {
@@ -64,7 +66,8 @@ export default function AdvertisementManagementPage() {
   const stats = getQuickStats();
 
   return (
-    <div className="space-y-6 p-6 bg-surface-primary min-h-screen">
+    <PermissionGuard permission={Permission.VIEW_ADVERTISEMENTS}>
+      <div className="space-y-6 p-6 bg-surface-primary min-h-screen">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
         <div className="flex-1 min-w-0">
@@ -177,6 +180,7 @@ export default function AdvertisementManagementPage() {
         onClose={handleModalClose}
         advertisement={editingAdvertisement}
       />
-    </div>
+      </div>
+    </PermissionGuard>
   );
 }

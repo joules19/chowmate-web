@@ -10,9 +10,11 @@ import {
 } from '@heroicons/react/24/outline';
 import { UserForRoleSwitch } from '@/app/data/types/vendor';
 import { WalletTransactionDto } from '@/app/data/types/payment';
+import { Permission } from '@/app/data/types/permissions';
 import UserSearchModal from '@/app/components/admin/users/UserFundWalletModal';
 import WalletTransactionsTable from '@/app/components/admin/payments/WalletTransactionsTable';
 import TransactionDetailsModal from '@/app/components/admin/payments/TransactionDetailsModal';
+import PermissionGuard from '@/app/components/admin/guards/PermissionGuard';
 
 // Dynamically import WalletFundingModal to prevent SSR issues
 const WalletFundingModal = dynamic(
@@ -59,7 +61,8 @@ export default function PaymentsPage() {
     };
 
     return (
-        <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+        <PermissionGuard permission={Permission.VIEW_PAYMENTS}>
+            <div className="p-4 sm:p-6 max-w-7xl mx-auto">
             {/* Header */}
             <div className="mb-6 sm:mb-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -148,6 +151,7 @@ export default function PaymentsPage() {
                 onClose={handleTransactionDetailsClose}
                 transaction={selectedTransaction}
             />
-        </div>
+            </div>
+        </PermissionGuard>
     );
 }

@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { UserPlusIcon, KeyIcon } from "@heroicons/react/24/outline";
 import AddAdminForm from "../../components/admin/settings/AddAdminForm";
+import PermissionGuard from "../../components/admin/guards/PermissionGuard";
+import { Permission } from "../../data/types/permissions";
 
 const tabs = [
   {
@@ -21,7 +23,8 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("admin-management");
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission={Permission.VIEW_SETTINGS}>
+      <div className="space-y-6">
       {/* Header */}
       <div className="border-b border-border-default pb-4">
         <h1 className="text-2xl font-semibold text-text-primary">Settings</h1>
@@ -75,6 +78,7 @@ export default function SettingsPage() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </PermissionGuard>
   );
 }

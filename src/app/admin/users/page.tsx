@@ -6,8 +6,10 @@ import { useCustomerStats } from "@/app/lib/hooks/api-hooks.ts/use-customer";
 import CustomerFilters from "@/app/components/admin/customers/CustomerFilters";
 import CustomerTable from "@/app/components/admin/customers/CustomerTable";
 import UserRoleSwitcher from "@/app/components/admin/users/UserRoleSwitcher";
+import PermissionGuard from "@/app/components/admin/guards/PermissionGuard";
 import { CustomerFilters as CustomerFiltersType } from "../../data/types/customer";
 import { RoleSwitchResponse } from "../../data/types/vendor";
+import { Permission } from "../../data/types/permissions";
 import { formatCurrency } from "@/app/lib/utils/currency";
 
 
@@ -33,7 +35,8 @@ export default function CustomersPage() {
   };
 
   return (
-    <div className="space-y-6 p-6 bg-background-primary min-h-screen">
+    <PermissionGuard permission={Permission.VIEW_USERS}>
+      <div className="space-y-6 p-6 bg-background-primary min-h-screen">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
         <div className="flex-1 min-w-0">
@@ -173,6 +176,7 @@ export default function CustomersPage() {
         filters={filters}
         onFiltersChange={setFilters}
       />
-    </div>
+      </div>
+    </PermissionGuard>
   );
 }

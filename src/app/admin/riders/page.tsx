@@ -4,7 +4,9 @@ import { useState } from "react";
 import RiderManagementTable from "../../components/admin/riders/RiderManagementTable";
 import RiderFilters from "../../components/admin/riders/RiderFilters";
 import RiderMap from "../../components/admin/riders/RiderMap";
+import PermissionGuard from "../../components/admin/guards/PermissionGuard";
 import { SearchFilters } from "../../data/types/api";
+import { Permission } from "../../data/types/permissions";
 
 export default function RidersPage() {
   const [filters, setFilters] = useState<SearchFilters>({
@@ -17,7 +19,8 @@ export default function RidersPage() {
   const [viewMode, setViewMode] = useState<'table' | 'map'>('table');
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <PermissionGuard permission={Permission.VIEW_RIDERS}>
+      <div className="space-y-4 sm:space-y-6">
       {/* Header Section - Mobile Responsive */}
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
@@ -97,6 +100,7 @@ export default function RidersPage() {
       )}
 
       {viewMode === 'map' && <RiderMap />}
-    </div>
+      </div>
+    </PermissionGuard>
   );
 }

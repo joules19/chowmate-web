@@ -4,10 +4,13 @@ import DashboardStats from "../../components/admin/dashboard/DashboardStats";
 import RevenueChart from "../../components/admin/dashboard/RevenueChart";
 import OrderStatusChart from "../../components/admin/dashboard/OrderStatusChart";
 import RecentActivities from "../../components/admin/dashboard/RecentActivities";
+import PermissionGuard from "../../components/admin/guards/PermissionGuard";
+import { Permission } from "../../data/types/permissions";
 
 export default function AdminDashboard() {
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <PermissionGuard permission={Permission.VIEW_DASHBOARD}>
+      <div className="space-y-4 sm:space-y-6">
       {/* Header Section - Mobile Responsive */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
@@ -35,6 +38,7 @@ export default function AdminDashboard() {
 
       {/* Recent Activities */}
       <RecentActivities />
-    </div>
+      </div>
+    </PermissionGuard>
   );
 }

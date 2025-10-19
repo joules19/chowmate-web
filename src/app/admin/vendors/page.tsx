@@ -4,7 +4,9 @@ import { useState } from "react";
 import { PlusIcon, DocumentArrowDownIcon } from "@heroicons/react/24/outline";
 import VendorManagementTable from "../../components/admin/vendors/VendorManagementTable";
 import VendorFiltersComponent from "../../components/admin/vendors/VendorFilters";
+import PermissionGuard from "../../components/admin/guards/PermissionGuard";
 import { VendorFilters } from "../../data/types/vendor";
+import { Permission } from "../../data/types/permissions";
 import { useVendorStats } from "@/app/lib/hooks/api-hooks.ts/use-vendor";
 
 
@@ -89,7 +91,8 @@ export default function VendorManagementPage() {
   );
 
   return (
-    <div className="space-y-6 p-6 bg-surface-primary min-h-screen">
+    <PermissionGuard permission={Permission.VIEW_VENDORS}>
+      <div className="space-y-6 p-6 bg-surface-primary min-h-screen">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
         <div className="flex-1 min-w-0">
@@ -353,6 +356,7 @@ export default function VendorManagementPage() {
         selectedCount={selectedVendors.length}
         isLoading={bulkApproveMutation.isPending || bulkRejectMutation.isPending || bulkSuspendMutation.isPending}
       /> */}
-    </div>
+      </div>
+    </PermissionGuard>
   );
 }

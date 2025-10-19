@@ -10,11 +10,13 @@ import {
   LightBulbIcon
 } from '@heroicons/react/24/outline';
 import { FeatureRequestFilterDto, FeatureRequestResponseDto } from '@/app/data/types/feature-request';
+import { Permission } from '@/app/data/types/permissions';
 import { useFeatureRequestStats } from '@/app/lib/hooks/api-hooks.ts/use-feature-request';
 import FeatureRequestManagementTable from '@/app/components/admin/feature-requests/FeatureRequestManagementTable';
 import FeatureRequestFilters from '@/app/components/admin/feature-requests/FeatureRequestFilters';
 import FeatureRequestDetailsModal from '@/app/components/admin/feature-requests/FeatureRequestDetailsModal';
 import UpdateFeatureRequestStatusModal from '@/app/components/admin/feature-requests/UpdateFeatureRequestStatusModal';
+import PermissionGuard from '@/app/components/admin/guards/PermissionGuard';
 
 export default function FeatureRequestsPage() {
   const [filters, setFilters] = useState<FeatureRequestFilterDto>({
@@ -89,7 +91,8 @@ export default function FeatureRequestsPage() {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <PermissionGuard permission={Permission.VIEW_FEATURE_REQUESTS}>
+      <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Feature Requests</h1>
@@ -158,6 +161,7 @@ export default function FeatureRequestsPage() {
         }}
         featureRequest={selectedFeatureRequest}
       />
-    </div>
+      </div>
+    </PermissionGuard>
   );
 }

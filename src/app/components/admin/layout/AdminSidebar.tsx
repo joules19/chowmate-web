@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,6 +18,7 @@ import {
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
 import { Permission } from "../../../data/types/permissions";
+import { AuthService } from "../../../lib/auth/auth-service";
 import Image from "next/image";
 import ChowmateLogo from "../../../assets/images/chowmate-dark-mont.png";
 
@@ -88,7 +89,13 @@ const menuItems = [
 export default function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const user = AuthService.getUser();
+    setCurrentUser(user);
+  }, []);
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -229,15 +236,20 @@ export default function AdminSidebar() {
                 role="img"
                 aria-label="Admin user avatar"
               >
-                <span className="text-text-inverse text-sm font-medium">A</span>
+                <span className="text-text-inverse text-sm font-medium">
+                  {currentUser?.firstName?.charAt(0)?.toUpperCase() || 'A'}
+                </span>
               </div>
               {!collapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-text-primary truncate">
-                    Admin User
+                    {currentUser?.firstName && currentUser?.lastName 
+                      ? `${currentUser.firstName} ${currentUser.lastName}`
+                      : 'Admin User'
+                    }
                   </p>
                   <p className="text-xs text-text-tertiary truncate">
-                    admin@chowmate.app
+                    {currentUser?.email || 'admin@chowmate.app'}
                   </p>
                 </div>
               )}
