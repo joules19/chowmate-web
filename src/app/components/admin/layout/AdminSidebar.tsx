@@ -12,7 +12,8 @@ import {
   ChevronRightIcon,
   MegaphoneIcon,
   LightBulbIcon,
-  CreditCardIcon
+  CreditCardIcon,
+  Cog6ToothIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -76,12 +77,12 @@ const menuItems = [
   //   icon: ChartPieIcon,
   //   permission: Permission.VIEW_ANALYTICS
   // },
-  // {
-  //   name: "Settings",
-  //   href: "/admin/settings",
-  //   icon: Cog6ToothIcon,
-  //   permission: Permission.VIEW_SETTINGS
-  // }
+  {
+    name: "Settings",
+    href: "/admin/settings",
+    icon: Cog6ToothIcon,
+    permission: Permission.VIEW_SETTINGS
+  }
 ];
 
 export default function AdminSidebar() {

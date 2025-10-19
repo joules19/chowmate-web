@@ -2,20 +2,23 @@ export enum Role {
   SUPER_ADMIN = 'SuperAdmin',
   ADMIN = 'Admin',
   MODERATOR = 'Moderator',
-  SUPPORT = 'Support'
+  SUPPORT = 'Support',
+  RIDER_ADMIN = 'RiderAdmin',
+  OPERATIONS_ADMIN = 'OperationsAdmin',
+
 }
 
 export enum Permission {
   // Dashboard
   VIEW_DASHBOARD = 'VIEW_DASHBOARD',
-  
+
   // Users
   VIEW_USERS = 'VIEW_USERS',
   CREATE_USER = 'CREATE_USER',
   EDIT_USER = 'EDIT_USER',
   DELETE_USER = 'DELETE_USER',
   SUSPEND_USER = 'SUSPEND_USER',
-  
+
   // Vendors
   VIEW_VENDORS = 'VIEW_VENDORS',
   APPROVE_VENDOR = 'APPROVE_VENDOR',
@@ -23,7 +26,7 @@ export enum Permission {
   SUSPEND_VENDOR = 'SUSPEND_VENDOR',
   EDIT_VENDOR = 'EDIT_VENDOR',
   DELETE_VENDOR = 'DELETE_VENDOR',
-  
+
   // Riders
   VIEW_RIDERS = 'VIEW_RIDERS',
   APPROVE_RIDER = 'APPROVE_RIDER',
@@ -32,36 +35,36 @@ export enum Permission {
   EDIT_RIDER = 'EDIT_RIDER',
   DELETE_RIDER = 'DELETE_RIDER',
   TRACK_RIDER = 'TRACK_RIDER',
-  
+
   // Orders
   VIEW_ORDERS = 'VIEW_ORDERS',
   EDIT_ORDER = 'EDIT_ORDER',
   CANCEL_ORDER = 'CANCEL_ORDER',
   REFUND_ORDER = 'REFUND_ORDER',
   ASSIGN_RIDER = 'ASSIGN_RIDER',
-  
+
   // Analytics
   VIEW_ANALYTICS = 'VIEW_ANALYTICS',
   EXPORT_REPORTS = 'EXPORT_REPORTS',
-  
+
   // Settings
   VIEW_SETTINGS = 'VIEW_SETTINGS',
   EDIT_SETTINGS = 'EDIT_SETTINGS',
   MANAGE_PERMISSIONS = 'MANAGE_PERMISSIONS',
-  
+
   // Advertisements
   VIEW_ADVERTISEMENTS = 'VIEW_ADVERTISEMENTS',
   CREATE_ADVERTISEMENT = 'CREATE_ADVERTISEMENT',
   EDIT_ADVERTISEMENT = 'EDIT_ADVERTISEMENT',
   DELETE_ADVERTISEMENT = 'DELETE_ADVERTISEMENT',
   TOGGLE_ADVERTISEMENT = 'TOGGLE_ADVERTISEMENT',
-  
+
   // Feature Requests
   VIEW_FEATURE_REQUESTS = 'VIEW_FEATURE_REQUESTS',
   CREATE_FEATURE_REQUEST = 'CREATE_FEATURE_REQUEST',
   MANAGE_FEATURE_REQUESTS = 'MANAGE_FEATURE_REQUESTS',
   REVIEW_FEATURE_REQUESTS = 'REVIEW_FEATURE_REQUESTS',
-  
+
   // Payments
   VIEW_PAYMENTS = 'VIEW_PAYMENTS',
   MANAGE_PAYMENTS = 'MANAGE_PAYMENTS',
@@ -69,7 +72,7 @@ export enum Permission {
   VIEW_WALLET_TRANSACTIONS = 'VIEW_WALLET_TRANSACTIONS',
   PROCESS_REFUNDS = 'PROCESS_REFUNDS',
   VIEW_PAYMENT_ANALYTICS = 'VIEW_PAYMENT_ANALYTICS',
-  
+
   // System
   VIEW_AUDIT_LOGS = 'VIEW_AUDIT_LOGS',
   MANAGE_SYSTEM = 'MANAGE_SYSTEM'
@@ -133,6 +136,52 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permission.VIEW_RIDERS,
     Permission.VIEW_ORDERS,
     Permission.EDIT_ORDER
+  ],
+  [Role.OPERATIONS_ADMIN]: [
+    Permission.VIEW_DASHBOARD,
+    Permission.VIEW_USERS,
+    Permission.VIEW_VENDORS,
+    Permission.VIEW_RIDERS,
+    Permission.VIEW_ORDERS,
+    Permission.EDIT_ORDER,
+    Permission.CANCEL_ORDER,
+    Permission.REFUND_ORDER,
+    Permission.ASSIGN_RIDER,
+    Permission.VIEW_ANALYTICS,
+    Permission.EXPORT_REPORTS,
+    Permission.VIEW_SETTINGS,
+    Permission.VIEW_AUDIT_LOGS,
+    Permission.VIEW_PAYMENTS,
+    Permission.MANAGE_PAYMENTS,
+    Permission.FUND_WALLET,
+    Permission.VIEW_WALLET_TRANSACTIONS,
+    Permission.PROCESS_REFUNDS,
+    Permission.VIEW_PAYMENT_ANALYTICS,
+    Permission.VIEW_ADVERTISEMENTS,
+    Permission.CREATE_ADVERTISEMENT,
+    Permission.EDIT_ADVERTISEMENT,
+    Permission.DELETE_ADVERTISEMENT,
+    Permission.TOGGLE_ADVERTISEMENT,
+    Permission.VIEW_FEATURE_REQUESTS,
+    Permission.CREATE_FEATURE_REQUEST,
+    Permission.MANAGE_FEATURE_REQUESTS,
+    Permission.REVIEW_FEATURE_REQUESTS
+  ],
+  [Role.RIDER_ADMIN]: [
+    Permission.VIEW_DASHBOARD,
+    Permission.VIEW_RIDERS,
+    Permission.APPROVE_RIDER,
+    Permission.REJECT_RIDER,
+    Permission.SUSPEND_RIDER,
+    Permission.EDIT_RIDER,
+    Permission.DELETE_RIDER,
+    Permission.TRACK_RIDER,
+    Permission.VIEW_ORDERS,
+    Permission.EDIT_ORDER,
+    Permission.CANCEL_ORDER,
+    Permission.ASSIGN_RIDER,
+    Permission.VIEW_ANALYTICS,
+    Permission.EXPORT_REPORTS
   ]
 };
 

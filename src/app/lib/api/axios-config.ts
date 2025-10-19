@@ -146,8 +146,16 @@ export const handleApiResponse = <T>(response: AxiosResponse<ApiResponse<T>>): T
     return data.data as T;
   }
 
-  // Handle current API format
-  if (data.statusCode !== 200) {
+  // Check if response has isSuccess field (another format)
+  if ('isSuccess' in data) {
+    if (!data.isSuccess) {
+      throw new Error(data.message || 'API request failed');
+    }
+    return data.data as T;
+  }
+
+  // Handle current API format - check for successful status codes (200-299)
+  if (data.statusCode < 200 || data.statusCode >= 300) {
     throw new Error(data.message || 'API request failed');
   }
 

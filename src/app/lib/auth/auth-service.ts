@@ -192,7 +192,7 @@ export class AuthService {
     if (!user) return false;
 
     return user.roles.some(role =>
-      [Role.SUPER_ADMIN, Role.ADMIN, Role.MODERATOR].includes(role as Role)
+      [Role.SUPER_ADMIN, Role.OPERATIONS_ADMIN, Role.RIDER_ADMIN, Role.ADMIN, Role.MODERATOR].includes(role as Role)
     );
   }
 }

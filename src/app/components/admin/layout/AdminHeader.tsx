@@ -6,14 +6,17 @@ import {
   MagnifyingGlassIcon,
   UserCircleIcon,
   ArrowRightStartOnRectangleIcon,
-  XCircleIcon
+  XCircleIcon,
+  KeyIcon
 } from "@heroicons/react/24/outline";
 import { AuthService } from "../../../lib/auth/auth-service";
 import { useForceCloseAllVendorStores } from "../../../lib/hooks/api-hooks.ts/use-vendor";
+import ChangePasswordModal from "../settings/ChangePasswordModal";
 
 export default function AdminHeader() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showCloseShopConfirm, setShowCloseShopConfirm] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const forceCloseAllStoresMutation = useForceCloseAllVendorStores();
 
@@ -127,6 +130,17 @@ export default function AdminHeader() {
                   <span>Profile</span>
                 </button>
                 <button
+                  onClick={() => {
+                    setShowChangePassword(true);
+                    setShowProfileMenu(false);
+                  }}
+                  className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-text-secondary hover:bg-surface-100 focus:bg-surface-100"
+                  role="menuitem"
+                >
+                  <KeyIcon className="h-4 w-4" aria-hidden="true" />
+                  <span>Change Password</span>
+                </button>
+                <button
                   onClick={handleLogout}
                   className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-text-secondary hover:bg-surface-100 focus:bg-surface-100"
                   role="menuitem"
@@ -187,6 +201,12 @@ export default function AdminHeader() {
           </div>
         </div>
       )}
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+      />
     </header>
   );
 }
