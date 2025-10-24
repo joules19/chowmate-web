@@ -6,6 +6,7 @@ import { customAntdTheme } from "./theme/themeConfig";
 import { ConfigProvider } from "antd";
 import { Montserrat } from "next/font/google";
 import AdminLink from "./components/navigation/AdminLink";
+import KnowledgeBaseLink from "./components/navigation/KnowledgeBaseLink";
 import QueryProvider from "./providers/QueryProvider";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <ConfigProvider theme={customAntdTheme}>
               <main className="">{children}</main>
               <AdminLink />
+              <KnowledgeBaseLink />
             </ConfigProvider>
           </AntdRegistry>
         </QueryProvider>
