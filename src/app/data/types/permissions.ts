@@ -65,6 +65,14 @@ export enum Permission {
   MANAGE_FEATURE_REQUESTS = 'MANAGE_FEATURE_REQUESTS',
   REVIEW_FEATURE_REQUESTS = 'REVIEW_FEATURE_REQUESTS',
 
+  // Product Promotions
+  VIEW_PROMOTIONS = 'VIEW_PROMOTIONS',
+  CREATE_PROMOTION = 'CREATE_PROMOTION',
+  EDIT_PROMOTION = 'EDIT_PROMOTION',
+  DELETE_PROMOTION = 'DELETE_PROMOTION',
+  TOGGLE_PROMOTION = 'TOGGLE_PROMOTION',
+  BULK_MANAGE_PROMOTIONS = 'BULK_MANAGE_PROMOTIONS',
+
   // Payments
   VIEW_PAYMENTS = 'VIEW_PAYMENTS',
   MANAGE_PAYMENTS = 'MANAGE_PAYMENTS',
@@ -108,6 +116,12 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permission.VIEW_FEATURE_REQUESTS,
     Permission.MANAGE_FEATURE_REQUESTS,
     Permission.REVIEW_FEATURE_REQUESTS,
+    Permission.VIEW_PROMOTIONS,
+    Permission.CREATE_PROMOTION,
+    Permission.EDIT_PROMOTION,
+    Permission.DELETE_PROMOTION,
+    Permission.TOGGLE_PROMOTION,
+    Permission.BULK_MANAGE_PROMOTIONS,
     Permission.VIEW_PAYMENTS,
     Permission.MANAGE_PAYMENTS,
     Permission.FUND_WALLET,
@@ -165,7 +179,13 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permission.VIEW_FEATURE_REQUESTS,
     Permission.CREATE_FEATURE_REQUEST,
     Permission.MANAGE_FEATURE_REQUESTS,
-    Permission.REVIEW_FEATURE_REQUESTS
+    Permission.REVIEW_FEATURE_REQUESTS,
+    Permission.VIEW_PROMOTIONS,
+    Permission.CREATE_PROMOTION,
+    Permission.EDIT_PROMOTION,
+    Permission.DELETE_PROMOTION,
+    Permission.TOGGLE_PROMOTION,
+    Permission.BULK_MANAGE_PROMOTIONS
   ],
   [Role.RIDER_ADMIN]: [
     Permission.VIEW_DASHBOARD,

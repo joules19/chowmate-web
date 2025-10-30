@@ -13,7 +13,8 @@ import {
   MegaphoneIcon,
   LightBulbIcon,
   CreditCardIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  TagIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -65,6 +66,12 @@ const menuItems = [
     href: "/admin/advertisements",
     icon: MegaphoneIcon,
     permission: Permission.VIEW_ADVERTISEMENTS
+  },
+  {
+    name: "Product Promotions",
+    href: "/admin/promotions",
+    icon: TagIcon,
+    permission: Permission.VIEW_PROMOTIONS
   },
   {
     name: "Feature Requests",

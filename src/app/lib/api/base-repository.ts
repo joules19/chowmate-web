@@ -40,6 +40,15 @@ export abstract class BaseRepository<T> {
     );
   }
 
+  protected async patch<U>(
+    path: string = '',
+    data?: Record<string, unknown> | FormData | string
+  ): Promise<U> {
+    return apiRequest(() =>
+      apiClient.patch<ApiResponse<U>>(`${this.endpoint}${path}`, data)
+    );
+  }
+
   protected async deleteRequest<U>(path: string = ''): Promise<U> {
     return apiRequest(() =>
       apiClient.delete<ApiResponse<U>>(`${this.endpoint}${path}`)
