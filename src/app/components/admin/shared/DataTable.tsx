@@ -22,6 +22,7 @@ interface Props<T> {
   };
   onSort?: (key: string, order: 'asc' | 'desc') => void;
   onPageChange?: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
   onRowClick?: (item: T) => void;
 }
 
@@ -32,6 +33,7 @@ export default function DataTable<T extends Record<string, unknown>>({
   pagination,
   onSort,
   onPageChange,
+  onPageSizeChange,
   onRowClick
 }: Props<T>) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
@@ -52,6 +54,49 @@ export default function DataTable<T extends Record<string, unknown>>({
       return column.render(item);
     }
     return item[column.key] as React.ReactNode;
+  };
+
+  const generatePaginationButtons = () => {
+    if (!pagination) return [];
+    
+    const totalPages = pagination.totalPages || Math.ceil(pagination.totalCount / pagination.pageSize);
+    const currentPage = pagination.pageNumber;
+    const buttons = [];
+    
+    if (totalPages <= 7) {
+      // Show all pages if 7 or fewer
+      for (let i = 1; i <= totalPages; i++) {
+        buttons.push(i);
+      }
+    } else {
+      // Always show first page
+      buttons.push(1);
+      
+      if (currentPage <= 4) {
+        // Show 1, 2, 3, 4, 5, ..., last
+        for (let i = 2; i <= 5; i++) {
+          buttons.push(i);
+        }
+        buttons.push('...');
+        buttons.push(totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        // Show 1, ..., last-4, last-3, last-2, last-1, last
+        buttons.push('...');
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          buttons.push(i);
+        }
+      } else {
+        // Show 1, ..., current-1, current, current+1, ..., last
+        buttons.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          buttons.push(i);
+        }
+        buttons.push('...');
+        buttons.push(totalPages);
+      }
+    }
+    
+    return buttons;
   };
 
   if (loading) {
@@ -135,7 +180,26 @@ export default function DataTable<T extends Record<string, unknown>>({
 
       {pagination && (
         <div className="bg-surface-0 px-4 py-3 border-t border-border-default sm:px-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            {/* Page Size Selector */}
+            {onPageSizeChange && (
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-text-secondary">Show</span>
+                <select
+                  value={pagination.pageSize}
+                  onChange={(e) => onPageSizeChange(Number(e.target.value))}
+                  className="border border-border-default rounded-button px-3 py-1 text-sm bg-surface-0 text-text-primary focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+                <span className="text-sm text-text-secondary">items</span>
+              </div>
+            )}
+
+            {/* Mobile Pagination */}
             <div className="flex-1 flex justify-between sm:hidden">
               <button
                 onClick={() => onPageChange?.(pagination.pageNumber - 1)}
@@ -144,15 +208,20 @@ export default function DataTable<T extends Record<string, unknown>>({
               >
                 Previous
               </button>
+              <span className="text-sm text-text-secondary self-center">
+                Page {pagination.pageNumber} of {Math.ceil(pagination.totalCount / pagination.pageSize)}
+              </span>
               <button
                 onClick={() => onPageChange?.(pagination.pageNumber + 1)}
-                disabled={pagination.pageNumber >= (pagination.totalPages || Math.ceil((pagination.totalCount || 0) / (pagination.pageSize || 1)))}
-                className="ml-3 relative inline-flex items-center px-4 py-2 border border-border-default text-sm font-medium rounded-button text-text-secondary bg-surface-0 hover:bg-surface-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={pagination.pageNumber >= Math.ceil(pagination.totalCount / pagination.pageSize)}
+                className="relative inline-flex items-center px-4 py-2 border border-border-default text-sm font-medium rounded-button text-text-secondary bg-surface-0 hover:bg-surface-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next
               </button>
             </div>
-            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+
+            {/* Desktop Info and Pagination */}
+            <div className="hidden sm:flex sm:items-center sm:justify-between sm:flex-1">
               <div>
                 <p className="text-sm text-text-secondary">
                   Showing{' '}
@@ -167,6 +236,7 @@ export default function DataTable<T extends Record<string, unknown>>({
                   <span className="font-medium">{pagination.totalCount}</span> results
                 </p>
               </div>
+
               <div>
                 <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
                   <button
@@ -177,12 +247,22 @@ export default function DataTable<T extends Record<string, unknown>>({
                     <ChevronLeftIcon className="h-5 w-5" />
                   </button>
                   
-                  {[...Array(pagination.totalPages || Math.ceil((pagination.totalCount || 0) / (pagination.pageSize || 1)))].map((_, i) => {
-                    const page = i + 1;
+                  {generatePaginationButtons().map((page, index) => {
+                    if (page === '...') {
+                      return (
+                        <span
+                          key={`ellipsis-${index}`}
+                          className="relative inline-flex items-center px-4 py-2 border border-border-default bg-surface-0 text-sm font-medium text-text-tertiary"
+                        >
+                          ...
+                        </span>
+                      );
+                    }
+                    
                     return (
                       <button
                         key={page}
-                        onClick={() => onPageChange?.(page)}
+                        onClick={() => onPageChange?.(page as number)}
                         className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                           page === pagination.pageNumber
                             ? 'z-10 bg-primary-50 border-primary-500 text-primary-600'
@@ -196,7 +276,7 @@ export default function DataTable<T extends Record<string, unknown>>({
                   
                   <button
                     onClick={() => onPageChange?.(pagination.pageNumber + 1)}
-                    disabled={pagination.pageNumber >= (pagination.totalPages || Math.ceil((pagination.totalCount || 0) / (pagination.pageSize || 1)))}
+                    disabled={pagination.pageNumber >= Math.ceil(pagination.totalCount / pagination.pageSize)}
                     className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-border-default bg-surface-0 text-sm font-medium text-text-tertiary hover:bg-surface-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronRightIcon className="h-5 w-5" />

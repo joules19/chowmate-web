@@ -8,11 +8,13 @@ import {
   CheckBadgeIcon,
   XMarkIcon,
   EyeIcon,
-  ArrowPathRoundedSquareIcon
+  ArrowPathRoundedSquareIcon,
+  PaperAirplaneIcon
 } from '@heroicons/react/24/outline';
 import { userService } from '@/app/lib/api/services/user-service';
 import { UserSummaryDto, GetAllUsersRequest } from '@/app/data/types/vendor';
 import { PaginatedResponse } from '@/app/data/types/api';
+import SendOtpModal from './SendOtpModal';
 
 interface Props {
   filters: GetAllUsersRequest;
@@ -24,6 +26,8 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
   const [users, setUsers] = useState<PaginatedResponse<UserSummaryDto> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserSummaryDto | null>(null);
 
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -45,6 +49,16 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
 
   const handlePageChange = (page: number) => {
     onFiltersChange({ ...filters, pageNumber: page });
+  };
+
+  const handleSendOtp = (user: UserSummaryDto) => {
+    setSelectedUser(user);
+    setOtpModalOpen(true);
+  };
+
+  const handleCloseOtpModal = () => {
+    setOtpModalOpen(false);
+    setSelectedUser(null);
   };
 
   const getRoleColor = (role: string) => {
@@ -220,13 +234,23 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
                   )}
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <button
-                    onClick={() => onUserSelect?.(user)}
-                    className="inline-flex items-center px-3 py-1 border border-border-light rounded-button text-sm text-text-primary hover:bg-surface-100 transition-colors"
-                  >
-                    <EyeIcon className="h-4 w-4 mr-1" />
-                    View
-                  </button>
+                  <div className="flex items-center space-x-2 justify-end">
+                    <button
+                      onClick={() => handleSendOtp(user)}
+                      className="inline-flex items-center px-3 py-1 border border-border-light rounded-button text-sm text-text-primary hover:bg-surface-100 transition-colors"
+                      title="Send OTP to user"
+                    >
+                      <PaperAirplaneIcon className="h-4 w-4 mr-1" />
+                      Send OTP
+                    </button>
+                    <button
+                      onClick={() => onUserSelect?.(user)}
+                      className="inline-flex items-center px-3 py-1 border border-border-light rounded-button text-sm text-text-primary hover:bg-surface-100 transition-colors"
+                    >
+                      <EyeIcon className="h-4 w-4 mr-1" />
+                      View
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -276,6 +300,15 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
           </p>
         </div>
       )}
+
+      {/* Send OTP Modal */}
+      <SendOtpModal
+        isOpen={otpModalOpen}
+        onClose={handleCloseOtpModal}
+        userEmail={selectedUser?.email}
+        userPhone={selectedUser?.phoneNumber}
+        userName={selectedUser?.fullName}
+      />
     </div>
   );
 }

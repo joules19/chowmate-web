@@ -110,7 +110,10 @@ export default function OrdersPage() {
             filters={filters}
             onFiltersChange={setFilters}
           />
-          <OrderManagementTable filters={filters} />
+          <OrderManagementTable 
+            filters={filters} 
+            onFiltersChange={setFilters}
+          />
         </>
       )}
 

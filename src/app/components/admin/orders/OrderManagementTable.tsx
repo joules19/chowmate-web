@@ -19,9 +19,10 @@ import RiderReplacementModal from "./RiderReplacementModal";
 
 interface Props {
   filters: SearchFilters;
+  onFiltersChange?: (filters: SearchFilters) => void;
 }
 
-export default function OrderManagementTable({ filters }: Props) {
+export default function OrderManagementTable({ filters, onFiltersChange }: Props) {
   const [selectedOrder, setSelectedOrder] = useState<AllOrdersDto | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showReplaceRiderModal, setShowReplaceRiderModal] = useState(false);
@@ -64,6 +65,25 @@ export default function OrderManagementTable({ filters }: Props) {
   const handleReplaceRider = (order: AllOrdersDto) => {
     setOrderForRiderReplacement(order);
     setShowReplaceRiderModal(true);
+  };
+
+  const handlePageChange = (page: number) => {
+    if (onFiltersChange) {
+      onFiltersChange({
+        ...filters,
+        page
+      });
+    }
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    if (onFiltersChange) {
+      onFiltersChange({
+        ...filters,
+        limit: pageSize,
+        page: 1 // Reset to first page when changing page size
+      });
+    }
   };
 
   const getStatusBadge = (status: number | string) => {
@@ -250,6 +270,8 @@ export default function OrderManagementTable({ filters }: Props) {
           pageSize: orders.pageSize,
           totalCount: orders.totalCount
         } : undefined}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
         onRowClick={handleViewOrder}
       />
 

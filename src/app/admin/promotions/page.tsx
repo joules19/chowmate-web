@@ -58,13 +58,13 @@ export default function PromotionManagementPage() {
     const totalCount = promotionsResponse?.totalCount || 0;
     const activeCount = promotions.filter(p => p.isActive).length;
     const inactiveCount = promotions.filter(p => !p.isActive).length;
-    
+
     const now = new Date();
-    const expiredCount = promotions.filter(p => 
+    const expiredCount = promotions.filter(p =>
       p.endDate && new Date(p.endDate) < now
     ).length;
-    
-    const scheduledCount = promotions.filter(p => 
+
+    const scheduledCount = promotions.filter(p =>
       p.startDate && new Date(p.startDate) > now
     ).length;
 
