@@ -456,8 +456,14 @@ export default function PromotionManagementTable({
                   <div className="flex items-center space-x-2">
                     {actions.map((action, index) => {
                       if (action.condition && !action.condition()) return null;
-                      const IconComponent = typeof action.icon === 'function' ? action.icon(promotion) : action.icon;
                       const label = typeof action.label === 'function' ? action.label(promotion) : action.label;
+                      
+                      let IconComponent;
+                      if (typeof action.icon === 'function') {
+                        IconComponent = action.icon(promotion);
+                      } else {
+                        IconComponent = action.icon;
+                      }
                       
                       return (
                         <button
@@ -468,9 +474,7 @@ export default function PromotionManagementTable({
                           }`}
                           title={label}
                         >
-                          {IconComponent && typeof IconComponent === 'function' ? (
-                            <IconComponent className="h-4 w-4" />
-                          ) : null}
+                          {IconComponent && React.createElement(IconComponent as React.ComponentType<any>, { className: "h-4 w-4" })}
                         </button>
                       );
                     })}
