@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   EyeIcon, 
   PencilSquareIcon, 
   XMarkIcon,
   MapIcon,
-  ArrowPathRoundedSquareIcon
+  ArrowPathRoundedSquareIcon,
+  ArrowPathIcon
 } from "@heroicons/react/24/outline";
 import DataTable, { Column } from "../shared/DataTable";
 import { SearchFilters } from "../../../data/types/api";
@@ -20,9 +21,10 @@ import RiderReplacementModal from "./RiderReplacementModal";
 interface Props {
   filters: SearchFilters;
   onFiltersChange?: (filters: SearchFilters) => void;
+  onStatsUpdate?: (stats: { totalActiveOrders?: number; totalPendingOrders?: number; completedToday?: number }) => void;
 }
 
-export default function OrderManagementTable({ filters, onFiltersChange }: Props) {
+export default function OrderManagementTable({ filters, onFiltersChange, onStatsUpdate }: Props) {
   const [selectedOrder, setSelectedOrder] = useState<AllOrdersDto | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showReplaceRiderModal, setShowReplaceRiderModal] = useState(false);
@@ -41,6 +43,17 @@ export default function OrderManagementTable({ filters, onFiltersChange }: Props
   };
 
   const { data: orders, isLoading: loading, error, refetch: refreshOrders, isFetching: isRefreshing } = useOrders(orderFilters, { enabled: true });
+
+  // Update stats when orders data changes
+  useEffect(() => {
+    if (orders && onStatsUpdate) {
+      onStatsUpdate({
+        totalActiveOrders: orders.totalActiveOrders,
+        totalPendingOrders: orders.totalPendingOrders,
+        completedToday: orders.completedToday
+      });
+    }
+  }, [orders, onStatsUpdate]);
 
   const handleViewOrder = (order: AllOrdersDto) => {
     setSelectedOrder(order);
@@ -261,6 +274,17 @@ export default function OrderManagementTable({ filters, onFiltersChange }: Props
 
   return (
     <>
+      <div className="mb-4 flex justify-end">
+        <button
+          onClick={() => refreshOrders()}
+          disabled={isRefreshing}
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-button text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <ArrowPathIcon className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+          {isRefreshing ? 'Refreshing...' : 'Refresh'}
+        </button>
+      </div>
+      
       <DataTable<AllOrdersDto>
         data={orders?.items || []}
         columns={columns}

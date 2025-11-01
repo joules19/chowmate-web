@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 import { 
   UserIcon, 
-  EnvelopeIcon, 
-  PhoneIcon,
   CheckBadgeIcon,
   XMarkIcon,
   EyeIcon,
@@ -15,6 +13,7 @@ import { userService } from '@/app/lib/api/services/user-service';
 import { UserSummaryDto, GetAllUsersRequest } from '@/app/data/types/vendor';
 import { PaginatedResponse } from '@/app/data/types/api';
 import SendOtpModal from './SendOtpModal';
+import UserDetailsModal from './UserDetailsModal';
 
 interface Props {
   filters: GetAllUsersRequest;
@@ -27,6 +26,7 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
   const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserSummaryDto | null>(null);
 
   const fetchUsers = async () => {
@@ -34,7 +34,8 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
     setError('');
 
     try {
-      const response = await userService.getAllUsers(filters);
+      const customerFilters = { ...filters, role: 'Customer' };
+      const response = await userService.getAllUsers(customerFilters);
       setUsers(response);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch users');
@@ -58,6 +59,16 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
 
   const handleCloseOtpModal = () => {
     setOtpModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleViewDetails = (user: UserSummaryDto) => {
+    setSelectedUser(user);
+    setDetailsModalOpen(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setDetailsModalOpen(false);
     setSelectedUser(null);
   };
 
@@ -128,7 +139,7 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
       <div className="px-6 py-4 border-b border-border-light">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-text-primary">
-            All Users ({users?.totalCount || 0})
+            Customers ({users?.totalCount || 0})
           </h3>
           <button
             onClick={fetchUsers}
@@ -154,9 +165,6 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
                 Contact
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-                Activity
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
                 Verification
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-text-secondary uppercase tracking-wider">
@@ -166,7 +174,11 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
           </thead>
           <tbody className="divide-y divide-border-light">
             {users?.items?.map((user) => (
-              <tr key={user.id} className="hover:bg-surface-50 transition-colors">
+              <tr 
+                key={user.id} 
+                className="hover:bg-surface-50 transition-colors cursor-pointer"
+                onClick={() => handleViewDetails(user)}
+              >
                 <td className="px-6 py-4">
                   <div className="flex items-center">
                     <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
@@ -194,23 +206,11 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
                 </td>
                 <td className="px-6 py-4">
                   <div className="space-y-1">
-                    <div className="flex items-center text-sm text-text-primary">
-                      <EnvelopeIcon className="h-4 w-4 mr-2 text-text-tertiary" />
+                    <div className="text-sm text-text-primary">
                       {user.email}
                     </div>
-                    <div className="flex items-center text-sm text-text-primary">
-                      <PhoneIcon className="h-4 w-4 mr-2 text-text-tertiary" />
+                    <div className="text-sm text-text-tertiary">
                       {user.phoneNumber}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="space-y-1">
-                    <div className="text-sm text-text-primary">
-                      {user.lastActivity}
-                    </div>
-                    <div className="text-xs text-text-tertiary">
-                      {user.totalOrders ? `${user.totalOrders} orders` : 'No orders'}
                     </div>
                   </div>
                 </td>
@@ -236,19 +236,24 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center space-x-2 justify-end">
                     <button
-                      onClick={() => handleSendOtp(user)}
-                      className="inline-flex items-center px-3 py-1 border border-border-light rounded-button text-sm text-text-primary hover:bg-surface-100 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSendOtp(user);
+                      }}
+                      className="p-2 text-text-tertiary hover:text-primary-600 hover:bg-primary-50 rounded-button transition-colors"
                       title="Send OTP to user"
                     >
-                      <PaperAirplaneIcon className="h-4 w-4 mr-1" />
-                      Send OTP
+                      <PaperAirplaneIcon className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => onUserSelect?.(user)}
-                      className="inline-flex items-center px-3 py-1 border border-border-light rounded-button text-sm text-text-primary hover:bg-surface-100 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewDetails(user);
+                      }}
+                      className="p-2 text-text-tertiary hover:text-primary-600 hover:bg-primary-50 rounded-button transition-colors"
+                      title="View user details"
                     >
-                      <EyeIcon className="h-4 w-4 mr-1" />
-                      View
+                      <EyeIcon className="h-4 w-4" />
                     </button>
                   </div>
                 </td>
@@ -294,7 +299,7 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
       {users && users.items.length === 0 && (
         <div className="text-center py-12">
           <UserIcon className="h-12 w-12 mx-auto text-text-tertiary opacity-50 mb-4" />
-          <h3 className="text-lg font-medium text-text-primary mb-2">No users found</h3>
+          <h3 className="text-lg font-medium text-text-primary mb-2">No customers found</h3>
           <p className="text-text-tertiary">
             Try adjusting your filters or search criteria.
           </p>
@@ -308,6 +313,13 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
         userEmail={selectedUser?.email}
         userPhone={selectedUser?.phoneNumber}
         userName={selectedUser?.fullName}
+      />
+
+      {/* User Details Modal */}
+      <UserDetailsModal
+        isOpen={detailsModalOpen}
+        onClose={handleCloseDetailsModal}
+        user={selectedUser}
       />
     </div>
   );

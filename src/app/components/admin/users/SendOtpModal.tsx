@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { XMarkIcon, PaperAirplaneIcon, EnvelopeIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
 import { AdminSendOtpRequest, OtpReason } from '@/app/data/types/otp';
 import { useSendOtpToUser } from '@/app/lib/hooks/api-hooks/use-otp';
@@ -27,6 +27,19 @@ export default function SendOtpModal({
   const [customReason, setCustomReason] = useState('');
 
   const sendOtpMutation = useSendOtpToUser();
+
+  // Update contact info when modal opens with new user data
+  useEffect(() => {
+    if (isOpen) {
+      const newContactInfo = userEmail || userPhone || '';
+      const newIsEmail = !!userEmail;
+      
+      setContactInfo(newContactInfo);
+      setIsEmail(newIsEmail);
+      setReason(OtpReason.ADMIN_ACTION);
+      setCustomReason('');
+    }
+  }, [isOpen, userEmail, userPhone]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

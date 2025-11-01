@@ -12,7 +12,8 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
   StarIcon,
-  ArrowUturnLeftIcon
+  ArrowUturnLeftIcon,
+  PaperAirplaneIcon
 } from "@heroicons/react/24/outline";
 import { VendorFilters, VendorSummary, VendorStatus, ApproveVendorRequest, RejectVendorRequest, SuspendVendorRequest, ActivateVendorRequest } from "../../../data/types/vendor";
 
@@ -41,6 +42,7 @@ import InstructionModal from './SendInstructionModal';
 import VendorActionModal from './VendorActionModal';
 import VendorDetailsModal from './VendorDetailsModal';
 import SendBackToPendingModal from './SendBackToPendingModal';
+import SendOtpModal from '../users/SendOtpModal';
 import { formatCurrency } from '@/app/lib/utils/currency';
 
 interface Props {
@@ -101,6 +103,7 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   const [showZoneModal, setShowZoneModal] = useState(false);
   const [showInstructionModal, setShowInstructionModal] = useState(false);
   const [showSendBackModal, setShowSendBackModal] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
   const [actionType, setActionType] = useState<'approve' | 'reject' | 'suspend' | 'activate'>('approve');
 
   const { data: vendorsData, isLoading, error, refetch } = useVendors(filters);
@@ -161,6 +164,11 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
     console.log('Send back to pending clicked for vendor:', vendor);
     setSelectedVendor(vendor);
     setShowSendBackModal(true);
+  };
+
+  const handleSendOtp = (vendor: VendorSummary) => {
+    setSelectedVendor(vendor);
+    setShowOtpModal(true);
   };
 
   const handleConfirmSendBackToPending = async (message: string) => {
@@ -584,6 +592,18 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                             <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
                           </button>
                         )}
+
+                        {/* Send OTP Button - Available for all statuses */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSendOtp(vendor);
+                          }}
+                          className="text-blue-600 hover:text-blue-700 p-1 rounded transition-colors"
+                          title="Send OTP to vendor"
+                        >
+                          <PaperAirplaneIcon className="h-4 w-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -732,6 +752,18 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
           isLoading={sendBackToPendingMutation.isPending}
         />
       )}
+
+      {/* Send OTP Modal */}
+      <SendOtpModal
+        isOpen={showOtpModal}
+        onClose={() => {
+          setShowOtpModal(false);
+          setSelectedVendor(null);
+        }}
+        userEmail={selectedVendor?.email}
+        userPhone={selectedVendor?.phoneNumber}
+        userName={selectedVendor?.businessName || selectedVendor?.fullName}
+      />
     </>
   );
 }

@@ -7,9 +7,12 @@ import { OrderStatus } from "../../../data/types/order";
 interface Props {
   filters: SearchFilters;
   onFiltersChange: (filters: SearchFilters) => void;
+  totalActiveOrders?: number;
+  totalPendingOrders?: number;
+  completedToday?: number;
 }
 
-export default function OrderFilters({ filters, onFiltersChange }: Props) {
+export default function OrderFilters({ filters, onFiltersChange, totalActiveOrders, totalPendingOrders, completedToday }: Props) {
   const handleSearchChange = (search: string) => {
     onFiltersChange({ ...filters, search, page: 1 });
   };
@@ -89,10 +92,13 @@ export default function OrderFilters({ filters, onFiltersChange }: Props) {
         <div className="flex items-center space-x-4">
           <div className="flex space-x-2">
             <button className="px-3 py-1 text-sm bg-orange-100 text-orange-800 rounded-full">
-              {47} Active Orders
+              {totalActiveOrders ?? 0} Active Orders
             </button>
             <button className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full">
-              {15} Pending
+              {totalPendingOrders ?? 0} Pending
+            </button>
+            <button className="px-3 py-1 text-sm bg-green-100 text-green-800 rounded-full">
+              {completedToday ?? 0} Completed Today
             </button>
           </div>
 

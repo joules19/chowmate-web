@@ -18,6 +18,7 @@ export default function OrdersPage() {
   });
   
   const [viewMode, setViewMode] = useState<'table' | 'tracking' | 'pending'>('table');
+  const [orderStats, setOrderStats] = useState<{ totalActiveOrders?: number; totalPendingOrders?: number; completedToday?: number }>({});
 
   return (
     <PermissionGuard permission={Permission.VIEW_ORDERS}>
@@ -109,10 +110,14 @@ export default function OrdersPage() {
           <OrderFilters 
             filters={filters}
             onFiltersChange={setFilters}
+            totalActiveOrders={orderStats.totalActiveOrders}
+            totalPendingOrders={orderStats.totalPendingOrders}
+            completedToday={orderStats.completedToday}
           />
           <OrderManagementTable 
             filters={filters} 
             onFiltersChange={setFilters}
+            onStatsUpdate={setOrderStats}
           />
         </>
       )}

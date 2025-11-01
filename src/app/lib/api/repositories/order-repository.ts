@@ -1,6 +1,6 @@
 import { BaseRepository } from "../base-repository";
 import { AllOrdersDto, AssignmentResultDto, AssignRiderToOrderRequest, AvailableRiderDto, Order, OrderStatus, PendingOrderDto } from "../../../data/types/order";
-import { PaginatedResponse } from "../../../data/types/api";
+import { PaginatedResponse, OrderPaginatedResponse } from "../../../data/types/api";
 
 export interface OrderFilters {
   search?: string;
@@ -24,7 +24,7 @@ export class OrderRepository extends BaseRepository<Order> {
   /**
    * Get all orders with full details using AllOrdersDto structure
    */
-  async getAllOrders(filters?: OrderFilters): Promise<PaginatedResponse<AllOrdersDto>> {
+  async getAllOrders(filters?: OrderFilters): Promise<OrderPaginatedResponse<AllOrdersDto>> {
     const queryParams = new URLSearchParams();
 
     if (filters) {
@@ -36,7 +36,7 @@ export class OrderRepository extends BaseRepository<Order> {
     }
 
     const endpoint = queryParams.toString() ? `?${queryParams}` : '';
-    return this.get<PaginatedResponse<AllOrdersDto>>(endpoint);
+    return this.get<OrderPaginatedResponse<AllOrdersDto>>(endpoint);
   }
 
   /**

@@ -42,6 +42,7 @@ export interface RiderSummary extends Record<string, unknown> {
     id: string;
     fullName: string;
     phoneNumber: string;
+    email?: string;
     status: number; // numeric status from API
     statusText: string;
     isOnline: boolean;

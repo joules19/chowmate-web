@@ -14,7 +14,8 @@ import {
   LightBulbIcon,
   CreditCardIcon,
   Cog6ToothIcon,
-  TagIcon
+  TagIcon,
+  ClipboardDocumentListIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -78,6 +79,12 @@ const menuItems = [
     href: "/admin/feature-requests",
     icon: LightBulbIcon,
     permission: Permission.VIEW_FEATURE_REQUESTS
+  },
+  {
+    name: "Surveys",
+    href: "/admin/surveys",
+    icon: ClipboardDocumentListIcon,
+    permission: Permission.VIEW_SURVEYS
   },
   // {
   //   name: "Analytics",

@@ -172,6 +172,7 @@ export interface WalletTransactionDto {
     fullName?: string;
     phone?: string;
     email?: string;
+    userRole?: string;
 }
 
 export interface PaginatedResult<T> {

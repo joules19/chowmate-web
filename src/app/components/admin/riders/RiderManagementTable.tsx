@@ -9,7 +9,8 @@ import {
   PlayIcon,
   ExclamationTriangleIcon,
   MapPinIcon,
-  ArrowUturnLeftIcon
+  ArrowUturnLeftIcon,
+  PaperAirplaneIcon
 } from "@heroicons/react/24/outline";
 import DataTable, { Column } from "../shared/DataTable";
 import { SearchFilters } from "../../../data/types/api";
@@ -22,6 +23,7 @@ import RiderZoneAssignmentModal from "./RiderZoneAssignmentModal";
 import RiderApproveModal from "./RiderApproveModal";
 import RiderRejectModal from "./RiderRejectModal";
 import RiderSendBackToPendingModal from "./RiderSendBackToPendingModal";
+import SendOtpModal from "../users/SendOtpModal";
 
 interface Props {
   filters: SearchFilters;
@@ -36,6 +38,7 @@ export default function RiderManagementTable({ filters }: Props) {
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showSendBackModal, setShowSendBackModal] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
   
   // Confirmation dialog states
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -107,6 +110,11 @@ export default function RiderManagementTable({ filters }: Props) {
   const handleSendBackToPending = (rider: RiderSummary) => {
     setSelectedRider(rider);
     setShowSendBackModal(true);
+  };
+
+  const handleSendOtp = (rider: RiderSummary) => {
+    setSelectedRider(rider);
+    setShowOtpModal(true);
   };
 
   const handleConfirmApprove = async (data: { zoneIds: string[]; notes: string; notifyRider: boolean }) => {
@@ -411,6 +419,18 @@ export default function RiderManagementTable({ filters }: Props) {
           >
             <MapPinIcon className="h-4 w-4" />
           </button>
+
+          {/* Send OTP button - always show */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSendOtp(rider);
+            }}
+            className="text-purple-600 hover:text-purple-700 p-1 rounded transition-colors"
+            title="Send OTP to rider"
+          >
+            <PaperAirplaneIcon className="h-4 w-4" />
+          </button>
         </div>
       )
     }
@@ -517,6 +537,18 @@ export default function RiderManagementTable({ filters }: Props) {
         onConfirm={handleConfirmSendBackToPending}
         rider={selectedRider}
         isLoading={sendBackToPendingMutation.isPending}
+      />
+
+      {/* Send OTP Modal */}
+      <SendOtpModal
+        isOpen={showOtpModal}
+        onClose={() => {
+          setShowOtpModal(false);
+          setSelectedRider(null);
+        }}
+        userEmail={selectedRider?.email}
+        userPhone={selectedRider?.phoneNumber}
+        userName={selectedRider?.fullName}
       />
 
       {/* Confirmation Dialogs */}
