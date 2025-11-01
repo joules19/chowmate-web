@@ -81,7 +81,7 @@ export default function OrderFilters({ filters, onFiltersChange, totalActiveOrde
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center space-x-2">
           <FunnelIcon className="h-5 w-5 text-text-tertiary" />
           <span className="text-sm text-text-tertiary">
@@ -89,22 +89,22 @@ export default function OrderFilters({ filters, onFiltersChange, totalActiveOrde
           </span>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="flex space-x-2">
-            <button className="px-3 py-1 text-sm bg-orange-100 text-orange-800 rounded-full">
-              {totalActiveOrders ?? 0} Active Orders
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <div className="flex flex-wrap gap-2">
+            <button className="px-2 py-1 text-xs sm:text-sm bg-orange-100 text-orange-800 rounded-full whitespace-nowrap">
+              {totalActiveOrders ?? 0} Active
             </button>
-            <button className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full">
+            <button className="px-2 py-1 text-xs sm:text-sm bg-yellow-100 text-yellow-800 rounded-full whitespace-nowrap">
               {totalPendingOrders ?? 0} Pending
             </button>
-            <button className="px-3 py-1 text-sm bg-green-100 text-green-800 rounded-full">
-              {completedToday ?? 0} Completed Today
+            <button className="px-2 py-1 text-xs sm:text-sm bg-green-100 text-green-800 rounded-full whitespace-nowrap">
+              {completedToday ?? 0} Today
             </button>
           </div>
 
           <button
             onClick={() => onFiltersChange({ page: 1, limit: 10, sortBy: 'orderDate', sortOrder: 'desc' })}
-            className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+            className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 self-start"
           >
             Clear Filters
           </button>
