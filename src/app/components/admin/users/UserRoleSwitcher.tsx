@@ -38,10 +38,10 @@ export default function UserRoleSwitcher({ onSuccess, onError }: Props) {
             {/* Trigger Button */}
             <button
                 onClick={() => setIsSearchModalOpen(true)}
-                className="inline-flex items-center px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-button transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center sm:justify-start px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors text-sm"
             >
-                <ArrowPathRoundedSquareIcon className="h-5 w-5 mr-2" />
-                Switch User Role
+                <ArrowPathRoundedSquareIcon className="h-4 w-4 mr-2 flex-shrink-0" />
+                <span className="whitespace-nowrap">Switch User Role</span>
             </button>
 
             {/* User Search Modal */}

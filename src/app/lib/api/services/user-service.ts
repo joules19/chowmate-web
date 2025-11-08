@@ -7,7 +7,18 @@ import {
   UserSummaryDto,
   GetAllUsersRequest
 } from "../../../data/types/vendor";
+import { UserDto } from "../../hooks/api-hooks.ts/use-admin";
 import { PaginatedResponse } from "../../../data/types/api";
+
+// Interface for admin creating users
+export interface AdminCreateUserRequest extends Record<string, unknown> {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  dateOfBirth?: string;
+  role: string;
+}
 
 export class UserService extends BaseRepository<User> {
   constructor() {
@@ -89,6 +100,11 @@ export class UserService extends BaseRepository<User> {
   // Role switching functionality
   async switchUserRole(userId: string, request: RoleSwitchRequest): Promise<RoleSwitchResponse> {
     return this.put<RoleSwitchResponse>(`/${userId}/switch-role`, request);
+  }
+
+  // Admin create user functionality
+  async adminCreateUser(request: AdminCreateUserRequest): Promise<UserDto> {
+    return this.post<UserDto>('/create', request);
   }
 }
 

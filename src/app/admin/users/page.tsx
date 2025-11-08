@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { UserGroupIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
 import UserManagementTable from "@/app/components/admin/users/UserManagementTable";
 import UserRoleSwitcher from "@/app/components/admin/users/UserRoleSwitcher";
+import CreateUserModal from "@/app/components/admin/users/CreateUserModal";
 import PermissionGuard from "@/app/components/admin/guards/PermissionGuard";
 import { GetAllUsersRequest, UserSummaryDto, RoleSwitchResponse } from "../../data/types/vendor";
 import { Permission } from "../../data/types/permissions";
@@ -21,6 +22,7 @@ export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserSummaryDto | null>(null);
   const [lastSwitchResult, setLastSwitchResult] = useState<RoleSwitchResponse | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   const handleUserSelect = (user: UserSummaryDto) => {
     setSelectedUser(user);
@@ -58,10 +60,20 @@ export default function UsersPage() {
             </p>
           </div>
 
-          <UserRoleSwitcher
-            onSuccess={handleRoleSwitchSuccess}
-            onError={handleRoleSwitchError}
-          />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3">
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 flex items-center justify-center sm:justify-start space-x-2 text-sm"
+            >
+              <PlusIcon className="h-4 w-4 flex-shrink-0" />
+              <span className="whitespace-nowrap">Create User</span>
+            </button>
+            
+            <UserRoleSwitcher
+              onSuccess={handleRoleSwitchSuccess}
+              onError={handleRoleSwitchError}
+            />
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -145,6 +157,11 @@ export default function UsersPage() {
             </div>
           </div>
         )}
+
+        <CreateUserModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+        />
       </div>
     </PermissionGuard>
   );

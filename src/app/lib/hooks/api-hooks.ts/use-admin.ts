@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AdminService } from '../../api/services/admin-service';
+import { userService, AdminCreateUserRequest } from '../../api/services/user-service';
 
 const adminService = new AdminService();
 
@@ -54,6 +55,21 @@ export function useChangeAdminPassword() {
       adminService.changeAdminPassword(request),
     onError: (error) => {
       console.error('Failed to change password:', error);
+    },
+  });
+}
+
+export function useAdminCreateUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: AdminCreateUserRequest): Promise<UserDto> => 
+      userService.adminCreateUser(request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+    onError: (error) => {
+      console.error('Failed to create user:', error);
     },
   });
 }
