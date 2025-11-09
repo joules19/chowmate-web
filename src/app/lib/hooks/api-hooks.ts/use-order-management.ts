@@ -90,3 +90,20 @@ export const useOrderAnalytics = (dateRange?: { from: string; to: string }) => {
     enabled: !!dateRange, // Only fetch when date range is provided
   });
 };
+
+// Hook for cancelling an order
+export const useCancelOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) =>
+      orderRepository.cancel(id, reason),
+    onSuccess: () => {
+      // Invalidate and refetch all order-related queries
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'pending-assignment'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'live'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'analytics'] });
+    },
+  });
+};

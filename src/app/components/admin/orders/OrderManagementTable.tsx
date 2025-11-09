@@ -12,11 +12,12 @@ import {
 import DataTable, { Column } from "../shared/DataTable";
 import { SearchFilters } from "../../../data/types/api";
 import { AllOrdersDto } from "@/app/data/types/order";
-import { useOrders } from "@/app/lib/hooks/api-hooks.ts/use-order-management";
+import { useOrders, useCancelOrder } from "@/app/lib/hooks/api-hooks.ts/use-order-management";
 import { OrderFilters } from "@/app/lib/api/repositories/order-repository";
 import { formatCurrency } from "@/app/lib/utils/currency";
 import OrderDetailsModal from "./OrderDetailsModal";
 import RiderReplacementModal from "./RiderReplacementModal";
+import OrderCancellationModal from "./OrderCancellationModal";
 
 interface Props {
   filters: SearchFilters;
@@ -28,7 +29,9 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
   const [selectedOrder, setSelectedOrder] = useState<AllOrdersDto | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showReplaceRiderModal, setShowReplaceRiderModal] = useState(false);
+  const [showCancellationModal, setShowCancellationModal] = useState(false);
   const [orderForRiderReplacement, setOrderForRiderReplacement] = useState<AllOrdersDto | null>(null);
+  const [orderForCancellation, setOrderForCancellation] = useState<AllOrdersDto | null>(null);
 
   // Convert SearchFilters to OrderFilters
   const orderFilters: OrderFilters = {
@@ -43,6 +46,7 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
   };
 
   const { data: orders, isLoading: loading, error, refetch: refreshOrders, isFetching: isRefreshing } = useOrders(orderFilters, { enabled: true });
+  const cancelOrderMutation = useCancelOrder();
 
   // Update stats when orders data changes
   useEffect(() => {
@@ -66,8 +70,20 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
   };
 
   const handleCancelOrder = (order: AllOrdersDto) => {
-    console.log('Cancel order:', order);
-    // TODO: Implement cancel functionality
+    setOrderForCancellation(order);
+    setShowCancellationModal(true);
+  };
+
+  const handleConfirmCancellation = async (orderId: string, reason: string) => {
+    try {
+      await cancelOrderMutation.mutateAsync({ id: orderId, reason });
+      setShowCancellationModal(false);
+      setOrderForCancellation(null);
+      // Optional: Show success message
+    } catch (error) {
+      // Error is handled by the mutation's onError callback
+      console.error('Failed to cancel order:', error);
+    }
   };
 
   const handleTrackOrder = (order: AllOrdersDto) => {
@@ -315,6 +331,17 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
           setOrderForRiderReplacement(null);
         }}
         order={orderForRiderReplacement}
+      />
+
+      <OrderCancellationModal
+        isOpen={showCancellationModal}
+        onClose={() => {
+          setShowCancellationModal(false);
+          setOrderForCancellation(null);
+        }}
+        order={orderForCancellation}
+        onCancel={handleConfirmCancellation}
+        isLoading={cancelOrderMutation.isPending}
       />
     </>
   );
