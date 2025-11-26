@@ -54,7 +54,7 @@ export default function SimpleFooter() {
                             className="flex items-center space-x-3 text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200"
                         >
                             <Mail className="w-5 h-5 text-[#FFC107]" />
-                            <span>contact@chowmate.app</span>
+                            <span>support@chowmate.app</span>
                         </a>
                         {/* <a
                             href="tel:+2341234567890"
