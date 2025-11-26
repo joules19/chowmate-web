@@ -1,4 +1,6 @@
 import { AuthService } from '../../auth/auth-service';
+import { BaseRepository } from '../base-repository';
+import apiClient from '../axios-config'; // Import apiClient
 
 export interface CustomerClassReportFilterDto {
   startMonth?: number;  // 1-12
@@ -10,11 +12,9 @@ export interface CustomerClassReportFilterDto {
   middleClassThreshold?: number;
 }
 
-export class ReportRepository {
-  private baseUrl: string;
-
+export class ReportRepository extends BaseRepository<any> {
   constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
+    super('/api/admin/customer-order-reports');
   }
 
   /**
@@ -42,14 +42,16 @@ export class ReportRepository {
     }
 
     const queryString = params.toString();
+    // Construct URL using apiClient's baseURL
+    const baseUrl = apiClient.defaults.baseURL || process.env.NEXT_PUBLIC_API_BASE_URL || 'https://chowmate-db2u.onrender.com';
     const url = queryString
-      ? `${this.baseUrl}/api/admin/customer-order-reports/export/customer-class-report/csv?${queryString}`
-      : `${this.baseUrl}/api/admin/customer-order-reports/export/customer-class-report/csv`;
+      ? `${baseUrl}${this.endpoint}/export/customer-class-report/csv?${queryString}`
+      : `${baseUrl}${this.endpoint}/export/customer-class-report/csv`;
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${this.getAuthToken()}`,
+        'Authorization': `Bearer ${AuthService.getToken()}`, // Use AuthService directly
       },
     });
 
@@ -70,8 +72,5 @@ export class ReportRepository {
     const blob = await this.downloadCustomerClassReportCsv(filter);
     return await blob.text();
   }
-
-  private getAuthToken(): string {
-    return AuthService.getToken() || '';
-  }
 }
+
