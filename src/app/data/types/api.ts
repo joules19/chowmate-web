@@ -5,11 +5,20 @@ export interface PaginatedResponse<T> {
   pageSize: number;
 }
 
+export interface EarningsPaginatedResponse<T> extends PaginatedResponse<T> {
+  totalEarnings: number;
+  totalPlatformEarnings: number;
+  totalVendorEarnings: number;
+  totalRiderEarnings: number;
+  totalPages: number; // Added this as it's present in the C# DTO
+}
+
 export interface OrderPaginatedResponse<T> extends PaginatedResponse<T> {
   totalPendingOrders: number;
   totalActiveOrders: number;
   completedToday: number;
 }
+
 
 export interface PagedResponse<T> {
   data: T[];

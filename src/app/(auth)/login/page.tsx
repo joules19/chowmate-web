@@ -23,14 +23,14 @@ const LoginContent: React.FC = () => {
   // Check if user is already authenticated as admin
   useEffect(() => {
     const checkAuth = async () => {
-   
+
         const user = await AuthService.initializeAuth();
         if (user && AuthService.hasAdminAccess()) {
-          const targetUrl = redirectUrl || '/admin/dashboard';
+          const targetUrl = redirectUrl || '/control/dashboard';
           router.replace(targetUrl);
         }
       }
-    
+
 
     checkAuth();
   }, [router, redirectUrl]);
@@ -76,8 +76,8 @@ const LoginContent: React.FC = () => {
       }
       
       message.success('Admin login successful!');
-      
-      const targetUrl = redirectUrl || '/admin/dashboard';
+
+      const targetUrl = redirectUrl || '/control/dashboard';
       router.replace(targetUrl);
 
     } catch (err: unknown) {

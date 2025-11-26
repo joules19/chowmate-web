@@ -30,7 +30,7 @@ export default function AdminLink() {
 
   return (
     <Link
-      href="/admin"
+      href="/control"
       className="fixed bottom-4 right-4 bg-primary-600 text-white p-3 rounded-full shadow-lg hover:bg-primary-700 transition-colors duration-200 z-50"
       title="Admin Panel"
     >

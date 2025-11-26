@@ -19,7 +19,7 @@ export default function AdminProtectedRoute({ children }: Props) {
         const user = await AuthService.initializeAuth();
 
         if (!user) {
-          router.replace('/login?redirect=/admin/dashboard');
+          router.replace('/login?redirect=/control/dashboard');
           return;
         }
 
@@ -31,7 +31,7 @@ export default function AdminProtectedRoute({ children }: Props) {
         setAuthorized(true);
       } catch (error) {
         console.error('Auth check failed:', error);
-        router.replace('/login?redirect=/admin/dashboard');
+        router.replace('/login?redirect=/control/dashboard');
       } finally {
         setLoading(false);
       }

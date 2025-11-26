@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  EyeIcon, 
-  PencilSquareIcon, 
+import {
+  EyeIcon,
   XMarkIcon,
   MapIcon,
   ArrowPathRoundedSquareIcon,
-  ArrowPathIcon
+  ArrowPathIcon,
+  BanknotesIcon
 } from "@heroicons/react/24/outline";
 import DataTable, { Column } from "../shared/DataTable";
 import { SearchFilters } from "../../../data/types/api";
@@ -18,6 +18,7 @@ import { formatCurrency } from "@/app/lib/utils/currency";
 import OrderDetailsModal from "./OrderDetailsModal";
 import RiderReplacementModal from "./RiderReplacementModal";
 import OrderCancellationModal from "./OrderCancellationModal";
+import OrderEarningsModal from "./OrderEarningsModal";
 
 interface Props {
   filters: SearchFilters;
@@ -30,8 +31,10 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showReplaceRiderModal, setShowReplaceRiderModal] = useState(false);
   const [showCancellationModal, setShowCancellationModal] = useState(false);
+  const [showEarningsModal, setShowEarningsModal] = useState(false);
   const [orderForRiderReplacement, setOrderForRiderReplacement] = useState<AllOrdersDto | null>(null);
   const [orderForCancellation, setOrderForCancellation] = useState<AllOrdersDto | null>(null);
+  const [orderForEarnings, setOrderForEarnings] = useState<AllOrdersDto | null>(null);
 
   // Convert SearchFilters to OrderFilters
   const orderFilters: OrderFilters = {
@@ -94,6 +97,11 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
   const handleReplaceRider = (order: AllOrdersDto) => {
     setOrderForRiderReplacement(order);
     setShowReplaceRiderModal(true);
+  };
+
+  const handleViewEarnings = (order: AllOrdersDto) => {
+    setOrderForEarnings(order);
+    setShowEarningsModal(true);
   };
 
   const handlePageChange = (page: number) => {
@@ -209,12 +217,12 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handleEditOrder(order);
+              handleViewEarnings(order);
             }}
-            className="text-yellow-600 hover:text-yellow-700 p-1 rounded transition-colors"
-            title="Edit Order"
+            className="text-green-600 hover:text-green-700 p-1 rounded transition-colors"
+            title="View Earnings"
           >
-            <PencilSquareIcon className="h-4 w-4" />
+            <BanknotesIcon className="h-4 w-4" />
           </button>
 
           {order.statusText !== 'Completed' && order.statusText !== 'Cancelled' && (
@@ -229,7 +237,7 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
               >
                 <MapIcon className="h-4 w-4" />
               </button>
-              
+
               {/* Replace Rider button - only show for orders with assigned riders */}
               {order.rider && (order.statusText === 'RiderAssigned' || order.statusText === 'RiderArrived' || order.statusText === 'OutForDelivery') && (
                 <button
@@ -243,7 +251,7 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
                   <ArrowPathRoundedSquareIcon className="h-4 w-4" />
                 </button>
               )}
-              
+
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -300,7 +308,7 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
           {isRefreshing ? 'Refreshing...' : 'Refresh'}
         </button>
       </div>
-      
+
       <DataTable<AllOrdersDto>
         data={orders?.items || []}
         columns={columns}
@@ -342,6 +350,15 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
         order={orderForCancellation}
         onCancel={handleConfirmCancellation}
         isLoading={cancelOrderMutation.isPending}
+      />
+
+      <OrderEarningsModal
+        isOpen={showEarningsModal}
+        onClose={() => {
+          setShowEarningsModal(false);
+          setOrderForEarnings(null);
+        }}
+        orderId={orderForEarnings?.id || ''}
       />
     </>
   );

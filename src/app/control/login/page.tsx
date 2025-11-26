@@ -25,7 +25,7 @@ const AdminLogin: React.FC = () => {
       const user = await AuthService.initializeAuth();
       if (user && AuthService.hasAdminAccess()) {
         // Admin is already authenticated, redirect to admin dashboard
-        const targetUrl = redirectUrl || '/admin/dashboard';
+        const targetUrl = redirectUrl || '/control/dashboard';
         router.replace(targetUrl);
       }
     }
@@ -82,7 +82,7 @@ const AdminLogin: React.FC = () => {
       message.success('Admin login successful!');
 
       // Redirect to admin dashboard
-      const targetUrl = redirectUrl || '/admin/dashboard';
+      const targetUrl = redirectUrl || '/control/dashboard';
       router.replace(targetUrl);
 
     } catch (err: any) {

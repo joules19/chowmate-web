@@ -12,10 +12,10 @@ export default function AdminEntry() {
       try {
         // Initialize auth and check if user has admin access
         const user = await AuthService.initializeAuth();
-        
+
         if (!user) {
           // Not authenticated, redirect to login
-          router.replace('/login?redirect=/admin/dashboard');
+          router.replace('/login?redirect=/control/dashboard');
           return;
         }
 
@@ -26,10 +26,10 @@ export default function AdminEntry() {
         }
 
         // User has admin access, redirect to dashboard
-        router.replace('/admin/dashboard');
+        router.replace('/control/dashboard');
       } catch (error) {
         console.error('Admin access check failed:', error);
-        router.replace('/login?redirect=/admin/dashboard');
+        router.replace('/login?redirect=/control/dashboard');
       }
     };
 

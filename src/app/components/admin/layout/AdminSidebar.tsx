@@ -15,7 +15,9 @@ import {
   CreditCardIcon,
   Cog6ToothIcon,
   TagIcon,
-  ClipboardDocumentListIcon
+  ClipboardDocumentListIcon,
+  DocumentChartBarIcon,
+  BanknotesIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -28,73 +30,85 @@ import ChowmateLogo from "../../../assets/images/chowmate-dark-mont.png";
 const menuItems = [
   {
     name: "Dashboard",
-    href: "/admin/dashboard",
+    href: "/control/dashboard",
     icon: ChartBarIcon,
     permission: Permission.VIEW_DASHBOARD
   },
   {
     name: "Users",
-    href: "/admin/users",
+    href: "/control/users",
     icon: UsersIcon,
     permission: Permission.VIEW_USERS
   },
   {
     name: "Vendors",
-    href: "/admin/vendors",
+    href: "/control/vendors",
     icon: BuildingStorefrontIcon,
     permission: Permission.VIEW_VENDORS
   },
   {
     name: "Riders",
-    href: "/admin/riders",
+    href: "/control/riders",
     icon: Bike,
     permission: Permission.VIEW_RIDERS
   },
   {
     name: "Orders",
-    href: "/admin/orders",
+    href: "/control/orders",
     icon: ShoppingBagIcon,
     permission: Permission.VIEW_ORDERS
   },
   {
     name: "Payments",
-    href: "/admin/payments",
+    href: "/control/payments",
     icon: CreditCardIcon,
     permission: Permission.VIEW_PAYMENTS
   },
   {
+    name: "Earnings",
+    href: "/control/earnings",
+    icon: BanknotesIcon,
+    permission: Permission.VIEW_PAYMENTS
+  },
+  {
     name: "Advertisements",
-    href: "/admin/advertisements",
+    href: "/control/advertisements",
     icon: MegaphoneIcon,
     permission: Permission.VIEW_ADVERTISEMENTS
   },
   {
     name: "Product Promotions",
-    href: "/admin/promotions",
+    href: "/control/promotions",
     icon: TagIcon,
     permission: Permission.VIEW_PROMOTIONS
   },
   {
     name: "Feature Requests",
-    href: "/admin/feature-requests",
+    href: "/control/feature-requests",
     icon: LightBulbIcon,
     permission: Permission.VIEW_FEATURE_REQUESTS
   },
   {
     name: "Surveys",
-    href: "/admin/surveys",
+    href: "/control/surveys",
     icon: ClipboardDocumentListIcon,
     permission: Permission.VIEW_SURVEYS
   },
+  {
+    name: "Reports",
+    href: "/control/reports",
+    icon: DocumentChartBarIcon,
+    permission: Permission.VIEW_DASHBOARD
+  },
   // {
   //   name: "Analytics",
-  //   href: "/admin/analytics",
+  //   href: "/control/analytics",
   //   icon: ChartPieIcon,
   //   permission: Permission.VIEW_ANALYTICS
   // },
   {
     name: "Settings",
-    href: "/admin/settings",
+    href: "/control/settings",
     icon: Cog6ToothIcon,
     permission: Permission.VIEW_SETTINGS
   }
@@ -168,7 +182,7 @@ export default function AdminSidebar() {
           <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
             {!collapsed && (
               <div className="flex items-center">
-                <Link href="/admin/dashboard">
+                <Link href="/control/dashboard">
                   <Image
                     src={ChowmateLogo}
                     alt="Chowmate Admin"
