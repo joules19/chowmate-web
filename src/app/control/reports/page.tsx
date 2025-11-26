@@ -38,8 +38,7 @@ export default function ReportsPage() {
               <h3 className="text-sm font-medium text-info-800">About Reports</h3>
               <p className="text-sm text-info-700 mt-1 leading-relaxed">
                 Configure filters for each report type and either preview the data in your browser
-                or download as CSV for further analysis. All reports are generated in real-time
-                based on your current data.
+                or download as CSV for further analysis.
               </p>
             </div>
           </div>
