@@ -9,7 +9,7 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   order: AllOrdersDto | null;
-  onCancel: (orderId: string, reason: string) => void;
+  onCancel: (orderId: string, cancellationReason: string) => void;
   isLoading?: boolean;
 }
 
@@ -52,7 +52,7 @@ export default function OrderCancellationModal({ isOpen, onClose, order, onCance
   if (!isOpen || !order) return null;
 
   // Check if order can be cancelled
-  const canCancel = ['Pending', 'Preparing', 'RiderAssigned'].includes(order.statusText);
+  const canCancel = ['Pending', 'Preparing', 'RiderAssigned', 'NoRiderFound'].includes(order.statusText);
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -149,9 +149,8 @@ export default function OrderCancellationModal({ isOpen, onClose, order, onCance
                   onChange={(e) => handleReasonChange(e.target.value)}
                   disabled={isLoading}
                   placeholder="Enter the reason for cancelling this order (max 500 characters)"
-                  className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 ${
-                    reasonError ? 'border-red-300' : ''
-                  }`}
+                  className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 ${reasonError ? 'border-red-300' : ''
+                    }`}
                 />
                 <div className="mt-1 flex justify-between">
                   <div>

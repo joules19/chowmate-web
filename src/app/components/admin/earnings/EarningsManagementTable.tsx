@@ -44,6 +44,17 @@ export default function EarningsManagementTable({
     }
   };
 
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
   const totalPages = Math.ceil(data.totalCount / data.pageSize);
 
   return (
@@ -56,6 +67,9 @@ export default function EarningsManagementTable({
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider">
                   Order #
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider hidden sm:table-cell">
+                  Date
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider">
                   Vendor
@@ -80,7 +94,7 @@ export default function EarningsManagementTable({
             <tbody className="bg-surface-0 divide-y divide-border-light">
               {isLoading ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center">
+                  <td colSpan={8} className="px-4 py-8 text-center">
                     <div className="flex justify-center items-center">
                       <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
                       <span className="ml-3 text-sm text-text-secondary">Loading earnings...</span>
@@ -89,7 +103,7 @@ export default function EarningsManagementTable({
                 </tr>
               ) : data.items.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-sm text-text-tertiary">
+                  <td colSpan={8} className="px-4 py-8 text-center text-sm text-text-tertiary">
                     No earnings found
                   </td>
                 </tr>
@@ -98,6 +112,9 @@ export default function EarningsManagementTable({
                   <tr key={earning.id} className="hover:bg-surface-50 transition-colors">
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span className="text-sm font-medium text-text-primary">{earning.orderNumber}</span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-text-secondary hidden sm:table-cell">
+                      {formatDate(earning.createdDate)}
                     </td>
                     <td className="px-4 py-3">
                       <div className="text-sm">

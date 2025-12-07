@@ -35,17 +35,17 @@ export default function PendingOrdersTable() {
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (statusText: string) => {
     const statusConfig = {
       'Preparing': { bg: 'bg-warning-50', text: 'text-warning-700', border: 'border-warning-200' },
       'NoRiderFound': { bg: 'bg-danger-50', text: 'text-danger-700', border: 'border-danger-200' },
     };
 
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig['Preparing'];
+    const config = statusConfig[statusText as keyof typeof statusConfig] || statusConfig['Preparing'];
 
     return (
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text} border ${config.border}`}>
-        {status === 'NoRiderFound' ? 'No Rider Found' : status}
+        {statusText === 'NoRiderFound' ? 'No Rider Found' : statusText}
       </span>
     );
   };
@@ -138,7 +138,7 @@ export default function PendingOrdersTable() {
                           {formatTimeAgo(order.orderDate)}
                         </p>
                       </div>
-                      {getStatusBadge(order.status)}
+                      {getStatusBadge(order.statusText)}
                     </div>
 
                     <div className="space-y-2">
@@ -259,7 +259,7 @@ export default function PendingOrdersTable() {
                         <div className="text-sm text-text-primary">{order.vendorName}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {getStatusBadge(order.status)}
+                        {getStatusBadge(order.statusText)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
                         {formatCurrency(order.totalAmount)}

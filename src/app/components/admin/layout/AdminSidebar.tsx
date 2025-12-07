@@ -17,6 +17,7 @@ import {
   TagIcon,
   ClipboardDocumentListIcon,
   DocumentChartBarIcon,
+  StarIcon,
   BanknotesIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
@@ -99,6 +100,12 @@ const menuItems = [
     href: "/control/reports",
     icon: DocumentChartBarIcon,
     permission: Permission.VIEW_DASHBOARD
+  },
+  {
+    name: "Ratings",
+    href: "/control/ratings",
+    icon: StarIcon,
+    permission: Permission.VIEW_VENDORS
   },
   // {
   //   name: "Analytics",

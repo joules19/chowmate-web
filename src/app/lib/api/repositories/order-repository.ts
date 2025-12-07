@@ -67,8 +67,8 @@ export class OrderRepository extends BaseRepository<Order> {
     return this.post<Order>(`/${id}/assign-rider`, { riderId });
   }
 
-  async cancel(id: string, reason: string): Promise<Order> {
-    return this.post<Order>(`/${id}/cancel`, { reason });
+  async cancel(id: string, cancellationReason: string): Promise<Order> {
+    return this.post<Order>(`/${id}/cancel`, { cancellationReason });
   }
 
   async refund(id: string, amount?: number, reason?: string): Promise<Order> {

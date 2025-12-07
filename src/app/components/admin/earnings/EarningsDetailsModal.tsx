@@ -31,6 +31,17 @@ export default function EarningsDetailsModal({ isOpen, onClose, earning }: Earni
     }
   };
 
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
   return (
     <>
       {/* Backdrop */}
@@ -99,7 +110,7 @@ export default function EarningsDetailsModal({ isOpen, onClose, earning }: Earni
                       <p className="text-sm font-medium text-text-primary truncate">{earning.vendorName}</p>
                     </div>
                   </div>
-                  <p className="text-2xl font-bold text-success-600">₦{earning.vendorEarnings.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-success-600">₦{earning.vendorEarnings.toLocaleString()}</p>.
                 </div>
 
                 {/* Rider Earnings */}
@@ -171,29 +182,35 @@ export default function EarningsDetailsModal({ isOpen, onClose, earning }: Earni
                 </div>
               </div>
 
-              {/* Distribution Info */}
-              {(earning.distributedAt || earning.refundedAt || earning.distributionNotes) && (
+              {/* Timestamps */}
+              <div>
+                <h3 className="text-base font-semibold text-text-primary mb-3">Timestamps</h3>
+                <div className="bg-surface-100 rounded-card p-4 border border-border-default space-y-3">
+                  <div>
+                    <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider">Created At</p>
+                    <p className="text-sm text-text-primary mt-1">{formatDate(earning.createdDate)}</p>
+                  </div>
+                  {earning.distributedAt && (
+                    <div>
+                      <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider">Distributed At</p>
+                      <p className="text-sm text-text-primary mt-1">{formatDate(earning.distributedAt)}</p>
+                    </div>
+                  )}
+                  {earning.refundedAt && (
+                    <div>
+                      <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider">Refunded At</p>
+                      <p className="text-sm text-text-primary mt-1">{formatDate(earning.refundedAt)}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Distribution Notes */}
+              {earning.distributionNotes && (
                 <div>
-                  <h3 className="text-base font-semibold text-text-primary mb-3">Distribution Information</h3>
-                  <div className="bg-surface-100 rounded-card p-4 border border-border-default space-y-2">
-                    {earning.distributedAt && (
-                      <div>
-                        <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider">Distributed At</p>
-                        <p className="text-sm text-text-primary mt-1">{new Date(earning.distributedAt).toLocaleString()}</p>
-                      </div>
-                    )}
-                    {earning.refundedAt && (
-                      <div>
-                        <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider">Refunded At</p>
-                        <p className="text-sm text-text-primary mt-1">{new Date(earning.refundedAt).toLocaleString()}</p>
-                      </div>
-                    )}
-                    {earning.distributionNotes && (
-                      <div>
-                        <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider">Notes</p>
-                        <p className="text-sm text-text-primary mt-1">{earning.distributionNotes}</p>
-                      </div>
-                    )}
+                  <h3 className="text-base font-semibold text-text-primary mb-3">Distribution Notes</h3>
+                  <div className="bg-surface-100 rounded-card p-4 border border-border-default">
+                    <p className="text-sm text-text-primary">{earning.distributionNotes}</p>
                   </div>
                 </div>
               )}

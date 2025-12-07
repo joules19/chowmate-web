@@ -96,8 +96,8 @@ export const useCancelOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, reason }: { id: string; reason: string }) =>
-      orderRepository.cancel(id, reason),
+    mutationFn: ({ id, cancellationReason }: { id: string; cancellationReason: string }) =>
+      orderRepository.cancel(id, cancellationReason),
     onSuccess: () => {
       // Invalidate and refetch all order-related queries
       queryClient.invalidateQueries({ queryKey: ['orders'] });

@@ -77,9 +77,9 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
     setShowCancellationModal(true);
   };
 
-  const handleConfirmCancellation = async (orderId: string, reason: string) => {
+  const handleConfirmCancellation = async (orderId: string, cancellationReason: string) => {
     try {
-      await cancelOrderMutation.mutateAsync({ id: orderId, reason });
+      await cancelOrderMutation.mutateAsync({ id: orderId, cancellationReason });
       setShowCancellationModal(false);
       setOrderForCancellation(null);
       // Optional: Show success message

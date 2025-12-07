@@ -331,8 +331,8 @@ export default function VendorFiltersComponent({ filters, onFiltersChange }: Pro
               <button
                 onClick={() => handleStatusChange(VendorStatus.PendingApproval)}
                 className={`px-3 py-1 rounded-full transition-colors ${filters.status === VendorStatus.PendingApproval
-                    ? 'bg-yellow-200 text-yellow-800'
-                    : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                  ? 'bg-yellow-200 text-yellow-800'
+                  : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
                   }`}
               >
                 {stats.pendingApproval} Pending
@@ -340,8 +340,8 @@ export default function VendorFiltersComponent({ filters, onFiltersChange }: Pro
               <button
                 onClick={() => handleStatusChange(VendorStatus.RequiresManualReview)}
                 className={`px-3 py-1 rounded-full transition-colors ${filters.status === VendorStatus.RequiresManualReview
-                    ? 'bg-purple-200 text-purple-800'
-                    : 'bg-purple-100 text-purple-800 hover:bg-purple-200'
+                  ? 'bg-purple-200 text-purple-800'
+                  : 'bg-purple-100 text-purple-800 hover:bg-purple-200'
                   }`}
               >
                 {stats.requiresManualReview} Need Review
@@ -349,8 +349,8 @@ export default function VendorFiltersComponent({ filters, onFiltersChange }: Pro
               <button
                 onClick={() => handleStatusChange(VendorStatus.Suspended)}
                 className={`px-3 py-1 rounded-full transition-colors ${filters.status === VendorStatus.Suspended
-                    ? 'bg-red-200 text-red-800'
-                    : 'bg-red-100 text-red-800 hover:bg-red-200'
+                  ? 'bg-red-200 text-red-800'
+                  : 'bg-red-100 text-red-800 hover:bg-red-200'
                   }`}
               >
                 {stats.suspended} Suspended

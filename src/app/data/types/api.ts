@@ -3,6 +3,7 @@ export interface PaginatedResponse<T> {
   totalCount: number;
   pageNumber: number;
   pageSize: number;
+  totalPages?: number;
 }
 
 export interface EarningsPaginatedResponse<T> extends PaginatedResponse<T> {

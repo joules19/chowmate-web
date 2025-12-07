@@ -22,7 +22,7 @@ export default function ReportsPage() {
                 </h1>
               </div>
               <p className="text-sm text-text-secondary leading-relaxed">
-                Generate and download detailed analytics reports for your business
+                Generate and download detailed analytics reports
               </p>
             </div>
           </div>
