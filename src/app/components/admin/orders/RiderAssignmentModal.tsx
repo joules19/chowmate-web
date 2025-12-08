@@ -33,10 +33,20 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
     if (!availableRiders || !searchQuery) return availableRiders || [];
 
     return availableRiders.filter(rider =>
-      rider.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      rider.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       rider.phoneNumber.includes(searchQuery)
     );
   }, [availableRiders, searchQuery]);
+
+  const getInitials = (fullName: string | null | undefined): string => {
+    if (!fullName) return '?';
+    return fullName
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
+  };
 
   const handleAssignRider = async () => {
     if (!order || !selectedRider) return;
@@ -51,7 +61,7 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
       if (result.success) {
         setToast({
           show: true,
-          message: `Rider ${selectedRider.fullName} successfully assigned to order ${order.orderId}`,
+          message: `Rider ${selectedRider.fullName || 'Unknown'} successfully assigned to order ${order.orderId}`,
           type: 'success'
         });
 
@@ -268,7 +278,7 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
                               <div className="flex-shrink-0">
                                 <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
                                   <span className="text-sm font-medium text-primary-700">
-                                    {rider.fullName.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                                    {getInitials(rider.fullName)}
                                   </span>
                                 </div>
                               </div>
@@ -279,7 +289,7 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
                                 <div className="flex items-start justify-between mb-2">
                                   <div className="flex-1 min-w-0">
                                     <p className="text-sm font-semibold text-text-primary truncate">
-                                      {rider.fullName}
+                                      {rider.fullName || 'Unknown'}
                                     </p>
                                     <p className="text-xs text-text-secondary truncate">
                                       {rider.phoneNumber}
@@ -319,7 +329,7 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
                                   <div className="flex-shrink-0">
                                     <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
                                       <span className="text-sm font-semibold text-primary-700">
-                                        {rider.fullName.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                                        {getInitials(rider.fullName)}
                                       </span>
                                     </div>
                                   </div>
@@ -328,7 +338,7 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
                                   <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between mb-1">
                                       <p className="text-base font-semibold text-text-primary truncate">
-                                        {rider.fullName}
+                                        {rider.fullName || 'Unknown'}
                                       </p>
                                     </div>
                                     <p className="text-sm text-text-secondary truncate mb-2">
@@ -405,7 +415,7 @@ export default function RiderAssignmentModal({ isOpen, onClose, order }: RiderAs
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-primary-900">
-                      {selectedRider.fullName}
+                      {selectedRider.fullName || 'Unknown'}
                     </p>
                     <p className="text-xs text-primary-700">
                       {selectedRider.rating.toFixed(1)}★ • {selectedRider.completedDeliveries} deliveries • {selectedRider.acceptanceRate.toFixed(0)}% acceptance rate
