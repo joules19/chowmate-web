@@ -107,3 +107,19 @@ export const useCancelOrder = () => {
     },
   });
 };
+
+// Hook for setting order to preparing (Admin accepting order on behalf of vendor)
+export const useSetOrderToPreparing = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (orderId: string) => orderRepository.setOrderToPreparing(orderId),
+    onSuccess: () => {
+      // Invalidate and refetch all order-related queries
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'pending-assignment'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'live'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'analytics'] });
+    },
+  });
+};

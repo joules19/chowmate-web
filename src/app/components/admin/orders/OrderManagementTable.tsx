@@ -7,18 +7,21 @@ import {
   MapIcon,
   ArrowPathRoundedSquareIcon,
   ArrowPathIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  CheckCircleIcon
 } from "@heroicons/react/24/outline";
 import DataTable, { Column } from "../shared/DataTable";
 import { SearchFilters } from "../../../data/types/api";
 import { AllOrdersDto } from "@/app/data/types/order";
-import { useOrders, useCancelOrder } from "@/app/lib/hooks/api-hooks.ts/use-order-management";
+import { useOrders, useCancelOrder, useSetOrderToPreparing } from "@/app/lib/hooks/api-hooks.ts/use-order-management";
 import { OrderFilters } from "@/app/lib/api/repositories/order-repository";
 import { formatCurrency } from "@/app/lib/utils/currency";
 import OrderDetailsModal from "./OrderDetailsModal";
 import RiderReplacementModal from "./RiderReplacementModal";
 import OrderCancellationModal from "./OrderCancellationModal";
 import OrderEarningsModal from "./OrderEarningsModal";
+import OrderAcceptanceModal from "./OrderAcceptanceModal";
+import { Toast } from "../../ui/SimpleToast";
 
 interface Props {
   filters: SearchFilters;
@@ -32,9 +35,16 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
   const [showReplaceRiderModal, setShowReplaceRiderModal] = useState(false);
   const [showCancellationModal, setShowCancellationModal] = useState(false);
   const [showEarningsModal, setShowEarningsModal] = useState(false);
+  const [showAcceptanceModal, setShowAcceptanceModal] = useState(false);
   const [orderForRiderReplacement, setOrderForRiderReplacement] = useState<AllOrdersDto | null>(null);
   const [orderForCancellation, setOrderForCancellation] = useState<AllOrdersDto | null>(null);
   const [orderForEarnings, setOrderForEarnings] = useState<AllOrdersDto | null>(null);
+  const [orderForAcceptance, setOrderForAcceptance] = useState<AllOrdersDto | null>(null);
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success'
+  });
 
   // Convert SearchFilters to OrderFilters
   const orderFilters: OrderFilters = {
@@ -50,6 +60,7 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
 
   const { data: orders, isLoading: loading, error, refetch: refreshOrders, isFetching: isRefreshing } = useOrders(orderFilters, { enabled: true });
   const cancelOrderMutation = useCancelOrder();
+  const setOrderToPreparingMutation = useSetOrderToPreparing();
 
   // Update stats when orders data changes
   useEffect(() => {
@@ -67,11 +78,6 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
     setShowDetailsModal(true);
   };
 
-  const handleEditOrder = (order: AllOrdersDto) => {
-    console.log('Edit order:', order);
-    // TODO: Implement edit functionality
-  };
-
   const handleCancelOrder = (order: AllOrdersDto) => {
     setOrderForCancellation(order);
     setShowCancellationModal(true);
@@ -86,6 +92,32 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
     } catch (error) {
       // Error is handled by the mutation's onError callback
       console.error('Failed to cancel order:', error);
+    }
+  };
+
+  const handleSetOrderToPreparing = (order: AllOrdersDto) => {
+    setOrderForAcceptance(order);
+    setShowAcceptanceModal(true);
+  };
+
+  const handleConfirmAcceptance = async (orderId: string) => {
+    try {
+      await setOrderToPreparingMutation.mutateAsync(orderId);
+      const order = orderForAcceptance;
+      setShowAcceptanceModal(false);
+      setOrderForAcceptance(null);
+      setToast({
+        show: true,
+        message: `Order ${order?.orderId} has been accepted and set to preparing!`,
+        type: 'success'
+      });
+    } catch (error) {
+      console.error('Failed to set order to preparing:', error);
+      setToast({
+        show: true,
+        message: 'Failed to accept order. Please try again.',
+        type: 'error'
+      });
     }
   };
 
@@ -225,6 +257,21 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
             <BanknotesIcon className="h-4 w-4" />
           </button>
 
+          {/* Accept Order button - only show for Pending orders */}
+          {order.statusText === 'Pending' && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSetOrderToPreparing(order);
+              }}
+              disabled={setOrderToPreparingMutation.isPending}
+              className="text-green-600 hover:text-green-700 p-1 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Accept Order (Set to Preparing)"
+            >
+              <CheckCircleIcon className="h-4 w-4" />
+            </button>
+          )}
+
           {order.statusText !== 'Completed' && order.statusText !== 'Cancelled' && (
             <>
               <button
@@ -360,6 +407,25 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
         }}
         orderId={orderForEarnings?.id || ''}
       />
+
+      <OrderAcceptanceModal
+        isOpen={showAcceptanceModal}
+        onClose={() => {
+          setShowAcceptanceModal(false);
+          setOrderForAcceptance(null);
+        }}
+        order={orderForAcceptance}
+        onConfirm={handleConfirmAcceptance}
+        isLoading={setOrderToPreparingMutation.isPending}
+      />
+
+      {toast.show && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ ...toast, show: false })}
+        />
+      )}
     </>
   );
 }
