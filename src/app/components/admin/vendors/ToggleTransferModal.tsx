@@ -7,43 +7,41 @@ import {
     ExclamationTriangleIcon,
     ArrowsRightLeftIcon
 } from '@heroicons/react/24/outline';
-import { useBulkToggleVendorTransfer } from '@/app/lib/hooks/api-hooks.ts/use-vendor';
-import { message } from 'antd';
-import { BulkToggleVendorTransferRequest } from '@/app/data/types/vendor';
+import { ToggleVendorTransferRequest } from '@/app/data/types/vendor';
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    onSuccess: () => void;
+    onConfirm: (request: ToggleVendorTransferRequest) => Promise<void>;
+    vendorName: string;
+    currentStatus: boolean;
+    isLoading?: boolean;
 }
 
-export default function BulkActionModal({ isOpen, onClose, onSuccess }: Props) {
-    const [isTransferEnabled, setIsTransferEnabled] = useState(false);
+export default function ToggleTransferModal({
+    isOpen,
+    onClose,
+    onConfirm,
+    vendorName,
+    currentStatus,
+    isLoading = false
+}: Props) {
     const [reason, setReason] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const bulkToggleMutation = useBulkToggleVendorTransfer();
+    const [notifyVendor, setNotifyVendor] = useState(true);
+    const newStatus = !currentStatus;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitting(true);
 
-        const request: BulkToggleVendorTransferRequest = {
-            isTransferEnabled,
-            reason,
+        const request: ToggleVendorTransferRequest = {
+            isTransferEnabled: newStatus,
+            reason: reason.trim(),
+            notifyVendor,
         };
 
-        try {
-            await bulkToggleMutation.mutateAsync(request);
-            message.success('Bulk transfer status updated successfully!');
-            onSuccess();
-            onClose();
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
-            message.error(`Failed to update bulk transfer status: ${errorMessage}`);
-        } finally {
-            setIsSubmitting(false);
-        }
+        await onConfirm(request);
+        setReason('');
+        setNotifyVendor(true);
     };
 
     return (
@@ -76,9 +74,9 @@ export default function BulkActionModal({ isOpen, onClose, onSuccess }: Props) {
                                 <form onSubmit={handleSubmit}>
                                     <div className="flex items-center justify-between p-6 border-b border-border-light">
                                         <div className="flex items-center space-x-3">
-                                            <ArrowsRightLeftIcon className={`h-6 w-6 ${isTransferEnabled ? 'text-success-500' : 'text-danger-500'}`} />
+                                            <ArrowsRightLeftIcon className={`h-6 w-6 ${newStatus ? 'text-success-500' : 'text-danger-500'}`} />
                                             <Dialog.Title className="text-lg font-semibold text-text-primary">
-                                                Bulk Toggle Vendor Transfers
+                                                {newStatus ? 'Enable' : 'Disable'} Transfer
                                             </Dialog.Title>
                                         </div>
                                         <button
@@ -94,30 +92,14 @@ export default function BulkActionModal({ isOpen, onClose, onSuccess }: Props) {
                                         <div className="flex items-start space-x-3 p-4 bg-yellow-50 border border-yellow-200 rounded-card mb-6">
                                             <ExclamationTriangleIcon className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
                                             <div>
-                                                <p className="text-sm text-yellow-800 font-medium">Warning</p>
+                                                <p className="text-sm text-yellow-800 font-medium">Confirm Action</p>
                                                 <p className="text-sm text-yellow-700 mt-1">
-                                                    This action will affect all active and approved vendors.
+                                                    You are about to {newStatus ? 'enable' : 'disable'} transfers for <span className="font-semibold">{vendorName}</span>.
                                                 </p>
                                             </div>
                                         </div>
 
                                         <div className="space-y-4">
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-sm font-medium text-text-secondary">
-                                                    Transfer Status
-                                                </span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setIsTransferEnabled(!isTransferEnabled)}
-                                                    className={`px-4 py-2 text-sm font-medium rounded-button transition-colors ${isTransferEnabled
-                                                            ? 'bg-success-500 text-white'
-                                                            : 'bg-danger-500 text-white'
-                                                        }`}
-                                                >
-                                                    {isTransferEnabled ? 'Enable' : 'Disable'}
-                                                </button>
-                                            </div>
-
                                             <div>
                                                 <label className="block text-sm font-medium text-text-secondary mb-2">
                                                     Reason <span className="text-danger-500">*</span>
@@ -125,11 +107,24 @@ export default function BulkActionModal({ isOpen, onClose, onSuccess }: Props) {
                                                 <textarea
                                                     value={reason}
                                                     onChange={(e) => setReason(e.target.value)}
-                                                    placeholder="Enter reason for this bulk action..."
+                                                    placeholder={`Enter reason for ${newStatus ? 'enabling' : 'disabling'} transfers...`}
                                                     required
                                                     rows={3}
                                                     className="w-full border border-border-default rounded-input px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-surface-50 text-text-primary resize-none"
                                                 />
+                                            </div>
+
+                                            <div className="flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    id="notifyVendor"
+                                                    checked={notifyVendor}
+                                                    onChange={(e) => setNotifyVendor(e.target.checked)}
+                                                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-border-default rounded"
+                                                />
+                                                <label htmlFor="notifyVendor" className="ml-2 text-sm text-text-secondary">
+                                                    Notify vendor via email
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -138,23 +133,27 @@ export default function BulkActionModal({ isOpen, onClose, onSuccess }: Props) {
                                         <button
                                             type="button"
                                             onClick={onClose}
-                                            disabled={isSubmitting}
+                                            disabled={isLoading}
                                             className="px-4 py-2 text-sm font-medium text-text-secondary bg-surface-0 border border-border-default rounded-button hover:bg-surface-100 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             type="submit"
-                                            disabled={isSubmitting || !reason.trim()}
-                                            className="px-4 py-2 text-sm font-medium text-white rounded-button focus:ring-2 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-primary-600 hover:bg-primary-700 focus:ring-primary-500"
+                                            disabled={isLoading || !reason.trim()}
+                                            className={`px-4 py-2 text-sm font-medium text-white rounded-button focus:ring-2 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                                                newStatus
+                                                    ? 'bg-success-600 hover:bg-success-700 focus:ring-success-500'
+                                                    : 'bg-danger-600 hover:bg-danger-700 focus:ring-danger-500'
+                                            }`}
                                         >
-                                            {isSubmitting ? (
+                                            {isLoading ? (
                                                 <div className="flex items-center space-x-2">
                                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                                                     <span>Processing...</span>
                                                 </div>
                                             ) : (
-                                                'Confirm Bulk Action'
+                                                `Confirm ${newStatus ? 'Enable' : 'Disable'}`
                                             )}
                                         </button>
                                     </div>

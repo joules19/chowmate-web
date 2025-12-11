@@ -11,7 +11,10 @@ import {
   VendorZoneAssignment,
   AssignVendorToZoneRequest,
   SendInstructionRequest,
-  VendorStats
+  VendorStats,
+  ToggleVendorTransferRequest,
+  BulkToggleVendorTransferRequest,
+  BulkActionResultDto
 } from '@/app/data/types/vendor';
 import { BaseRepository } from '../base-repository';
 import { PaginatedResponse } from '@/app/data/types/api';
@@ -128,5 +131,13 @@ export class VendorRepository extends BaseRepository<Vendor> {
 
   async forceCloseAllVendorStores(): Promise<void> {
     return this.post<void>('/force-close-all', {});
+  }
+
+  async toggleVendorTransfer(vendorId: string, request: ToggleVendorTransferRequest): Promise<VendorDetails> {
+    return this.put<VendorDetails>(`/${vendorId}/toggle-transfer`, request);
+  }
+
+  async bulkToggleVendorTransfer(request: BulkToggleVendorTransferRequest): Promise<BulkActionResultDto> {
+    return this.post<BulkActionResultDto>('/bulk-toggle-transfer', request);
   }
 }

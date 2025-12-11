@@ -3,7 +3,7 @@ import { VendorRepository } from '../../api/repositories/vendor-repository';
 import { PaginatedResponse } from '@/app/data/types/api';
 import { Zone } from '@/app/data/types/location';
 
-import { ActivateVendorRequest, ApproveVendorRequest, AssignVendorToZoneRequest, RejectVendorRequest, SendInstructionRequest, SuspendVendorRequest, UpdateVendorStatusRequest, VendorDetails, VendorFilters, VendorStats, VendorSummary, VendorZoneAssignment } from '@/app/data/types/vendor';
+import { ActivateVendorRequest, ApproveVendorRequest, AssignVendorToZoneRequest, RejectVendorRequest, SendInstructionRequest, SuspendVendorRequest, UpdateVendorStatusRequest, VendorDetails, VendorFilters, VendorStats, VendorSummary, VendorZoneAssignment, BulkToggleVendorTransferRequest, ToggleVendorTransferRequest } from '@/app/data/types/vendor';
 
 // Create singleton instance
 const vendorRepo = new VendorRepository();
@@ -209,6 +209,32 @@ export function useForceCloseAllVendorStores() {
 
     return useMutation({
         mutationFn: () => vendorRepo.forceCloseAllVendorStores(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.lists() });
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.stats() });
+        },
+    });
+}
+
+export function useToggleVendorTransfer() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ vendorId, request }: { vendorId: string; request: ToggleVendorTransferRequest }) =>
+            vendorRepo.toggleVendorTransfer(vendorId, request),
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.lists() });
+            queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.detail(variables.vendorId) });
+        },
+    });
+}
+
+export function useBulkToggleVendorTransfer() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (request: BulkToggleVendorTransferRequest) =>
+            vendorRepo.bulkToggleVendorTransfer(request),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.lists() });
             queryClient.invalidateQueries({ queryKey: VENDOR_QUERY_KEYS.stats() });

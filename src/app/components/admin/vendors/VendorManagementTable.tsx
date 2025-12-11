@@ -13,9 +13,11 @@ import {
   ChevronDownIcon,
   StarIcon,
   ArrowUturnLeftIcon,
-  PaperAirplaneIcon
+  PaperAirplaneIcon,
+  ArrowsRightLeftIcon,
+  ArrowDownRightIcon
 } from "@heroicons/react/24/outline";
-import { VendorFilters, VendorSummary, VendorStatus, ApproveVendorRequest, RejectVendorRequest, SuspendVendorRequest, ActivateVendorRequest } from "../../../data/types/vendor";
+import { VendorFilters, VendorSummary, VendorStatus, ApproveVendorRequest, RejectVendorRequest, SuspendVendorRequest, ActivateVendorRequest, ToggleVendorTransferRequest } from "../../../data/types/vendor";
 
 // Utility function to convert numeric status to string enum
 const getVendorStatus = (status: VendorStatus | number): VendorStatus => {
@@ -34,16 +36,18 @@ const getVendorStatus = (status: VendorStatus | number): VendorStatus => {
   return status;
 };
 
-type VendorActionData = ApproveVendorRequest | RejectVendorRequest | SuspendVendorRequest | ActivateVendorRequest;
+type VendorActionData = ApproveVendorRequest | RejectVendorRequest | SuspendVendorRequest | ActivateVendorRequest | ToggleVendorTransferRequest;
 
 import ZoneAssignmentModal from './ZoneAssignmentModal';
-import { useVendors, useApproveVendor, useRejectVendor, useSuspendVendor, useActivateVendor, useSendBackToPending } from '@/app/lib/hooks/api-hooks.ts/use-vendor';
+import { useVendors, useApproveVendor, useRejectVendor, useSuspendVendor, useActivateVendor, useSendBackToPending, useToggleVendorTransfer } from '@/app/lib/hooks/api-hooks.ts/use-vendor';
 import InstructionModal from './SendInstructionModal';
 import VendorActionModal from './VendorActionModal';
 import VendorDetailsModal from './VendorDetailsModal';
 import SendBackToPendingModal from './SendBackToPendingModal';
 import SendOtpModal from '../users/SendOtpModal';
 import { formatCurrency } from '@/app/lib/utils/currency';
+import ToggleTransferModal from './ToggleTransferModal';
+import BulkActionModal from './BulkActionModal';
 
 interface Props {
   filters: VendorFilters;
@@ -104,7 +108,9 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   const [showInstructionModal, setShowInstructionModal] = useState(false);
   const [showSendBackModal, setShowSendBackModal] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
-  const [actionType, setActionType] = useState<'approve' | 'reject' | 'suspend' | 'activate'>('approve');
+  const [showBulkActionModal, setShowBulkActionModal] = useState(false);
+  const [showToggleTransferModal, setShowToggleTransferModal] = useState(false);
+  const [actionType, setActionType] = useState<'approve' | 'reject' | 'suspend' | 'activate' | 'toggle-transfer'>('approve');
 
   const { data: vendorsData, isLoading, error, refetch } = useVendors(filters);
   const approveMutation = useApproveVendor();
@@ -112,6 +118,8 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   const suspendMutation = useSuspendVendor();
   const activateMutation = useActivateVendor();
   const sendBackToPendingMutation = useSendBackToPending();
+  const toggleVendorTransferMutation = useToggleVendorTransfer();
+
 
   // Move vendors declaration here, before it's used
   const vendors = vendorsData?.items || [];
@@ -142,7 +150,7 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   };
 
   const handleActionClick = (
-    type: 'approve' | 'reject' | 'suspend' | 'activate',
+    type: 'approve' | 'reject' | 'suspend' | 'activate' | 'toggle-transfer',
     vendor: VendorSummary
   ) => {
     setSelectedVendor(vendor);
@@ -173,9 +181,9 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
 
   const handleConfirmSendBackToPending = async (message: string) => {
     if (!selectedVendor) return;
-    
+
     console.log('Confirming send back to pending:', { vendorId: selectedVendor.id, message });
-    
+
     try {
       await sendBackToPendingMutation.mutateAsync({
         vendorId: selectedVendor.id,
@@ -186,6 +194,27 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
       console.error('Failed to send vendor back to pending:', error);
     } finally {
       setShowSendBackModal(false);
+      setSelectedVendor(null);
+    }
+  };
+
+  const handleToggleTransfer = (vendor: VendorSummary) => {
+    setSelectedVendor(vendor);
+    setShowToggleTransferModal(true);
+  };
+
+  const handleConfirmToggleTransfer = async (request: ToggleVendorTransferRequest) => {
+    if (!selectedVendor) return;
+
+    try {
+      await toggleVendorTransferMutation.mutateAsync({
+        vendorId: selectedVendor.id,
+        request
+      });
+    } catch (error) {
+      console.error('Failed to toggle vendor transfer:', error);
+    } finally {
+      setShowToggleTransferModal(false);
       setSelectedVendor(null);
     }
   };
@@ -238,6 +267,12 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
           await activateMutation.mutateAsync({
             vendorId: selectedVendor.id,
             request: data as ActivateVendorRequest
+          });
+          break;
+        case 'toggle-transfer':
+          await toggleVendorTransferMutation.mutateAsync({
+            vendorId: selectedVendor.id,
+            request: data as ToggleVendorTransferRequest
           });
           break;
       }
@@ -293,10 +328,16 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
     <>
       <div className="bg-surface-0 rounded-card shadow-soft border border-border-light overflow-hidden">
         {/* Table Header */}
-        <div className="px-6 py-4 border-b border-border-light bg-surface-50">
+        <div className="px-6 py-4 border-b border-border-light bg-surface-50 flex justify-between items-center">
           <h3 className="text-lg font-semibold text-text-primary">
             Vendors ({pagination?.totalCount || 0})
           </h3>
+          <button
+            onClick={() => setShowBulkActionModal(true)}
+            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-button hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+          >
+            Bulk Actions
+          </button>
         </div>
 
         {/* Table */}
@@ -338,6 +379,15 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
                   Status
+                </th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider cursor-pointer hover:bg-surface-100 transition-colors"
+                  onClick={() => handleSort('isTransferEnabled')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Transfers</span>
+                    {getSortIcon('isTransferEnabled')}
+                  </div>
                 </th>
                 <th
                   className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider cursor-pointer hover:bg-surface-100 transition-colors"
@@ -465,6 +515,14 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-2">
+                        <div className={`h-2 w-2 rounded-full ${vendor.isTransferEnabled ? 'bg-success-500' : 'bg-danger-500'}`}></div>
+                        <span className={`text-sm font-medium ${vendor.isTransferEnabled ? 'text-success-600' : 'text-danger-600'}`}>
+                          {vendor.isTransferEnabled ? 'Enabled' : 'Disabled'}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <StarIcon className="h-4 w-4 text-yellow-400 fill-current" />
                         <span className="ml-1 text-sm text-text-primary">
@@ -492,6 +550,12 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                           title="View Details"
                         >
                           <EyeIcon className="h-4 w-4" />
+                        </button>
+                        <button onClick={(e) => { e.stopPropagation(); handleActionClick('toggle-transfer', vendor); }}
+                          className={`p-1 rounded transition-colors ${vendor.isTransferEnabled ? 'text-danger-600 hover:text-danger-700' : 'text-success-600 hover:text-success-700'}`}
+                          title={vendor.isTransferEnabled ? "Disable Transfers" : "Enable Transfers"}
+                        >
+                          {vendor.isTransferEnabled ? <ArrowDownRightIcon className="h-4 w-4" /> : <ArrowsRightLeftIcon className="h-4 w-4" />}
                         </button>
 
                         {getVendorStatus(vendor.status) === VendorStatus.UnderReview && (
@@ -604,6 +668,9 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
                         >
                           <PaperAirplaneIcon className="h-4 w-4" />
                         </button>
+
+                        {/* Toggle Transfer Button - Available for Approved vendors */}
+
                       </div>
                     </td>
                   </tr>
@@ -763,6 +830,28 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
         userEmail={selectedVendor?.email}
         userPhone={selectedVendor?.phoneNumber}
         userName={selectedVendor?.businessName || selectedVendor?.fullName}
+      />
+
+      {/* Toggle Transfer Modal */}
+      {selectedVendor && showToggleTransferModal && (
+        <ToggleTransferModal
+          isOpen={showToggleTransferModal}
+          onClose={() => {
+            setShowToggleTransferModal(false);
+            setSelectedVendor(null);
+          }}
+          onConfirm={handleConfirmToggleTransfer}
+          vendorName={selectedVendor.businessName}
+          currentStatus={selectedVendor.isTransferEnabled}
+          isLoading={toggleVendorTransferMutation.isPending}
+        />
+      )}
+
+      {/* Bulk Action Modal */}
+      <BulkActionModal
+        isOpen={showBulkActionModal}
+        onClose={() => setShowBulkActionModal(false)}
+        onSuccess={() => refetch()}
       />
     </>
   );

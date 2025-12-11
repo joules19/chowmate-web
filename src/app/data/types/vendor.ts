@@ -182,6 +182,7 @@ export interface VendorSummary {
     deliveryType: DeliveryType;
     isCurrentlyOpen: boolean;
     complianceScore: number;
+    isTransferEnabled: boolean;
 }
 
 export interface VendorDetails extends Vendor {
@@ -200,6 +201,7 @@ export interface VendorDetails extends Vendor {
     rcNumber: string;
     lastActivity?: string;
     complianceScore: number;
+    isTransferEnabled: boolean;
     performanceMetrics: {
         orderAcceptanceRate: number;
         onTimeDeliveryRate: number;
@@ -457,4 +459,23 @@ export interface GetAllUsersRequest extends Record<string, unknown> {
     pageSize?: number;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
+}
+
+// Transfer toggle types
+export interface ToggleVendorTransferRequest extends Record<string, unknown> {
+    isTransferEnabled: boolean;
+    reason: string;
+    notifyVendor?: boolean;
+}
+
+export interface BulkToggleVendorTransferRequest extends Record<string, unknown> {
+    isTransferEnabled: boolean;
+    reason: string;
+}
+
+export interface BulkActionResultDto {
+    totalRequested: number;
+    successCount: number;
+    failureCount: number;
+    errors: string[];
 }

@@ -10,17 +10,17 @@ import {
     PlayIcon,
     ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
-import { VendorSummary, ApproveVendorRequest, RejectVendorRequest, SuspendVendorRequest, ActivateVendorRequest } from '@/app/data/types/vendor';
+import { VendorSummary, ApproveVendorRequest, RejectVendorRequest, SuspendVendorRequest, ActivateVendorRequest, ToggleVendorTransferRequest } from '@/app/data/types/vendor';
 import { useAvailableZones } from '@/app/lib/hooks/api-hooks.ts/use-vendor';
 import { message } from 'antd';
 
-type VendorActionData = ApproveVendorRequest | RejectVendorRequest | SuspendVendorRequest | ActivateVendorRequest;
+type VendorActionData = ApproveVendorRequest | RejectVendorRequest | SuspendVendorRequest | ActivateVendorRequest | ToggleVendorTransferRequest;
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
     onConfirm: (data: VendorActionData) => void;
-    action: 'approve' | 'reject' | 'suspend' | 'activate';
+    action: 'approve' | 'reject' | 'suspend' | 'activate' | 'toggle-transfer';
     vendor: VendorSummary;
 }
 
@@ -80,6 +80,13 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
                     restoreZoneAssignments: true
                 } as ActivateVendorRequest;
                 break;
+            case 'toggle-transfer':
+                data = {
+                    isTransferEnabled: !vendor.isTransferEnabled,
+                    reason: reason.trim() || 'No reason provided',
+                    notifyVendor,
+                } as ToggleVendorTransferRequest;
+                break;
             default:
                 throw new Error(`Unknown action: ${action}`);
         }
@@ -92,7 +99,8 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
                 approve: `${vendor.businessName} has been approved successfully and assigned to the selected zone!`,
                 reject: `${vendor.businessName} application has been rejected.`,
                 suspend: `${vendor.businessName} has been temporarily suspended.`,
-                activate: `${vendor.businessName} has been reactivated and can now accept orders.`
+                activate: `${vendor.businessName} has been reactivated and can now accept orders.`,
+                'toggle-transfer': `Transfer status for ${vendor.businessName} has been updated.`
             };
 
             message.success(actionMessages[action]);
@@ -113,7 +121,8 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
                 approve: 'Failed to approve vendor',
                 reject: 'Failed to reject vendor',
                 suspend: 'Failed to suspend vendor',
-                activate: 'Failed to activate vendor'
+                activate: 'Failed to activate vendor',
+                'toggle-transfer': 'Failed to toggle transfer status'
             };
             
             const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
@@ -160,6 +169,16 @@ export default function VendorActionModal({ isOpen, onClose, onConfirm, action, 
                     color: 'success',
                     confirmText: 'Activate Vendor',
                     requiresReason: false
+                };
+            case 'toggle-transfer':
+                const isEnabling = !vendor.isTransferEnabled;
+                return {
+                    title: isEnabling ? 'Enable Transfers' : 'Disable Transfers',
+                    description: `This will ${isEnabling ? 'enable' : 'disable'} bank transfers for this vendor. Please provide a reason.`,
+                    icon: isEnabling ? <PlayIcon className="h-6 w-6 text-success-500" /> : <PauseIcon className="h-6 w-6 text-danger-500" />,
+                    color: isEnabling ? 'success' : 'danger',
+                    confirmText: isEnabling ? 'Enable Transfers' : 'Disable Transfers',
+                    requiresReason: true
                 };
         }
     };

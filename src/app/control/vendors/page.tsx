@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { PlusIcon, DocumentArrowDownIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, DocumentArrowDownIcon, ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 import VendorManagementTable from "../../components/admin/vendors/VendorManagementTable";
 import VendorFiltersComponent from "../../components/admin/vendors/VendorFilters";
 import PermissionGuard from "../../components/admin/guards/PermissionGuard";
 import { VendorFilters } from "../../data/types/vendor";
 import { Permission } from "../../data/types/permissions";
 import { useVendorStats } from "@/app/lib/hooks/api-hooks.ts/use-vendor";
+import BulkActionModal from "../../components/admin/vendors/BulkActionModal";
 
 
 export default function VendorManagementPage() {
@@ -33,6 +34,8 @@ export default function VendorManagementPage() {
   //     exportMutation.mutate(filters);
   // };
 
+  const [showBulkTransferModal, setShowBulkTransferModal] = useState(false);
+
   const handleBulkAction = (action: 'approve' | 'reject' | 'suspend') => {
     if (selectedVendors.length === 0) {
       alert('Please select vendors first');
@@ -41,6 +44,10 @@ export default function VendorManagementPage() {
     // setBulkActionType(action);
     // setShowBulkModal(true);
     console.log('Bulk action:', action, 'for vendors:', selectedVendors);
+  };
+
+  const handleBulkTransferToggle = () => {
+    setShowBulkTransferModal(true);
   };
 
   // const handleBulkActionConfirm = async (data: any) => {
@@ -148,6 +155,16 @@ export default function VendorManagementPage() {
               </button>
             </div>
           )}
+
+          <button
+            onClick={handleBulkTransferToggle}
+            className="w-full xs:w-auto px-4 py-2.5 bg-purple-500 text-white rounded-button hover:bg-purple-600 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 shadow-soft hover:shadow-soft-md transition-all duration-200 text-sm font-medium"
+            aria-label="Bulk toggle vendor transfers"
+          >
+            <ArrowsRightLeftIcon className="h-4 w-4 inline mr-2" />
+            <span className="hidden sm:inline">Bulk Transfer Toggle</span>
+            <span className="sm:hidden">Transfer</span>
+          </button>
 
           <button
 
@@ -356,6 +373,17 @@ export default function VendorManagementPage() {
         selectedCount={selectedVendors.length}
         isLoading={bulkApproveMutation.isPending || bulkRejectMutation.isPending || bulkSuspendMutation.isPending}
       /> */}
+
+      {/* Bulk Transfer Toggle Modal */}
+      <BulkActionModal
+        isOpen={showBulkTransferModal}
+        onClose={() => setShowBulkTransferModal(false)}
+        onSuccess={() => {
+          setShowBulkTransferModal(false);
+          // Refresh the table
+          setFilters({ ...filters });
+        }}
+      />
       </div>
     </PermissionGuard>
   );
