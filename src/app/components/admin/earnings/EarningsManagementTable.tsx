@@ -47,7 +47,6 @@ export default function EarningsManagementTable({
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleString(undefined, {
-      year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -65,28 +64,28 @@ export default function EarningsManagementTable({
           <table className="min-w-full divide-y divide-border-default">
             <thead className="bg-surface-100">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider">
                   Order #
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider hidden sm:table-cell">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider hidden sm:table-cell">
                   Date
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider">
                   Vendor
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider hidden md:table-cell">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider hidden md:table-cell">
                   Rider
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-text-primary uppercase tracking-wider">
+                <th className="px-3 py-3 text-right text-xs font-semibold text-text-primary uppercase tracking-wider">
                   Total
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-text-primary uppercase tracking-wider hidden lg:table-cell">
+                <th className="px-3 py-3 text-right text-xs font-semibold text-text-primary uppercase tracking-wider hidden lg:table-cell">
                   Platform
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-semibold text-text-primary uppercase tracking-wider">
+                <th className="px-3 py-3 text-center text-xs font-semibold text-text-primary uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-semibold text-text-primary uppercase tracking-wider">
+                <th className="px-3 py-3 text-center text-xs font-semibold text-text-primary uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -110,39 +109,39 @@ export default function EarningsManagementTable({
               ) : (
                 data.items.map((earning) => (
                   <tr key={earning.id} className="hover:bg-surface-50 transition-colors">
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <span className="text-sm font-medium text-text-primary">{earning.orderNumber}</span>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      <span className="text-xs font-medium text-text-primary">{earning.orderNumber}</span>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-text-secondary hidden sm:table-cell">
+                    <td className="px-3 py-3 whitespace-nowrap text-xs text-text-secondary hidden sm:table-cell">
                       {formatDate(earning.createdDate)}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-3 py-3">
                       <div className="text-sm">
-                        <p className="font-medium text-text-primary truncate max-w-[200px]">{earning.vendorName}</p>
-                        <p className="text-text-tertiary">₦{earning.vendorEarnings.toLocaleString()}</p>
+                        <p className="font-medium text-text-primary truncate max-w-[120px]">{earning.vendorName}</p>
+                        <p className="text-text-tertiary text-xs">₦{earning.vendorEarnings.toLocaleString()}</p>
                       </div>
                     </td>
-                    <td className="px-4 py-3 hidden md:table-cell">
+                    <td className="px-3 py-3 hidden md:table-cell">
                       <div className="text-sm">
-                        <p className="font-medium text-text-primary truncate max-w-[150px]">{earning.riderName || 'N/A'}</p>
-                        <p className="text-text-tertiary">₦{earning.riderEarnings.toLocaleString()}</p>
+                        <p className="font-medium text-text-primary truncate max-w-[100px]">{earning.riderName || 'N/A'}</p>
+                        <p className="text-text-tertiary text-xs">₦{earning.riderEarnings.toLocaleString()}</p>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-right whitespace-nowrap">
-                      <span className="text-sm font-bold text-primary-600">₦{earning.totalAmount.toLocaleString()}</span>
+                    <td className="px-3 py-3 text-right whitespace-nowrap">
+                      <span className="text-xs font-bold text-primary-600">₦{earning.totalAmount.toLocaleString()}</span>
                     </td>
-                    <td className="px-4 py-3 text-right whitespace-nowrap hidden lg:table-cell">
-                      <span className="text-sm font-medium text-text-primary">₦{earning.platformEarnings.toLocaleString()}</span>
+                    <td className="px-3 py-3 text-right whitespace-nowrap hidden lg:table-cell">
+                      <span className="text-xs font-medium text-text-primary">₦{earning.platformEarnings.toLocaleString()}</span>
                     </td>
-                    <td className="px-4 py-3 text-center whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(earning.distributionStatus)}`}>
+                    <td className="px-3 py-3 text-center whitespace-nowrap">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(earning.distributionStatus)}`}>
                         {earning.distributionStatusText}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center whitespace-nowrap">
+                    <td className="px-2 py-3 text-center whitespace-nowrap">
                       <button
                         onClick={() => handleViewDetails(earning)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-info-500 text-text-inverse rounded-button hover:bg-info-600 active:bg-info-700 focus:ring-2 focus:ring-info-500 focus:ring-offset-2 transition-all duration-200 text-xs font-medium"
+                        className="inline-flex items-center gap-1 px-2 py-1.5 bg-info-500 text-text-inverse rounded-button hover:bg-info-600 active:bg-info-700 focus:ring-2 focus:ring-info-500 focus:ring-offset-2 transition-all duration-200 text-xs font-medium"
                         aria-label="View details"
                       >
                         <EyeIcon className="h-3.5 w-3.5" />

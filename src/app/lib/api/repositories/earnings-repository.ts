@@ -1,6 +1,7 @@
 import { BaseRepository } from '../base-repository';
 import { EarningsPaginatedResponse } from '@/app/data/types/api';
 import { OrderEarningsDto, GetOrderEarningsRequest } from '@/app/data/types/earnings';
+import apiClient from '../axios-config';
 
 export class EarningsRepository extends BaseRepository<OrderEarningsDto> {
   constructor() {
@@ -27,5 +28,20 @@ export class EarningsRepository extends BaseRepository<OrderEarningsDto> {
 
   async getOrderEarningByOrderId(orderId: string): Promise<OrderEarningsDto> {
     return this.get<OrderEarningsDto>(`/order/${orderId}`);
+  }
+
+  async downloadTaxReport(startMonth: number, startYear: number, endMonth: number, endYear: number): Promise<Blob> {
+    const queryParams = new URLSearchParams({
+      startMonth: startMonth.toString(),
+      startYear: startYear.toString(),
+      endMonth: endMonth.toString(),
+      endYear: endYear.toString(),
+    });
+
+    const response = await apiClient.get(`/api/admin/tax-report?${queryParams}`, {
+      responseType: 'blob',
+    });
+
+    return response.data;
   }
 }
