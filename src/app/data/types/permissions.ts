@@ -81,6 +81,10 @@ export enum Permission {
   PROCESS_REFUNDS = 'PROCESS_REFUNDS',
   VIEW_PAYMENT_ANALYTICS = 'VIEW_PAYMENT_ANALYTICS',
 
+  // Deductions
+  VIEW_DEDUCTIONS = 'VIEW_DEDUCTIONS',
+  MANAGE_DEDUCTIONS = 'MANAGE_DEDUCTIONS',
+
   // Surveys
   VIEW_SURVEYS = 'VIEW_SURVEYS',
   CREATE_SURVEY = 'CREATE_SURVEY',
@@ -137,6 +141,8 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permission.VIEW_WALLET_TRANSACTIONS,
     Permission.PROCESS_REFUNDS,
     Permission.VIEW_PAYMENT_ANALYTICS,
+    Permission.VIEW_DEDUCTIONS,
+    Permission.MANAGE_DEDUCTIONS,
     Permission.VIEW_SURVEYS,
     Permission.CREATE_SURVEY,
     Permission.EDIT_SURVEY,

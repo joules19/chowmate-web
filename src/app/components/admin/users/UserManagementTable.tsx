@@ -189,7 +189,13 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
                         {user.fullName}
                       </div>
                       <div className="text-sm text-text-tertiary">
-                        {user.businessName || `Member since ${user.memberSince}`}
+                        {user.businessName || 
+                          `Member since ${new Date(user.memberSince).toLocaleString('en-US', {
+                            month: 'short',
+                            day: '2-digit',
+                            year: 'numeric',
+                          })}`
+                        }
                       </div>
                     </div>
                   </div>

@@ -49,9 +49,9 @@ export abstract class BaseRepository<T> {
     );
   }
 
-  protected async deleteRequest<U>(path: string = ''): Promise<U> {
+  protected async deleteRequest<U>(path: string = '', data?: Record<string, unknown>): Promise<U> {
     return apiRequest(() =>
-      apiClient.delete<ApiResponse<U>>(`${this.endpoint}${path}`)
+      apiClient.delete<ApiResponse<U>>(`${this.endpoint}${path}`, { data })
     );
   }
 

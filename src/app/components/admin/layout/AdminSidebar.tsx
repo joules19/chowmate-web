@@ -18,7 +18,9 @@ import {
   ClipboardDocumentListIcon,
   DocumentChartBarIcon,
   StarIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  ShieldExclamationIcon,
+  ReceiptRefundIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -36,7 +38,7 @@ const menuItems = [
     permission: Permission.VIEW_DASHBOARD
   },
   {
-    name: "Users",
+    name: "Customers",
     href: "/control/users",
     icon: UsersIcon,
     permission: Permission.VIEW_USERS
@@ -65,6 +67,18 @@ const menuItems = [
     icon: CreditCardIcon,
     permission: Permission.VIEW_PAYMENTS
   },
+  {
+    name: "Deductions",
+    href: "/control/deductions",
+    icon: ReceiptRefundIcon,
+    permission: Permission.VIEW_VENDORS
+  },
+  // {
+  //   name: "Disputed Deductions",
+  //   href: "/control/deductions/disputes",
+  //   icon: ShieldExclamationIcon,
+  //   permission: Permission.VIEW_VENDORS
+  // },
   {
     name: "Earnings",
     href: "/control/earnings",
@@ -278,7 +292,7 @@ export default function AdminSidebar() {
               {!collapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-text-primary truncate">
-                    {currentUser?.firstName && currentUser?.lastName 
+                    {currentUser?.firstName && currentUser?.lastName
                       ? `${currentUser.firstName} ${currentUser.lastName}`
                       : 'Admin User'
                     }

@@ -200,6 +200,18 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
       )
     },
     {
+      key: 'orderDate',
+      label: 'Order Date',
+      sortable: true,
+      render: (order) => (
+        <div className="text-sm">
+          {new Date(order.orderDate).toLocaleDateString()}
+          <br />
+          <span className="text-text-tertiary">{new Date(order.orderDate).toLocaleTimeString()}</span>
+        </div>
+      )
+    },
+    {
       key: 'vendor',
       label: 'Vendor',
       render: (order) => (
@@ -223,12 +235,6 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
       label: 'Status',
       sortable: true,
       render: (order) => getStatusBadge(order.statusText)
-    },
-    {
-      key: 'orderDate',
-      label: 'Order Date',
-      sortable: true,
-      render: (order) => new Date(order.orderDate).toLocaleDateString()
     },
     {
       key: 'actions',
