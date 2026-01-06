@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { 
-  UserIcon, 
+import {
+  UserIcon,
   CheckBadgeIcon,
   XMarkIcon,
   EyeIcon,
@@ -174,8 +174,8 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
           </thead>
           <tbody className="divide-y divide-border-light">
             {users?.items?.map((user) => (
-              <tr 
-                key={user.id} 
+              <tr
+                key={user.id}
                 className="hover:bg-surface-50 transition-colors cursor-pointer"
                 onClick={() => handleViewDetails(user)}
               >
@@ -189,8 +189,8 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
                         {user.fullName}
                       </div>
                       <div className="text-sm text-text-tertiary">
-                        {user.businessName || 
-                          `Member since ${new Date(user.memberSince).toLocaleString('en-US', {
+                        {user.businessName ||
+                          `Member since ${new Date(user.createdAt).toLocaleString('en-US', {
                             month: 'short',
                             day: '2-digit',
                             year: 'numeric',
