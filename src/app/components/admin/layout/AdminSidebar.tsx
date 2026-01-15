@@ -20,7 +20,8 @@ import {
   StarIcon,
   BanknotesIcon,
   ShieldExclamationIcon,
-  ReceiptRefundIcon
+  ReceiptRefundIcon,
+  ChatBubbleLeftRightIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -120,6 +121,12 @@ const menuItems = [
     href: "/control/ratings",
     icon: StarIcon,
     permission: Permission.VIEW_VENDORS
+  },
+  {
+    name: "Messaging",
+    href: "/control/messaging",
+    icon: ChatBubbleLeftRightIcon,
+    permission: Permission.VIEW_SETTINGS
   },
   // {
   //   name: "Analytics",
