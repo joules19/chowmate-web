@@ -12,11 +12,14 @@ import {
     CheckCircleIcon,
     XCircleIcon,
     ClockIcon,
-    ArrowsRightLeftIcon
+    ArrowsRightLeftIcon,
+    ShieldExclamationIcon
 } from '@heroicons/react/24/outline';
 import { VendorStatus, ToggleVendorTransferRequest } from '@/app/data/types/vendor';
 import { useVendor, useToggleVendorTransfer } from '@/app/lib/hooks/api-hooks.ts/use-vendor';
+import { useVendorStrikeSummary } from '@/app/lib/hooks/api-hooks/use-strikes';
 import ToggleTransferModal from './ToggleTransferModal';
+import Link from 'next/link';
 
 interface Props {
     vendorId: string;
@@ -26,6 +29,7 @@ interface Props {
 
 export default function VendorDetailsModal({ vendorId, isOpen, onClose }: Props) {
     const { data: vendor, isLoading, error } = useVendor(vendorId);
+    const { data: strikeSummary } = useVendorStrikeSummary(vendorId);
     const [showToggleTransferModal, setShowToggleTransferModal] = useState(false);
     const toggleVendorTransferMutation = useToggleVendorTransfer();
 
@@ -308,6 +312,56 @@ export default function VendorDetailsModal({ vendorId, isOpen, onClose }: Props)
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                {/* Strike Summary */}
+                                                {strikeSummary && strikeSummary.activeStrikeCount > 0 && (
+                                                    <div className="bg-orange-50 border-2 border-orange-200 rounded-card p-4">
+                                                        <div className="flex items-center justify-between mb-3">
+                                                            <h3 className="text-lg font-semibold text-orange-900 flex items-center">
+                                                                <ShieldExclamationIcon className="h-5 w-5 mr-2" />
+                                                                Strikes
+                                                            </h3>
+                                                            <Link
+                                                                href="/control/strikes"
+                                                                className="text-xs text-orange-700 hover:text-orange-900 font-medium underline"
+                                                            >
+                                                                View All
+                                                            </Link>
+                                                        </div>
+                                                        <div className="space-y-3">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-orange-700 font-medium">Active Strikes</span>
+                                                                <span className="text-2xl font-bold text-orange-900">
+                                                                    {strikeSummary.activeStrikeCount}/{strikeSummary.strikeThreshold}
+                                                                </span>
+                                                            </div>
+                                                            <div className="w-full bg-orange-100 rounded-full h-2.5">
+                                                                <div
+                                                                    className={`h-2.5 rounded-full ${
+                                                                        strikeSummary.activeStrikeCount >= strikeSummary.strikeThreshold
+                                                                            ? 'bg-red-600'
+                                                                            : strikeSummary.activeStrikeCount >= strikeSummary.strikeThreshold - 1
+                                                                            ? 'bg-orange-500'
+                                                                            : 'bg-yellow-500'
+                                                                    }`}
+                                                                    style={{
+                                                                        width: `${Math.min(
+                                                                            (strikeSummary.activeStrikeCount / strikeSummary.strikeThreshold) * 100,
+                                                                            100
+                                                                        )}%`,
+                                                                    }}
+                                                                ></div>
+                                                            </div>
+                                                            {strikeSummary.activeStrikeCount >= strikeSummary.strikeThreshold - 1 && (
+                                                                <div className="bg-red-50 border border-red-200 rounded p-2 text-xs text-red-800">
+                                                                    ⚠️ {strikeSummary.activeStrikeCount >= strikeSummary.strikeThreshold
+                                                                        ? 'Threshold reached! Deduction created automatically.'
+                                                                        : 'One strike away from automatic deduction!'}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
 
                                                 {/* Zone Assignments */}
                                                 <div className="bg-surface-50 rounded-card p-4">

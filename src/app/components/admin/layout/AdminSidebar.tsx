@@ -74,12 +74,12 @@ const menuItems = [
     icon: ReceiptRefundIcon,
     permission: Permission.VIEW_VENDORS
   },
-  // {
-  //   name: "Disputed Deductions",
-  //   href: "/control/deductions/disputes",
-  //   icon: ShieldExclamationIcon,
-  //   permission: Permission.VIEW_VENDORS
-  // },
+  {
+    name: "Strikes",
+    href: "/control/strikes",
+    icon: ShieldExclamationIcon,
+    permission: Permission.VIEW_VENDORS
+  },
   {
     name: "Earnings",
     href: "/control/earnings",
