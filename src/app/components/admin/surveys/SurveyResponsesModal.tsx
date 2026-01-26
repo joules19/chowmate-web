@@ -49,6 +49,16 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
     hasPreviousPage: false
   };
 
+  console.log('📊 Responses data:', {
+    totalCount: responses.totalCount,
+    totalPages: responses.totalPages,
+    currentPage: responses.page,
+    dataLength: responses.data?.length,
+    hasNextPage: responses.hasNextPage,
+    hasPreviousPage: responses.hasPreviousPage,
+    filters
+  });
+
   const getStatusBadge = (status: ResponseStatus) => {
     const statusConfig = {
       [ResponseStatus.InProgress]: { color: 'bg-warning-100 text-warning-800', icon: ClockIcon, label: 'In Progress' },
@@ -154,19 +164,23 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
         );
       case QuestionType.MultipleChoice:
       case QuestionType.Dropdown:
+        // Use selectedOptions if available, otherwise fall back to answerText
+        const selectedOption = answer.selectedOptions?.[0] || answer.answerText;
         return (
           <span className="px-2 py-1 bg-primary-100 text-primary-800 rounded-soft text-xs">
-            {answer.answerText || 'No selection'}
+            {selectedOption || 'No selection'}
           </span>
         );
       case QuestionType.YesNo:
+        // Use selectedOptions if available, otherwise fall back to answerText
+        const yesNoAnswer = answer.selectedOptions?.[0] || answer.answerText;
         return (
           <span className={`px-2 py-1 rounded-soft text-xs ${
-            answer.answerText === 'Yes' 
-              ? 'bg-success-100 text-success-800' 
+            yesNoAnswer === 'Yes'
+              ? 'bg-success-100 text-success-800'
               : 'bg-danger-100 text-danger-800'
           }`}>
-            {answer.answerText}
+            {yesNoAnswer}
           </span>
         );
       case QuestionType.ShortText:
@@ -302,8 +316,9 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-surface-0 rounded-card shadow-soft-lg w-full max-w-6xl max-h-[90vh] overflow-hidden">
-        <div className="flex items-center justify-between p-6 border-b border-border-light">
+      <div className="bg-surface-0 rounded-card shadow-soft-lg w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-border-light flex-shrink-0">
           <div>
             <h2 className="text-xl font-semibold text-text-primary">Survey Responses</h2>
             <p className="text-sm text-text-tertiary">{responses.totalCount} total responses</p>
@@ -317,7 +332,7 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
         </div>
 
         {/* Filters */}
-        <div className="p-6 border-b border-border-light">
+        <div className="p-6 border-b border-border-light flex-shrink-0">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <select
               value={filters.status?.toString() || ''}
@@ -355,7 +370,8 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
           </div>
         </div>
 
-        <div className="overflow-y-auto max-h-[calc(90vh-200px)]">
+        {/* Table - Scrollable */}
+        <div className="overflow-y-auto flex-1 min-h-0">
           <table className="min-w-full divide-y divide-border-light">
             <thead className="bg-surface-100 sticky top-0">
               <tr>
@@ -453,13 +469,38 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
           )}
         </div>
 
-        {responses.totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-border-light">
+        {/* Pagination */}
+        {responses.totalCount > 0 && (
+          <div className="px-6 py-4 border-t border-border-light flex-shrink-0">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-              <div className="text-sm text-text-secondary">
-                Showing {((filters.page - 1) * filters.pageSize) + 1} to {Math.min(filters.page * filters.pageSize, responses.totalCount)} of {responses.totalCount} responses
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-text-secondary">
+                  Showing {((filters.page - 1) * filters.pageSize) + 1} to {Math.min(filters.page * filters.pageSize, responses.totalCount)} of {responses.totalCount} responses
+                </div>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="pageSize" className="text-sm text-text-tertiary">
+                    Per page:
+                  </label>
+                  <select
+                    id="pageSize"
+                    value={filters.pageSize}
+                    onChange={(e) => handleFilterChange('pageSize', parseInt(e.target.value))}
+                    className="px-2 py-1 text-sm bg-surface-50 border border-border-default rounded-button focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                  </select>
+                </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleFilterChange('page', 1)}
+                  disabled={!responses.hasPreviousPage}
+                  className="px-3 py-1.5 text-sm text-text-secondary border border-border-default rounded-button hover:bg-surface-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  First
+                </button>
                 <button
                   onClick={() => handleFilterChange('page', filters.page - 1)}
                   disabled={!responses.hasPreviousPage}
@@ -467,6 +508,11 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
                 >
                   Previous
                 </button>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-text-secondary">
+                    Page {filters.page} of {responses.totalPages}
+                  </span>
+                </div>
                 <button
                   onClick={() => handleFilterChange('page', filters.page + 1)}
                   disabled={!responses.hasNextPage}
@@ -474,12 +520,20 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
                 >
                   Next
                 </button>
+                <button
+                  onClick={() => handleFilterChange('page', responses.totalPages)}
+                  disabled={!responses.hasNextPage}
+                  className="px-3 py-1.5 text-sm text-text-secondary border border-border-default rounded-button hover:bg-surface-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Last
+                </button>
               </div>
             </div>
           </div>
         )}
 
-        <div className="flex justify-end p-6 border-t border-border-light">
+        {/* Close Button */}
+        <div className="flex justify-end p-6 border-t border-border-light flex-shrink-0">
           <button
             onClick={onClose}
             className="px-4 py-2 text-text-secondary border border-border-default rounded-button hover:bg-surface-50"

@@ -174,7 +174,7 @@ export default function StrikeForm({ vendor, onClose }: StrikeFormProps) {
                                                 <XMarkIcon className="h-5 w-5" />
                                             </button>
                                             <p className="text-xs text-text-secondary mt-1">
-                                                {evidenceImage?.name} ({(evidenceImage?.size / 1024).toFixed(2)} KB)
+                                                {evidenceImage?.name} ({((evidenceImage?.size || 0) / 1024).toFixed(2)} KB)
                                             </p>
                                         </div>
                                     )}

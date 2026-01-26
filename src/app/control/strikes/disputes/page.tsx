@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useDisputedStrikes } from '@/app/lib/hooks/api-hooks/use-strikes';
-import { StrikeDto } from '@/app/data/types/strikes';
+import { StrikeDetailsDto } from '@/app/data/types/strikes';
 import { DisputeStatus } from '@/app/data/types/deductions';
 import { ShieldCheckIcon, EyeIcon } from '@heroicons/react/24/outline';
 import AdminPageHeader from '@/app/components/admin/layout/AdminPageHeader';
@@ -11,12 +11,12 @@ import StrikeDetailsModal from '@/app/components/admin/strikes/StrikeDetailsModa
 
 export default function DisputedStrikesPage() {
     const [selectedDisputeStatus, setSelectedDisputeStatus] = useState<DisputeStatus | undefined>(undefined);
-    const [selectedStrike, setSelectedStrike] = useState<StrikeDto | undefined>(undefined);
+    const [selectedStrike, setSelectedStrike] = useState<StrikeDetailsDto | undefined>(undefined);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
 
     const { data: disputes, isLoading } = useDisputedStrikes({ disputeStatus: selectedDisputeStatus });
 
-    const handleViewDetails = (strike: StrikeDto) => {
+    const handleViewDetails = (strike: StrikeDetailsDto) => {
         setSelectedStrike(strike);
         setShowDetailsModal(true);
     };

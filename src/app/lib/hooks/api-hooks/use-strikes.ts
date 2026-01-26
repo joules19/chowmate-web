@@ -46,7 +46,7 @@ export function useStrike(strikeId: string): UseQueryResult<StrikeDetailsDto, Er
     });
 }
 
-export function useDisputedStrikes(filters?: DisputedStrikeFilters): UseQueryResult<PaginatedResponse<StrikeDto>, Error> {
+export function useDisputedStrikes(filters?: DisputedStrikeFilters): UseQueryResult<PaginatedResponse<StrikeDetailsDto>, Error> {
     return useQuery({
         queryKey: STRIKE_QUERY_KEYS.disputes(filters),
         queryFn: () => strikeRepo.listDisputedStrikes(filters),

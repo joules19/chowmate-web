@@ -56,7 +56,7 @@ export class StrikeRepository extends BaseRepository<StrikeDto> {
         return this.post<boolean>(`/${strikeId}/resolve`, request as unknown as Record<string, unknown>);
     }
 
-    async listDisputedStrikes(filters?: DisputedStrikeFilters): Promise<PaginatedResponse<StrikeDto>> {
+    async listDisputedStrikes(filters?: DisputedStrikeFilters): Promise<PaginatedResponse<StrikeDetailsDto>> {
         const queryParams = new URLSearchParams();
 
         if (filters) {
@@ -68,7 +68,7 @@ export class StrikeRepository extends BaseRepository<StrikeDto> {
         }
 
         const endpoint = `/disputes${queryParams.toString() ? `?${queryParams}` : ''}`;
-        return this.get<PaginatedResponse<StrikeDto>>(endpoint);
+        return this.get<PaginatedResponse<StrikeDetailsDto>>(endpoint);
     }
 
     async reviewStrikeDispute(strikeId: string, request: ReviewStrikeDisputeRequest): Promise<StrikeDto> {
