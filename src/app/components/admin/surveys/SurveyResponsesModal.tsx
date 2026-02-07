@@ -105,7 +105,12 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
   };
 
   const handleFilterChange = (key: keyof SurveyResponseFilterDto, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
+    setFilters(prev => ({
+      ...prev,
+      [key]: value,
+      // Only reset to page 1 if we're not changing the page itself
+      ...(key !== 'page' && { page: 1 })
+    }));
   };
 
   const getQuestionTypeName = (questionType: QuestionType) => {

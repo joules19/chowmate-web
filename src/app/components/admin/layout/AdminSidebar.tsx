@@ -21,7 +21,8 @@ import {
   BanknotesIcon,
   ShieldExclamationIcon,
   ReceiptRefundIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  CubeIcon
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -61,6 +62,12 @@ const menuItems = [
     href: "/control/orders",
     icon: ShoppingBagIcon,
     permission: Permission.VIEW_ORDERS
+  },
+  {
+    name: "Products",
+    href: "/control/products",
+    icon: CubeIcon,
+    permission: Permission.VIEW_VENDORS
   },
   {
     name: "Payments",

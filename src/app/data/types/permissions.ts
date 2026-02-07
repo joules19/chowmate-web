@@ -65,6 +65,12 @@ export enum Permission {
   MANAGE_FEATURE_REQUESTS = 'MANAGE_FEATURE_REQUESTS',
   REVIEW_FEATURE_REQUESTS = 'REVIEW_FEATURE_REQUESTS',
 
+  // Products
+  VIEW_PRODUCTS = 'VIEW_PRODUCTS',
+  APPROVE_PRODUCT = 'APPROVE_PRODUCT',
+  REJECT_PRODUCT = 'REJECT_PRODUCT',
+  MANAGE_PRODUCTS = 'MANAGE_PRODUCTS',
+
   // Product Promotions
   VIEW_PROMOTIONS = 'VIEW_PROMOTIONS',
   CREATE_PROMOTION = 'CREATE_PROMOTION',
@@ -129,6 +135,10 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permission.VIEW_FEATURE_REQUESTS,
     Permission.MANAGE_FEATURE_REQUESTS,
     Permission.REVIEW_FEATURE_REQUESTS,
+    Permission.VIEW_PRODUCTS,
+    Permission.APPROVE_PRODUCT,
+    Permission.REJECT_PRODUCT,
+    Permission.MANAGE_PRODUCTS,
     Permission.VIEW_PROMOTIONS,
     Permission.CREATE_PROMOTION,
     Permission.EDIT_PROMOTION,
@@ -163,7 +173,10 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permission.VIEW_ORDERS,
     Permission.EDIT_ORDER,
     Permission.ASSIGN_RIDER,
-    Permission.VIEW_ANALYTICS
+    Permission.VIEW_ANALYTICS,
+    Permission.VIEW_PRODUCTS,
+    Permission.APPROVE_PRODUCT,
+    Permission.REJECT_PRODUCT
   ],
   [Role.SUPPORT]: [
     Permission.VIEW_DASHBOARD,
