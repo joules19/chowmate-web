@@ -234,7 +234,19 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
       key: 'status',
       label: 'Status',
       sortable: true,
-      render: (order) => getStatusBadge(order.statusText)
+      render: (order) => (
+        <div className="flex flex-col gap-1.5">
+          {getStatusBadge(order.statusText)}
+          {order.statusText === 'Completed' && order.orderDuration && (
+            <div className="flex items-center gap-1.5 text-xs text-text-tertiary bg-gradient-to-r from-green-50 to-emerald-50 px-2 py-1 rounded-md border border-green-100">
+              <svg className="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="font-medium text-green-700">{order.orderDuration}</span>
+            </div>
+          )}
+        </div>
+      )
     },
     {
       key: 'actions',
