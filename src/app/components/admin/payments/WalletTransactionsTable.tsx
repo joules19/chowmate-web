@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     EyeIcon,
     MagnifyingGlassIcon,
@@ -34,7 +34,7 @@ export default function WalletTransactionsTable({ onTransactionSelect }: Props) 
         hasPreviousPage: false
     });
 
-    const loadTransactions = async (page: number = 1, pageSize?: number) => {
+    const loadTransactions = useCallback(async (page: number = 1, pageSize?: number) => {
         setIsLoading(true);
         setError('');
 
@@ -65,11 +65,11 @@ export default function WalletTransactionsTable({ onTransactionSelect }: Props) 
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [pagination.pageSize, selectedFilter]);
 
     useEffect(() => {
         loadTransactions(1);
-    }, [selectedFilter, statusFilter]);
+    }, [loadTransactions, statusFilter]);
 
     const handlePageChange = (newPage: number) => {
         loadTransactions(newPage);
