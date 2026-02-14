@@ -55,15 +55,23 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
     const parts = cleanDuration.split(':');
     if (parts.length === 3) {
       const hours = parseInt(parts[0]);
-      const minutes = parseInt(parts[1]);
+      let minutes = parseInt(parts[1]);
       const seconds = parseInt(parts[2]);
 
+      // Round up minutes if seconds >= 30
+      if (seconds >= 30) {
+        minutes += 1;
+      }
+
       if (hours > 0) {
-        return `${hours}h ${minutes}m`;
+        if (minutes > 0) {
+          return `${hours}hr ${minutes} ${minutes === 1 ? 'min' : 'mins'}`;
+        }
+        return `${hours} ${hours === 1 ? 'hr' : 'hrs'}`;
       } else if (minutes > 0) {
-        return `${minutes}m ${seconds}s`;
+        return `${minutes} ${minutes === 1 ? 'min' : 'mins'}`;
       } else {
-        return `${seconds}s`;
+        return `${seconds} ${seconds === 1 ? 'sec' : 'secs'}`;
       }
     }
 
