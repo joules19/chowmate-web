@@ -46,6 +46,30 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
     type: 'success'
   });
 
+  // Format duration string (removes milliseconds and formats nicely)
+  const formatDuration = (duration: string) => {
+    // Remove milliseconds if present (e.g., "00:39:50.8686780" -> "00:39:50")
+    const cleanDuration = duration.split('.')[0];
+
+    // Parse HH:MM:SS format
+    const parts = cleanDuration.split(':');
+    if (parts.length === 3) {
+      const hours = parseInt(parts[0]);
+      const minutes = parseInt(parts[1]);
+      const seconds = parseInt(parts[2]);
+
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      } else if (minutes > 0) {
+        return `${minutes}m ${seconds}s`;
+      } else {
+        return `${seconds}s`;
+      }
+    }
+
+    return duration; // Return as-is if format is unexpected
+  };
+
   // Convert SearchFilters to OrderFilters
   const orderFilters: OrderFilters = {
     pageNumber: filters.page || 1,
@@ -242,7 +266,7 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
               <svg className="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="font-medium text-green-700">{order.orderDuration}</span>
+              <span className="font-medium text-green-700">{formatDuration(order.orderDuration)}</span>
             </div>
           )}
         </div>
