@@ -1,0 +1,353 @@
+Welcome to chowdeck.com, a proprietary website/application of Chowdeck Logistics Limited ("Chowdeck", "we", "us"). By accessing this Platform, you ("User", "you", "your") agree to our terms and conditions below. We understand that legal documents may be lengthy and boring and more often than not you want to skip them, but it is important that you read these terms carefully before using the Platform. By using this Platform, you agree to be legally bound by these terms. If you do not understand any of the terms of this agreement, please contact us at hello@chowdeck.com. We’re more than happy to guide you.
+
+
+Last Updated: 24th September 2025
+
+
+1. General Terms 
+
+
+1.1. These terms of use govern the use of our website and mobile application (collectively called the “Platform”) and define the legally binding terms on which you access, browse, register or otherwise use the Platform to enjoy our services. The terms of use apply to all “Users” of the Platform including guest Users.
+
+
+1.2. By using our Platforms in any manner, you confirm that you accept these terms of use and that you agree to comply with and be bound by them.
+
+
+1.3. You understand that a breach of any of these terms of use may result in your rights to use the services on the Platform being restricted, suspended or withdrawn.
+
+
+1.4. We may amend these terms of use at any time by amending this page. Please check this page from time to time to take notice of any changes we make as they will be binding on you. If you are an existing User, we will duly inform you of any amendments that are made, by sending a prompt on the mobile application.
+
+
+1.5. If you do not agree to these terms of use, please do not access this Platform or use the services.
+
+
+
+2. Services 
+
+
+2.1. This Platform allows Users to request one of our Riders to order or pick up food, grocery items, over-the-counter drugs, medical consumables, and over-the- counter health-related products (“OTC Pharmaceuticals”) from your favourite nearby restaurant, supermarket and pharmacy respectively and also enables Merchants accept orders, view pay out, report order issues, modify menus, etc (“Services”)
+
+
+2.2. The platform contains a variety of restaurants, supermarkets and pharmacies you can choose to order your preferred meal, grocery items and OTC Pharmaceuticals from and have them picked up and delivered to you.
+
+
+2.3. Chowdeck is not affiliated with or has any form of partnership with these restaurants, supermarkets and pharmacies. We are only responsible for purchasing or ordering the food, grocery items and OTC Pharmaceuticals on your behalf and instructions and we get them delivered to you without hassle. We operate the Platform and implement the tools and technical means to enable this relationship to work smoothly. We do not have possession of any food, grocery item and OTC pharmaceuticals offered for sale. Chowdeck is not a part or subsidiary of any of the restaurants, supermarkets or pharmacies listed on this platform.
+
+
+2.4. We have no control over and do not guarantee the existence, quality and safety of food, grocery items and OTC Pharmaceuticals as advertised. We do not guarantee the truth or accuracy of restaurants, supermarkets or pharmacies’ offers and the ability they have to produce a meal or grocery item as described nor do we guarantee the complete safety of the OTC Pharmaceuticals being ordered.
+
+
+2.5. Unlike our delivery services, we cannot give any undertaking that meals, grocery items and OTC pharmaceuticals ordered through this Platform will be of satisfactory quality and, this and any other such warranties (whether express or implied) are disclaimed by us to the fullest extent permitted by law.
+
+
+3. Accessing our Platform and the Services 
+
+
+3.1. We do not guarantee that our Platforms or any of the Services will always be available, uninterrupted or fault-free. We will not be liable to any User of the Platform if for any reason the Platform is unavailable at any time or for any period.
+
+
+3.2. We do not guarantee that our Platform or any content on it will be free from errors or omissions.
+
+
+3.3. You are responsible for making all arrangements necessary to have access to our Platforms and for ensuring that all persons who access the Platform through your User profile are aware of these terms of use and other applicable terms and conditions and that they comply with them.
+
+
+4. Membership and Registration 
+
+
+4.1. Our Services are available only to and may only be used by individuals who are 18 years and older and who can form legally binding contracts under applicable law. You represent that you are at least 18 years old and that all registration information you submit is accurate and truthful.
+
+
+4.2. Users who fulfill the requirements above must create an account in accordance with clause 4.3 below.
+
+
+4.3. In order to create an account, you must provide a full name, email address, telephone number, and delivery address. A one-time password will be provided to the User upon signing up. It is at this point that you are required to tick a box to confirm to agree with our terms of use and privacy policy.
+
+
+4.4. You are solely responsible for keeping your login details confidential and must not disclose or share it with anyone. You will be responsible for all activities and orders that take place using your login information. In the event of theft, loss or unauthorised use of a User’s password or account, you must contact us immediately at hello@chowdeck.com
+
+
+4.5. Once you create an account, you will be able to select restaurants or supermarkets of your choice, order your meals and grocery items and request that a Chowdeck Champion get the meals delivered to your registered address.
+
+
+4.6. Once you create an account, you will be able to select pharmacies of your choice, order your OTC Pharmaceuticals and request that a Chowdeck Champion get them delivered to the registered address provided to us.
+
+
+4.7. Where we have reason to suspect or believe that there has or is likely to be a security breach or other misuse of our Platform, we reserve the right to require you to change your password. Failure to do so may result in us suspending or deleting your account.
+
+
+4.8. As a user, you:
+4.8.1. represent and understand that all account information provided is accurate, up-to-date, honest and not misleading;
+
+4.8.2. commit to updating your account information as and when it changes; and
+
+4.8.3 accept sole responsibility for any direct or indirect adverse consequences caused by the inaccuracy of this information or failure to update this information.
+
+
+4.9. The information submitted to create or update an account constitutes proof of your identity. We reserve the right to verify, at any time the accuracy of the information provided and to ask you for any additional documentation for the purpose of identity verification.
+
+
+4.10. You can decide at any time to terminate your account, in which case your details will be deleted from the Platform.
+
+
+5. Payment 
+
+
+5.1. All payments made on our Platform are processed by a third-party payment processor which provides a gateway for online payments.
+
+
+5.2. Payments to Merchants shall be made in accordance with the agreed SLAs.
+
+
+5.3. In order for Users to successfully make an order, payment for orders can be made in two ways:
+
+5.3.1. through a closed-loop electronic wallet feature on the Platform which you top up via the available payment channels. You can only use the units or value allotted to you on the wallet to purchase food through our Platform; or
+
+5.3.2. you may also make payments through a debit card; or
+
+5.3.3. through bank transfers; or
+
+5.3.4. through QR codes
+
+5.3.5. any of the wallets provided on the Platform; or
+
+5.3.6. any other payment methods/channels our payment service partners may provide from time to time.
+
+
+5.4. The sale prices of meals, grocery items and OTC Pharmaceuticals are displayed in the offers. They are given in Naira and include any tax applicable taxes.
+
+
+5.5. The delivery fee can be accessed at the checkout page.
+
+
+5.6. The total price is stated in the offer at checkout and is due for payment when the order is placed.
+
+
+5.7. In the event of any price change for whatever reason, you will receive a notification on the Platform, informing you about the relevant change. You will be required to accept the updated price before proceeding with the order.
+
+
+5.8. By creating an account, you agree to be bound by these terms of payment.
+
+
+6. Intellectual Property 
+
+
+6.1. We and our service partners own all intellectual property rights in the Platform and any materials published on it. These rights are protected under applicable copyright laws in Ghana and all such rights are reserved. You may only access and use the materials for personal use and you may not otherwise reproduce, distribute, publicly display or modify without a licence to do so from us.
+
+
+6.2. We own or are the licensor of all rights, titles, and interests, in and to the Platform including all rights under patents, copyrights, design rights, trade secrets, and any and all other proprietary rights. Any disassembling, decryption, extraction, re-use, re-engineer, reverse engineering, copying or more generally any act of reproduction, representation, transmission or use of any of these elements, in part or in whole, without the authorization of the company is strictly prohibited and may result in legal action.
+
+
+6.3. If you believe the content of our Platform may have infringed on your copyright in any manner, kindly contact us at hello@chowdeck.com and we will immediately take steps to stop or remedy such breach.
+
+
+6.4. You acknowledge that words and terms used to describe the food menu and grocery items for all the restaurants and supermarkets listed were provided to us by Users who have requested that we purchase food and grocery items on their behalf in the past. Chowdeck will not be liable for any inappropriate or inaccurate use of food or grocery items names on this Platform. Kindly contact us if you believe a food menu or grocery item has been wrongly described and we will immediately take steps to remedy the same.
+
+
+6.5. You acknowledge that words and terms used to describe OTC Pharmaceuticals for all the pharmacies listed were provided to us by these pharmacies. Chowdeck will not be liable for any inappropriate or inaccurate use of OTC Pharmaceuticals on this Platform. Kindly contact us if you believe an OTC Pharmaceuticals has been wrongly described and we will immediately take steps to remedy the same.
+
+
+7. No Reliance  
+
+
+The content on our Platform regarding the meals, grocery items and OTC Pharmaceuticals is provided for general information only and is not intended to amount to advice on which you should rely. Although we make reasonable efforts to update the information on our site, we make no representation or guarantee, whether express or implied, that the content on our website/application is complete or up-to-date and you acknowledge that any reliance on such information will be at your own risk.
+
+
+8. Limitation of Liability 
+
+
+8.1. Nothing in these terms of use excludes or limits our liability for personal injury arising from our negligence or fraudulent misrepresentation or any other liability that cannot be excluded or limited by Ghanaian law.
+
+
+8.2. To the extent permitted by law, we exclude all conditions, warranties, representations or other terms which may otherwise apply to our Platform or any content on it, whether express or implied.
+
+
+8.3. We assume no responsibility for the content of websites linked to our Platform. Such links should not be interpreted as endorsement by us of those linked websites. We will not be liable for any loss or damage that may arise from your use of them.
+
+
+8.4. As a User, please note that we only provide our Platform for domestic and private use. You agree not to use our Platform for any commercial or business purposes without written unequivocal consent from us and we have no liability to you for any loss of profit or loss of business opportunity when our Platform is used without proper consent.
+
+
+8.5. To the extent permitted by the law, Chowdeck shall not be liable to you for any indirect punitive, incidental, special or exemplary damages arising out of your inability to use our Services.
+
+
+8.6. We are not liable for any damage which may be incurred by you from unauthorised use of, tampering or access to your Chowdeck account.
+
+
+8.7. Chowdeck is not liable and you agree not to hold Chowdeck liable for any damages or losses resulting either directly or indirectly from:
+
+8.7.1. delays or disruptions in our Services, software, and Platform;
+
+8.7.2. your use or inability to use or access our Services or Platform;
+
+8.7.3. a suspension or other actions taken with your Chowdeck account;
+
+8.7.4. any access or use of our services in a manner that is inconsistent with this terms of use or any error, inaccuracies, losses or omissions in or to any data provided to us; and
+
+8.7.5. any damage caused by a virus or other technologically harmful material that may infect your electronic devices due to the use of our Platform or any website linked to it.
+
+
+8.8. We will not be liable to any User for any loss or damage, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, even if foreseeable arising in connection with use of or inability to use our Platform.
+
+
+9. Indemnification 
+
+
+9.1. You agree to indemnify, defend and hold Chowdeck harmless against any loss, damage, liability and claim due to or arising out of your:
+
+9.1.1. Use or misuse of our Services;
+
+9.1.2. use or misuse of the OTC Pharmaceuticals being delivered; and
+
+9.1.3. breach of these terms of use or any applicable law.
+
+
+9.2. We reserve the right at your expense to assume the exclusive defence and control of any matter for which you are required to indemnify us, and you agree to cooperate with our defence of such claims.
+
+
+10. Term and Termination  
+
+
+This term of use becomes effective from the date you start using our services and continues until it is terminated by either you (through the closing of your account) or us.
+
+
+11. Restricted Activities 
+
+
+11.1. Our Platform must be used only for lawful purposes. You must not, and must not allow another person to use it for any purpose other than which we made it available.
+
+
+11.2. As a user of our Services and Platform, you agree not to use them:
+
+11.2.1. in a way that breaches the provision of any applicable law or regulation;
+
+11.2.2. in a way that is not authorized by us or detrimental to us;
+
+11.2.3. for any fraudulent purpose or act (Including provision of false identification); and
+
+11.2.4. to modify, adapt, decipher, disassemble or reverse engineer any of the software making up a part of our Platform.
+
+
+12. Electronic Communication 
+
+
+12.1. By accessing and using our Services, you consent to receiving electronic communications, and that all notices, disclosures and other communications we provide to you electronically through emails or displayed on our Platform satisfy any legal requirement for written communications.
+
+
+12.2. You agree to the use of electronic signatures, contracts, orders and other records and to the electronic delivery of records of transactions initiated or completed by you. You waive the rights or requirements of any law in any jurisdiction which require original signature, or delivery or retention of non-electronic records.
+
+
+13. Severability  
+
+
+13.1. If any of these terms of use are determined by any competent authority to be invalid, unlawful or unenforceable to any extent, such term, condition or provision will to that extent be severed from the remaining terms, conditions and provisions which will continue to be valid to the fullest extent permitted by Ghanaian law.
+
+
+14. Personal Data  
+
+
+14.1. The company collects and processes Users’ personal data. For further details on how your data is processed and used by us, every User is encouraged to read the Platform’s “Privacy Policy”. For the avoidance of doubt, we do not share your details with any other third parties except as detailed in our Privacy Policy and as legally required for the fulfilment of your order.
+
+
+15. Sanctions of Breaches 
+
+
+15.1. In the event of any fraud, breach of these terms of use or violation of applicable laws or regulations, we reserve the right to take any appropriate measure, including without limitation:
+
+15.1.1. suspending or terminating access to all or part of the services of the User who committed the breach; or
+
+15.1.2. alerting all relevant authorities and taking legal action.
+
+
+15.2. Any suspension or termination shall take full effect on the date we send the communication to the User and the User’s account will be automatically deleted without further notice.
+
+
+16. Placing Orders 
+
+
+16.1. The images of the products listed on our Platform may be stock photographs used by us for illustrative purposes only. Although we will make every effort to be as accurate as possible.
+
+
+16.2. The order page and our communications to you in relation to any order will be in English. The order page will allow you to make your order, review your order and make any corrections before confirmation.
+
+
+16.3. The order page leads to the checkout page where your order is to be confirmed and by confirming your order you agree that you have made all necessary corrections.
+
+
+16.4. To place an order, you must select the restaurant, supermarket or pharmacy and the orders from the list provided on the homepage of the Platform.
+
+
+16.5. Where a restaurant, supermarket or pharmacy of choice is not listed on the Platform, you may contact us to request a listing, however, we are not bound to list recommended restaurants, supermarkets or pharmacies on the Platform.
+
+
+16.6. The User can access a summary of the order at the checkout page at any time before confirmation.
+
+
+16.7. Confirmation of an order amounts to an offer to enter into a contract to purchase selected meals, grocery items or OTC Pharmaceuticals, therefore any User who chooses to cancel an order is to do so before the order is accepted by the restaurant or pharmacy, after which cancellation can no longer occur.
+
+
+16.8. The Platform contains a tool summarizing your orders and the history of payments which you can access at any time.
+
+
+17. Delivery of your order  
+
+
+17.1. The delivery of your meal is executed directly between you and Chowdeck.
+
+
+17.2. You commit to taking delivery of the meals, grocery items and OTC Pharmaceuticals you have ordered through the Platform.
+
+
+17.3. If you do not receive all the orders you made, you must immediately contact Chowdeck’s customer service without delay. In this event, the order will be delivered and if appropriate cases, you will be refunded the sum corresponding to the undelivered order.
+
+
+17.4. Users expressly accept that they are not able to ask for a refund or a later delivery of orders which they have made but failed to take delivery.
+
+
+17.5. It is your responsibility to confirm delivery details and to ensure that the details provided including your address and phone number are accurate.
+
+
+17.6. In the case of inaccurate or mixed-up orders, you agree to contact Chowdeck immediately and request a return. The order should remain as delivered and not be tampered with such that it becomes impracticable to bring it back to the form in which it was delivered.
+
+
+18. Complaints  
+
+
+18.1. Users are to submit complaints to customer service via this email: hello@chowdeck.com or the in-app chat box.
+
+
+19. Disclaimer  
+
+
+19.1. The services are provided “As Is” and “As Available”. Chowdeck disclaims all representations and warranties, express, implied or statutory, not expressly set out in these terms. Chowdeck makes no representation of having an existing relationship, engagement or commitment with any of the restaurants, supermarkets or pharmacies listed on the platform. In addition, Chowdeck makes no representation, warranty, or guarantee regarding the reliability, timeliness, quality, suitability or availability of the Services or any services or goods requested through the use of the Services, or that the Services will be uninterrupted or error-free. You agree that the entire risk arising out of your use of the Services, and any service or good requested in connection with it, remains solely with you, to the maximum extent permitted under applicable law.
+
+19.1.1. Chowdeck further disclaims any responsibility. We are not medical practitioners, and our Services are strictly limited to the delivery of these OTC Pharmaceuticals. We do not provide medical advice, offer diagnoses or any form of healthcare services.
+
+19.1.2. The Services provided under this term of use are limited to OTC Pharmaceuticals. We do not provide our Services for any drugs requiring a prescription from a duly licensed doctor.
+
+
+
+20. Promotional Codes  
+
+Chowdeck may, at its sole discretion, create promotional codes that may be redeemed for purchase discounts, or other features or benefits related to the Services, subject to any additional terms that Chowdeck establishes on a per promotional code basis (“Promo Codes”). You agree that Promo Codes:
+
+
+20.1.1 must be used for the intended purpose, and in a lawful manner;
+20.1.2. may not be duplicated, sold or transferred in any manner, or made available to the general public (whether posted to a public form or otherwise);
+20.1.3. may be disabled by Chowdeck at any time for any reason without liability to Chowdeck;
+20.1.4. may only be used pursuant to the specific terms that Chowdeck establishes for such Promo Code;
+20.1.5. are not valid for cash; and
+20.1.6. may expire prior to your use.
+20.1.7. Chowdeck reserves the right to withhold or deduct credits or other features or benefits obtained through the use of Promo Codes by you or any other User in the event that Chowdeck determines or believes that the use or redemption of the Promo Code was in error, fraudulent, illegal, or in violation of the applicable Promo Code terms or these terms.
+
+21. Governing Law 
+
+
+21.1. These terms of use are governed by Ghanaian law. In the event of a dispute regarding the validity, interpretation and/or execution of these terms, the parties submit to the exclusive jurisdiction of the Ghanaian courts.
+
+
+22. Version Control 
+
+
+22.1. This Terms of Use was last updated on 24th September 2025 by Chowdeck Logistics Limited.

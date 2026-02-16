@@ -10,6 +10,7 @@ import KnowledgeBaseLink from "./components/navigation/KnowledgeBaseLink";
 import QueryProvider from "./providers/QueryProvider";
 
 import { ToastProvider } from "./providers/ToastProvider";
+import CookieConsentBanner from "./components/CookieConsentBanner";
 
 export const metadata: Metadata = {
   title: "Food Delivery App",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <main className="">{children}</main>
                 <AdminLink />
                 <KnowledgeBaseLink />
+                <CookieConsentBanner />
               </ConfigProvider>
             </AntdRegistry>
           </ToastProvider>

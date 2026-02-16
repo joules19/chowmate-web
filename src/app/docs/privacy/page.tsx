@@ -152,10 +152,10 @@ const PrivacyPage = () => {
                                     <p className="text-sm sm:text-base text-[#666666]">
                                         For questions about this policy, please contact us at{" "}
                                         <a
-                                            href="mailto:privacy@chowmate.app"
+                                            href="mailto:support@chowmate.app"
                                             className="text-[#FFC107] hover:underline focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:ring-offset-2 rounded"
                                         >
-                                            privacy@chowmate.app
+                                            support@chowmate.app
                                         </a>.
                                     </p>
                                 </div>
@@ -369,10 +369,10 @@ const PrivacyPage = () => {
                                         <p className="text-[#666666] text-xs sm:text-sm">
                                             To exercise these rights, contact us at{" "}
                                             <a
-                                                href="mailto:privacy@chowmate.app"
+                                                href="mailto:support@chowmate.app"
                                                 className="text-[#FFC107] hover:underline focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:ring-offset-2 rounded"
                                             >
-                                                privacy@chowmate.app
+                                                support@chowmate.app
                                             </a> or use our in-app data request feature.
                                         </p>
                                     </div>
@@ -388,10 +388,10 @@ const PrivacyPage = () => {
                                         <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-[#666666]">
                                             <p><strong>Email:</strong>{" "}
                                                 <a
-                                                    href="mailto:privacy@chowmate.app"
+                                                    href="mailto:support@chowmate.app"
                                                     className="text-[#FFC107] hover:underline focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:ring-offset-2 rounded"
                                                 >
-                                                    privacy@chowmate.app
+                                                    support@chowmate.app
                                                 </a>
                                             </p>
                                             <p><strong>Phone:</strong>{" "}
@@ -399,7 +399,7 @@ const PrivacyPage = () => {
                                                     href="tel:+2349038073651"
                                                     className="text-[#FFC107] hover:underline focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:ring-offset-2 rounded"
                                                 >
-                                                    +234 903 8073 651
+                                                    +234 810 357 6463
                                                 </a>
                                             </p>
                                             {/* <p><strong>Address:</strong> 8, Trinity Street, Phase II, Mowe, Ogun State, Nigeria</p> */}

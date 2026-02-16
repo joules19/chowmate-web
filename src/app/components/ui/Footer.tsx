@@ -22,9 +22,9 @@ const footerLinks = {
         { name: "Safety", href: "/safety" },
     ],
     legal: [
-        { name: "Terms of Service", href: "/terms" },
-        { name: "Privacy Policy", href: "/privacy" },
-        { name: "Cookie Policy", href: "/cookies" },
+        { name: "Terms of Service", href: "/docs/terms" },
+        { name: "Privacy Policy", href: "/docs/privacy" },
+        { name: "Cookie Policy", href: "/docs/privacy" },
         { name: "Refund Policy", href: "/refunds" },
     ],
 };
@@ -160,13 +160,13 @@ export default function Footer() {
                         © 2024 Chowmate. All rights reserved.
                     </p>
                     <div className="flex space-x-6 text-sm">
-                        <Link href="/terms" className="text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200">
+                        <Link href="/docs/terms" className="text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200">
                             Terms
                         </Link>
-                        <Link href="/privacy" className="text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200">
+                        <Link href="/docs/privacy" className="text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200">
                             Privacy
                         </Link>
-                        <Link href="/cookies" className="text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200">
+                        <Link href="/docs/privacy" className="text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200">
                             Cookies
                         </Link>
                     </div>

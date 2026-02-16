@@ -61,7 +61,7 @@ export default function SimpleFooter() {
                             className="flex items-center space-x-3 text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200"
                         >
                             <Phone className="w-5 h-5 text-[#FFC107]" />
-                            <span>+234 903 8073 651</span>
+                            <span>+234 810 357 6463</span>
                         </a> */}
                         {/* <div className="flex items-center space-x-3 text-[#A1A1A1]">
                             <MapPin className="w-5 h-5 text-[#FFC107]" />
@@ -86,6 +86,12 @@ export default function SimpleFooter() {
                             className="text-sm text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200"
                         >
                             Privacy Policy
+                        </Link>
+                        <Link
+                            href="/docs/terms"
+                            className="text-sm text-[#A1A1A1] hover:text-[#FFC107] transition-colors duration-200"
+                        >
+                            Terms of Service
                         </Link>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Clock, Shield, ArrowRight, Navigation } from "lucide-react";
 import { useEffect, useState } from "react";
-import HeroImage from "../../assets/images/map.jpg";
+import HeroImage from "../../assets/images/map.png";
 import { Button } from "../ui/AppButton";
 
 
