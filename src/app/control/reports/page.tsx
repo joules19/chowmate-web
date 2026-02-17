@@ -2,6 +2,7 @@
 
 import { DocumentChartBarIcon } from "@heroicons/react/24/outline";
 import CustomerClassReportCard from "@/app/components/admin/reports/CustomerClassReportCard";
+import LowFrequencyCustomerReportCard from "@/app/components/admin/reports/LowFrequencyCustomerReportCard";
 import PermissionGuard from "@/app/components/admin/guards/PermissionGuard";
 import { Permission } from "@/app/data/types/permissions";
 
@@ -52,21 +53,7 @@ export default function ReportsPage() {
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <CustomerClassReportCard />
-
-              {/* Placeholder for future reports */}
-              <div className="bg-surface-0 rounded-card shadow-soft border border-border-light border-dashed">
-                <div className="p-6 flex flex-col items-center justify-center min-h-[300px] text-center">
-                  <div className="p-4 bg-surface-100 rounded-full mb-4">
-                    <DocumentChartBarIcon className="h-8 w-8 text-text-tertiary" />
-                  </div>
-                  <h3 className="text-base font-medium text-text-secondary mb-2">
-                    More Reports Coming Soon
-                  </h3>
-                  <p className="text-sm text-text-tertiary max-w-xs">
-                    Additional customer analytics reports will be available here
-                  </p>
-                </div>
-              </div>
+              <LowFrequencyCustomerReportCard />
             </div>
           </div>
 
