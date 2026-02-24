@@ -429,6 +429,9 @@ export interface UserSummaryDto {
     // Wallet information
     walletId?: string;
     walletBalance?: number;
+    // Delivery credits (customers only)
+    activeDeliveryCredits: number;
+    deliveryCreditsExpiry?: string | null;
 }
 
 export interface UserForRoleSwitch {

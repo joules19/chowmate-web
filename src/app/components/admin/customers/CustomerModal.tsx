@@ -1,9 +1,11 @@
 "use client";
 
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon, EnvelopeIcon, PhoneIcon, MapPinIcon, CalendarIcon } from '@heroicons/react/24/outline';
-import { useCustomer, useCustomerOrders } from '@/app/lib/hooks/api-hooks.ts/use-customer';
+import { XMarkIcon, EnvelopeIcon, PhoneIcon, MapPinIcon, CalendarIcon, GiftIcon } from '@heroicons/react/24/outline';
+import { message } from 'antd';
+import { useCustomer, useCustomerOrders, useRevokeDeliveryCredits } from '@/app/lib/hooks/api-hooks.ts/use-customer';
+import DeliveryCreditsModal from './DeliveryCreditsModal';
 
 interface CustomerModalProps {
     customerId: string;
@@ -14,6 +16,9 @@ interface CustomerModalProps {
 export default function CustomerModal({ customerId, isOpen, onClose }: CustomerModalProps) {
     const { data: customer, isLoading: customerLoading, error: customerError } = useCustomer(customerId);
     const { data: ordersData, isLoading: ordersLoading } = useCustomerOrders(customerId, { pageSize: 5 });
+    const revokeMutation = useRevokeDeliveryCredits();
+    const [showGrantModal, setShowGrantModal] = useState(false);
+    const [confirmRevoke, setConfirmRevoke] = useState(false);
     // const { data: activities, isLoading: activitiesLoading } = useCustomerActivities(customerId, 10);
 
     // Debug logging to check customer data
@@ -94,6 +99,7 @@ export default function CustomerModal({ customerId, isOpen, onClose }: CustomerM
     }
 
     return (
+        <>
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-50" onClose={onClose}>
                 <Transition.Child
@@ -202,6 +208,76 @@ export default function CustomerModal({ customerId, isOpen, onClose }: CustomerM
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {/* Delivery Credits */}
+                                            <div>
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <h3 className="text-lg font-medium text-gray-900">Delivery Credits</h3>
+                                                    <button
+                                                        onClick={() => setShowGrantModal(true)}
+                                                        className="text-xs px-3 py-1.5 bg-primary-50 text-primary-700 hover:bg-primary-100 rounded-lg transition-colors font-medium"
+                                                    >
+                                                        + Grant Credits
+                                                    </button>
+                                                </div>
+                                                <div className="bg-background-primary p-4 rounded-lg flex items-start justify-between">
+                                                    <div className="flex items-start space-x-3">
+                                                        <GiftIcon className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                                                        <div>
+                                                            <div className="text-2xl font-bold text-gray-900">
+                                                                {customer.activeDeliveryCredits || 0}
+                                                            </div>
+                                                            <div className="text-sm text-gray-500">Active free deliveries</div>
+                                                            {customer.deliveryCreditsExpiry ? (
+                                                                <div className="text-xs text-amber-600 mt-1">
+                                                                    Expires {new Date(customer.deliveryCreditsExpiry).toLocaleDateString()}
+                                                                </div>
+                                                            ) : (
+                                                                customer.activeDeliveryCredits > 0 && (
+                                                                    <div className="text-xs text-gray-400 mt-1">No expiry set</div>
+                                                                )
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    {customer.activeDeliveryCredits > 0 && (
+                                                        <div className="flex-shrink-0">
+                                                            {confirmRevoke ? (
+                                                                <div className="flex items-center space-x-2">
+                                                                    <span className="text-xs text-gray-500">Revoke all?</span>
+                                                                    <button
+                                                                        onClick={async () => {
+                                                                            try {
+                                                                                const result = await revokeMutation.mutateAsync({ userIds: [customer.userId] });
+                                                                                message.success(`${result.creditsRevoked} delivery credit${result.creditsRevoked !== 1 ? 's' : ''} revoked from ${customer.fullName}.`);
+                                                                            } catch {
+                                                                                message.error('Failed to revoke delivery credits. Please try again.');
+                                                                            }
+                                                                            setConfirmRevoke(false);
+                                                                        }}
+                                                                        disabled={revokeMutation.isPending}
+                                                                        className="text-xs px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:opacity-50"
+                                                                    >
+                                                                        {revokeMutation.isPending ? 'Revoking...' : 'Confirm'}
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => setConfirmRevoke(false)}
+                                                                        className="text-xs px-2 py-1 border border-gray-300 text-gray-600 rounded hover:bg-gray-100 transition-colors"
+                                                                    >
+                                                                        Cancel
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => setConfirmRevoke(true)}
+                                                                    className="text-xs px-3 py-1.5 text-red-600 hover:bg-red-50 border border-red-200 rounded-lg transition-colors"
+                                                                >
+                                                                    Revoke
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
 
                                         {/* Recent Orders & Activities */}
@@ -261,5 +337,15 @@ export default function CustomerModal({ customerId, isOpen, onClose }: CustomerM
                 </div>
             </Dialog>
         </Transition>
+
+        {customer && (
+            <DeliveryCreditsModal
+                userId={customer.userId}
+                customerName={customer.fullName}
+                isOpen={showGrantModal}
+                onClose={() => setShowGrantModal(false)}
+            />
+        )}
+        </>
     );
 }

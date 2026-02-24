@@ -7,13 +7,16 @@ import {
   XMarkIcon,
   EyeIcon,
   ArrowPathRoundedSquareIcon,
-  PaperAirplaneIcon
+  PaperAirplaneIcon,
+  GiftIcon,
 } from '@heroicons/react/24/outline';
 import { userService } from '@/app/lib/api/services/user-service';
 import { UserSummaryDto, GetAllUsersRequest } from '@/app/data/types/vendor';
 import { PaginatedResponse } from '@/app/data/types/api';
 import SendOtpModal from './SendOtpModal';
 import UserDetailsModal from './UserDetailsModal';
+import DeliveryCreditsModal from '../customers/DeliveryCreditsModal';
+import BulkDeliveryCreditsModal from './BulkDeliveryCreditsModal';
 
 interface Props {
   filters: GetAllUsersRequest;
@@ -28,6 +31,8 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
   const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserSummaryDto | null>(null);
+  const [grantTarget, setGrantTarget] = useState<UserSummaryDto | null>(null);
+  const [showBulkModal, setShowBulkModal] = useState(false);
 
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -141,12 +146,21 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
           <h3 className="text-lg font-semibold text-text-primary">
             Customers ({users?.totalCount || 0})
           </h3>
-          <button
-            onClick={fetchUsers}
-            className="p-2 text-text-tertiary hover:text-text-primary hover:bg-surface-100 rounded-button"
-          >
-            <ArrowPathRoundedSquareIcon className="h-5 w-5" />
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setShowBulkModal(true)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-button transition-colors"
+            >
+              <GiftIcon className="h-4 w-4" />
+              Grant Credits
+            </button>
+            <button
+              onClick={fetchUsers}
+              className="p-2 text-text-tertiary hover:text-text-primary hover:bg-surface-100 rounded-button"
+            >
+              <ArrowPathRoundedSquareIcon className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -254,6 +268,16 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
+                        setGrantTarget(user);
+                      }}
+                      className="p-2 text-text-tertiary hover:text-primary-600 hover:bg-primary-50 rounded-button transition-colors"
+                      title="Grant delivery credits"
+                    >
+                      <GiftIcon className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
                         handleViewDetails(user);
                       }}
                       className="p-2 text-text-tertiary hover:text-primary-600 hover:bg-primary-50 rounded-button transition-colors"
@@ -326,6 +350,22 @@ export default function UserManagementTable({ filters, onFiltersChange, onUserSe
         isOpen={detailsModalOpen}
         onClose={handleCloseDetailsModal}
         user={selectedUser}
+      />
+
+      {/* Per-row delivery credits grant modal */}
+      {grantTarget && (
+        <DeliveryCreditsModal
+          userId={grantTarget.id}
+          customerName={grantTarget.fullName}
+          isOpen={!!grantTarget}
+          onClose={() => setGrantTarget(null)}
+        />
+      )}
+
+      {/* Bulk delivery credits modal */}
+      <BulkDeliveryCreditsModal
+        isOpen={showBulkModal}
+        onClose={() => setShowBulkModal(false)}
       />
     </div>
   );

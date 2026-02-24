@@ -9,7 +9,11 @@ import {
     SuspendCustomerRequest,
     UpdateCustomerStatusRequest,
     DeleteCustomerRequest,
-    CustomerActionRequest
+    CustomerActionRequest,
+    GrantDeliveryCreditsRequest,
+    GrantDeliveryCreditsResult,
+    RevokeDeliveryCreditsRequest,
+    RevokeDeliveryCreditsResult,
 } from '@/app/data/types/customer';
 import { PaginatedResponse } from '@/app/data/types/api';
 
@@ -118,6 +122,30 @@ export function useUpdateCustomerStatus() {
             queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.lists() });
             queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.detail(variables.customerId) });
             queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.stats() });
+        },
+    });
+}
+
+export function useGrantDeliveryCredits() {
+    const queryClient = useQueryClient();
+
+    return useMutation<GrantDeliveryCreditsResult, Error, GrantDeliveryCreditsRequest>({
+        mutationFn: (request) => customerRepo.grantDeliveryCredits(request),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.lists() });
+            queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.details() });
+        },
+    });
+}
+
+export function useRevokeDeliveryCredits() {
+    const queryClient = useQueryClient();
+
+    return useMutation<RevokeDeliveryCreditsResult, Error, RevokeDeliveryCreditsRequest>({
+        mutationFn: (request) => customerRepo.revokeDeliveryCredits(request),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.lists() });
+            queryClient.invalidateQueries({ queryKey: CUSTOMER_QUERY_KEYS.details() });
         },
     });
 }

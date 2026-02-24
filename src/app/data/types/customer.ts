@@ -31,6 +31,10 @@ export interface Customer extends BaseEntity {
     lastOrderDate?: string;
     customerSince: string;
     lastActivity: string;
+
+    // Delivery credits
+    activeDeliveryCredits: number;
+    deliveryCreditsExpiry?: string | null;
 }
 
 export interface CustomerAddress extends BaseEntity {
@@ -45,6 +49,7 @@ export interface CustomerAddress extends BaseEntity {
 
 export interface CustomerSummary {
     id: string;
+    userId: string;
     fullName: string;
     email: string;
     status: string;
@@ -52,6 +57,37 @@ export interface CustomerSummary {
     totalSpent: number;
     createdAt: string;
     lastLoginAt?: string;
+    activeDeliveryCredits: number;
+    deliveryCreditsExpiry?: string | null;
+}
+
+export interface GrantDeliveryCreditsRequest {
+    userIds?: string[];
+    sendToAll?: boolean;
+    credits: number;
+    reason?: string;
+    expiryDays?: number;
+}
+
+export interface GrantDeliveryCreditsResult {
+    totalRequested: number;
+    successful: number;
+    failed: number;
+    failedUserIds: string[];
+}
+
+export interface RevokeDeliveryCreditsRequest {
+    userIds?: string[];
+    removeFromAll?: boolean;
+    reason?: string;
+}
+
+export interface RevokeDeliveryCreditsResult {
+    totalRequested: number;
+    successful: number;
+    failed: number;
+    creditsRevoked: number;
+    failedUserIds: string[];
 }
 
 export interface CustomerOrderHistory {

@@ -6,7 +6,11 @@ import {
     CustomerStats,
     SuspendCustomerRequest,
     UpdateCustomerStatusRequest,
-    CustomerActionRequest
+    CustomerActionRequest,
+    GrantDeliveryCreditsRequest,
+    GrantDeliveryCreditsResult,
+    RevokeDeliveryCreditsRequest,
+    RevokeDeliveryCreditsResult,
 } from '@/app/data/types/customer';
 import { BaseRepository } from '../base-repository';
 import { PaginatedResponse } from '@/app/data/types/api';
@@ -104,6 +108,14 @@ export class CustomerRepository extends BaseRepository<Customer> {
 
     async getCustomerActivities(customerId: string, limit: number = 20): Promise<CustomerActivityLog[]> {
         return this.get<CustomerActivityLog[]>(`/${customerId}/activities?limit=${limit}`);
+    }
+
+    async grantDeliveryCredits(request: GrantDeliveryCreditsRequest): Promise<GrantDeliveryCreditsResult> {
+        return this.post<GrantDeliveryCreditsResult>('/delivery-credits', request as unknown as Record<string, unknown>);
+    }
+
+    async revokeDeliveryCredits(request: RevokeDeliveryCreditsRequest): Promise<RevokeDeliveryCreditsResult> {
+        return this.deleteRequest<RevokeDeliveryCreditsResult>('/delivery-credits', request as unknown as Record<string, unknown>);
     }
 
     // Convenience methods for common actions

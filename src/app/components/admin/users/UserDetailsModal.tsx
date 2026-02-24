@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { 
   XMarkIcon,
@@ -14,9 +14,13 @@ import {
   CheckBadgeIcon,
   BuildingStorefrontIcon,
   TruckIcon,
-  StarIcon
+  StarIcon,
+  GiftIcon,
 } from '@heroicons/react/24/outline';
 import { UserSummaryDto } from '@/app/data/types/vendor';
+import { message } from 'antd';
+import { useRevokeDeliveryCredits } from '@/app/lib/hooks/api-hooks.ts/use-customer';
+import DeliveryCreditsModal from '../customers/DeliveryCreditsModal';
 
 interface UserDetailsModalProps {
   isOpen: boolean;
@@ -25,6 +29,10 @@ interface UserDetailsModalProps {
 }
 
 export default function UserDetailsModal({ isOpen, onClose, user }: UserDetailsModalProps) {
+  const revokeMutation = useRevokeDeliveryCredits();
+  const [showGrantModal, setShowGrantModal] = useState(false);
+  const [confirmRevoke, setConfirmRevoke] = useState(false);
+
   if (!user) return null;
 
   const formatDate = (dateString: string | null) => {
@@ -88,6 +96,7 @@ export default function UserDetailsModal({ isOpen, onClose, user }: UserDetailsM
   };
 
   return (
+    <>
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
         <Transition.Child
@@ -281,6 +290,80 @@ export default function UserDetailsModal({ isOpen, onClose, user }: UserDetailsM
                   </div>
                 </div>
 
+                {/* Delivery Credits — customers only */}
+                {user.role === 'Customer' && (
+                  <div className="mt-6 p-4 bg-primary-50 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-2">
+                        <GiftIcon className="h-5 w-5 text-primary-600" />
+                        <p className="text-sm font-medium text-primary-800">Delivery Credits</p>
+                      </div>
+                      <button
+                        onClick={() => setShowGrantModal(true)}
+                        className="text-xs px-3 py-1 bg-primary-100 text-primary-700 hover:bg-primary-200 rounded-lg transition-colors font-medium"
+                      >
+                        + Grant Credits
+                      </button>
+                    </div>
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <div className="flex items-baseline space-x-2">
+                          <span className="text-2xl font-bold text-primary-900">
+                            {user.activeDeliveryCredits ?? 0}
+                          </span>
+                          <span className="text-sm text-primary-700">active free deliveries</span>
+                        </div>
+                        {user.deliveryCreditsExpiry ? (
+                          <p className="text-xs text-amber-700 mt-1">
+                            Earliest expiry: {formatDate(user.deliveryCreditsExpiry)}
+                          </p>
+                        ) : (user.activeDeliveryCredits ?? 0) > 0 ? (
+                          <p className="text-xs text-primary-600 mt-1">No expiry set</p>
+                        ) : (
+                          <p className="text-xs text-primary-600 mt-1">No active credits</p>
+                        )}
+                      </div>
+                      {(user.activeDeliveryCredits ?? 0) > 0 && (
+                        <div className="flex-shrink-0">
+                          {confirmRevoke ? (
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs text-gray-600">Revoke all?</span>
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const result = await revokeMutation.mutateAsync({ userIds: [user.id] });
+                                    message.success(`${result.creditsRevoked} delivery credit${result.creditsRevoked !== 1 ? 's' : ''} revoked from ${user.fullName}.`);
+                                  } catch {
+                                    message.error('Failed to revoke delivery credits. Please try again.');
+                                  }
+                                  setConfirmRevoke(false);
+                                }}
+                                disabled={revokeMutation.isPending}
+                                className="text-xs px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:opacity-50"
+                              >
+                                {revokeMutation.isPending ? 'Revoking...' : 'Confirm'}
+                              </button>
+                              <button
+                                onClick={() => setConfirmRevoke(false)}
+                                className="text-xs px-2 py-1 border border-gray-300 text-gray-600 rounded hover:bg-white transition-colors"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => setConfirmRevoke(true)}
+                              className="text-xs px-3 py-1 text-red-600 hover:bg-red-50 border border-red-200 rounded-lg transition-colors"
+                            >
+                              Revoke
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Activity Status */}
                 {(user.hasActiveOrders || user.hasActiveDeliveries) && (
                   <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
@@ -338,5 +421,13 @@ export default function UserDetailsModal({ isOpen, onClose, user }: UserDetailsM
         </div>
       </Dialog>
     </Transition>
+
+    <DeliveryCreditsModal
+      userId={user.id}
+      customerName={user.fullName}
+      isOpen={showGrantModal}
+      onClose={() => setShowGrantModal(false)}
+    />
+    </>
   );
 }

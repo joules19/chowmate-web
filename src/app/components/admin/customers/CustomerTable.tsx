@@ -7,12 +7,14 @@ import {
     PlayIcon,
     TrashIcon,
     ChevronUpIcon,
-    ChevronDownIcon
+    ChevronDownIcon,
+    GiftIcon,
 } from "@heroicons/react/24/outline";
 import { CustomerFilters, CustomerSummary } from "../../../data/types/customer";
 import { useCustomers, useSuspendCustomer, useActivateCustomer, useDeleteCustomer } from '@/app/lib/hooks/api-hooks.ts/use-customer';
 import ActionConfirmModal from './ActionConfirmModal';
 import CustomerModal from './CustomerModal';
+import DeliveryCreditsModal from './DeliveryCreditsModal';
 
 interface Props {
     filters: CustomerFilters;
@@ -44,6 +46,7 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
         type: 'suspend' | 'activate' | 'delete';
         customer: CustomerSummary;
     } | null>(null);
+    const [grantTarget, setGrantTarget] = useState<CustomerSummary | null>(null);
 
     const { data: customersData, isLoading, error, refetch } = useCustomers(filters);
     
@@ -323,6 +326,17 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
+                                                        setGrantTarget(customer);
+                                                    }}
+                                                    className="text-primary-600 hover:text-primary-700 p-1 rounded transition-colors"
+                                                    title="Grant Delivery Credits"
+                                                >
+                                                    <GiftIcon className="h-4 w-4" />
+                                                </button>
+
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
                                                         handleActionClick('delete', customer);
                                                     }}
                                                     className="text-red-600 hover:text-red-700 p-1 rounded transition-colors"
@@ -427,6 +441,16 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
                         setShowModal(false);
                         setSelectedCustomer(null);
                     }}
+                />
+            )}
+
+            {/* Delivery Credits Modal */}
+            {grantTarget && (
+                <DeliveryCreditsModal
+                    userId={grantTarget.userId}
+                    customerName={grantTarget.fullName}
+                    isOpen={!!grantTarget}
+                    onClose={() => setGrantTarget(null)}
                 />
             )}
 
