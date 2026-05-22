@@ -1,5 +1,9 @@
-"use client";
+import type { Metadata } from "next";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+
+export const metadata: Metadata = {
+  title: "Product Management",
+};
 import Link from "next/link";
 import { Button } from "../../components/ui/AppButton";
 import Navbar from "../../components/navigation/NavBar";

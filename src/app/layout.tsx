@@ -13,8 +13,11 @@ import { ToastProvider } from "./providers/ToastProvider";
 import CookieConsentBanner from "./components/CookieConsentBanner";
 
 export const metadata: Metadata = {
-  title: "Food Delivery App",
-  description: "Food delivery made easy",
+  title: {
+    template: "%s | Chowmate",
+    default: "Chowmate",
+  },
+  description: "Fast and reliable food delivery made easy",
 };
 
 const montserrat = Montserrat({

@@ -1,5 +1,9 @@
-"use client";
+import type { Metadata } from "next";
 import { Card, Row, Col } from "antd";
+
+export const metadata: Metadata = {
+  title: "Knowledge Base",
+};
 import { PlayCircleOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import Navbar from "../components/navigation/NavBar";

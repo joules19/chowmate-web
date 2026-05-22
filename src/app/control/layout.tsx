@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import { ReactNode } from "react";
 import AdminSidebar from "../components/admin/layout/AdminSidebar";
 import AdminHeader from "../components/admin/layout/AdminHeader";
 import AdminProtectedRoute from "../components/admin/layout/AdminProtectedRoute";
 import NavigationProgress from "../components/admin/shared/NavigationProgress";
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Chowmate Admin",
+    default: "Chowmate Admin",
+  },
+};
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (

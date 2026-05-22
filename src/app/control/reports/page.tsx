@@ -1,6 +1,9 @@
-"use client";
-
+import type { Metadata } from "next";
 import { DocumentChartBarIcon } from "@heroicons/react/24/outline";
+
+export const metadata: Metadata = {
+  title: "Reports",
+};
 import CustomerClassReportCard from "@/app/components/admin/reports/CustomerClassReportCard";
 import LowFrequencyCustomerReportCard from "@/app/components/admin/reports/LowFrequencyCustomerReportCard";
 import PermissionGuard from "@/app/components/admin/guards/PermissionGuard";

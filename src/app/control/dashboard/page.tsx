@@ -1,6 +1,9 @@
-"use client";
-
+import type { Metadata } from "next";
 import DashboardStats from "../../components/admin/dashboard/DashboardStats";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 import RevenueChart from "../../components/admin/dashboard/RevenueChart";
 import OrderStatusChart from "../../components/admin/dashboard/OrderStatusChart";
 import RecentActivities from "../../components/admin/dashboard/RecentActivities";

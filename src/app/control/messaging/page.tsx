@@ -1,6 +1,9 @@
-"use client";
-
+import type { Metadata } from "next";
 import { ChatBubbleLeftRightIcon, EnvelopeIcon, DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
+
+export const metadata: Metadata = {
+  title: "Messaging",
+};
 import PushNotificationCard from "@/app/components/admin/messaging/PushNotificationCard";
 import PermissionGuard from "@/app/components/admin/guards/PermissionGuard";
 import { Permission } from "@/app/data/types/permissions";

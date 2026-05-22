@@ -1,6 +1,9 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Access Denied",
+};
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 export default function UnauthorizedPage() {
