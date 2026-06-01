@@ -108,6 +108,22 @@ export const useCancelOrder = () => {
   });
 };
 
+// Hook for admin force-completing an order
+export const useAdminCompleteOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ orderId, reason }: { orderId: string; reason: string }) =>
+      orderRepository.adminCompleteOrder(orderId, reason),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'pending-assignment'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'live'] });
+      queryClient.invalidateQueries({ queryKey: ['orders', 'analytics'] });
+    },
+  });
+};
+
 // Hook for setting order to preparing (Admin accepting order on behalf of vendor)
 export const useSetOrderToPreparing = () => {
   const queryClient = useQueryClient();

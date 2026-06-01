@@ -13,7 +13,7 @@ import {
 import DataTable, { Column } from "../shared/DataTable";
 import { SearchFilters } from "../../../data/types/api";
 import { AllOrdersDto } from "@/app/data/types/order";
-import { useOrders, useCancelOrder, useSetOrderToPreparing } from "@/app/lib/hooks/api-hooks.ts/use-order-management";
+import { useOrders, useCancelOrder, useSetOrderToPreparing, useAdminCompleteOrder } from "@/app/lib/hooks/api-hooks.ts/use-order-management";
 import { OrderFilters } from "@/app/lib/api/repositories/order-repository";
 import { formatCurrency } from "@/app/lib/utils/currency";
 import OrderDetailsModal from "./OrderDetailsModal";
@@ -21,6 +21,7 @@ import RiderReplacementModal from "./RiderReplacementModal";
 import OrderCancellationModal from "./OrderCancellationModal";
 import OrderEarningsModal from "./OrderEarningsModal";
 import OrderAcceptanceModal from "./OrderAcceptanceModal";
+import OrderForceCompleteModal from "./OrderForceCompleteModal";
 import { Toast } from "../../ui/SimpleToast";
 
 interface Props {
@@ -36,10 +37,12 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
   const [showCancellationModal, setShowCancellationModal] = useState(false);
   const [showEarningsModal, setShowEarningsModal] = useState(false);
   const [showAcceptanceModal, setShowAcceptanceModal] = useState(false);
+  const [showForceCompleteModal, setShowForceCompleteModal] = useState(false);
   const [orderForRiderReplacement, setOrderForRiderReplacement] = useState<AllOrdersDto | null>(null);
   const [orderForCancellation, setOrderForCancellation] = useState<AllOrdersDto | null>(null);
   const [orderForEarnings, setOrderForEarnings] = useState<AllOrdersDto | null>(null);
   const [orderForAcceptance, setOrderForAcceptance] = useState<AllOrdersDto | null>(null);
+  const [orderForForceComplete, setOrderForForceComplete] = useState<AllOrdersDto | null>(null);
   const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
     show: false,
     message: '',
@@ -93,6 +96,7 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
   const { data: orders, isLoading: loading, error, refetch: refreshOrders, isFetching: isRefreshing } = useOrders(orderFilters, { enabled: true });
   const cancelOrderMutation = useCancelOrder();
   const setOrderToPreparingMutation = useSetOrderToPreparing();
+  const adminCompleteOrderMutation = useAdminCompleteOrder();
 
   // Update stats when orders data changes
   useEffect(() => {
@@ -148,6 +152,32 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
       setToast({
         show: true,
         message: 'Failed to accept order. Please try again.',
+        type: 'error'
+      });
+    }
+  };
+
+  const handleForceCompleteOrder = (order: AllOrdersDto) => {
+    setOrderForForceComplete(order);
+    setShowForceCompleteModal(true);
+  };
+
+  const handleConfirmForceComplete = async (orderId: string, reason: string) => {
+    try {
+      await adminCompleteOrderMutation.mutateAsync({ orderId, reason });
+      const order = orderForForceComplete;
+      setShowForceCompleteModal(false);
+      setOrderForForceComplete(null);
+      setToast({
+        show: true,
+        message: `Order ${order?.orderId} has been marked as completed.`,
+        type: 'success'
+      });
+    } catch (error) {
+      console.error('Failed to force complete order:', error);
+      setToast({
+        show: true,
+        message: 'Failed to complete order. Please try again.',
         type: 'error'
       });
     }
@@ -349,6 +379,21 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
                 </button>
               )}
 
+              {/* Force Complete button - only show for OutForDelivery orders */}
+              {(order.statusText === 'OutForDelivery' || order.status === 5) && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleForceCompleteOrder(order);
+                  }}
+                  disabled={adminCompleteOrderMutation.isPending}
+                  className="text-green-600 hover:text-green-700 p-1 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Force Complete Order"
+                >
+                  <CheckCircleIcon className="h-4 w-4" />
+                </button>
+              )}
+
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -467,6 +512,17 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
         order={orderForAcceptance}
         onConfirm={handleConfirmAcceptance}
         isLoading={setOrderToPreparingMutation.isPending}
+      />
+
+      <OrderForceCompleteModal
+        isOpen={showForceCompleteModal}
+        onClose={() => {
+          setShowForceCompleteModal(false);
+          setOrderForForceComplete(null);
+        }}
+        order={orderForForceComplete}
+        onConfirm={handleConfirmForceComplete}
+        isLoading={adminCompleteOrderMutation.isPending}
       />
 
       {toast.show && (

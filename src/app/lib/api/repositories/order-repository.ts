@@ -75,6 +75,10 @@ export class OrderRepository extends BaseRepository<Order> {
     return this.patch<boolean>(`/${orderId}/preparing`, {});
   }
 
+  async adminCompleteOrder(orderId: string, reason?: string): Promise<boolean> {
+    return this.post<boolean>(`/${orderId}/complete`, { reason });
+  }
+
   async refund(id: string, amount?: number, reason?: string): Promise<Order> {
     return this.post<Order>(`/${id}/refund`, { amount, reason });
   }
