@@ -41,7 +41,6 @@ export default function PromotionManagementPage() {
   };
 
   const handleDetailsClick = (promotion: ProductPromotion) => {
-    console.log('View details for:', promotion.id);
   };
 
   const handleModalClose = () => {

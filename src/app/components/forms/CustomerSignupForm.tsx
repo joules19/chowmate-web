@@ -60,10 +60,6 @@ const CustomerSignupForm: React.FC = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log("Submitted values:", values);
-      console.log(password);
-      console.log(skills);
-
       if (password !== confirmPassword) {
         message.warning("Passwords do not match");
         return;
@@ -139,9 +135,9 @@ const CustomerSignupForm: React.FC = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="w-full h-[42px] px-3 rounded-md text-sm text-[#4c4c4c]"
-            // status={
-            //   formik.touched.firstName && formik.errors.firstName ? "error" : ""
-            // }
+          // status={
+          //   formik.touched.firstName && formik.errors.firstName ? "error" : ""
+          // }
           />
           {formik.touched.firstName && formik.errors.firstName && (
             <span className="text-red-500 text-xs mt-1">
@@ -162,9 +158,9 @@ const CustomerSignupForm: React.FC = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="w-full h-[42px] px-3 rounded-md text-sm text-[#4c4c4c]"
-            // status={
-            //   formik.touched.lastName && formik.errors.lastName ? "error" : ""
-            // }
+          // status={
+          //   formik.touched.lastName && formik.errors.lastName ? "error" : ""
+          // }
           />
           {formik.touched.lastName && formik.errors.lastName && (
             <span className="text-red-500 text-xs mt-1">
@@ -187,7 +183,7 @@ const CustomerSignupForm: React.FC = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="w-full h-[42px] px-3 rounded-md text-xs text-[#4c4c4c]"
-            // status={formik.touched.email && formik.errors.email ? "error" : ""}
+          // status={formik.touched.email && formik.errors.email ? "error" : ""}
           />
           {formik.touched.email && formik.errors.email && (
             <span className="text-red-500 text-xs mt-1">
@@ -208,7 +204,7 @@ const CustomerSignupForm: React.FC = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="w-full h-[42px] px-3 rounded-md text-sm text-[#4c4c4c]"
-            // status={formik.touched.phone && formik.errors.phone ? "error" : ""}
+          // status={formik.touched.phone && formik.errors.phone ? "error" : ""}
           />
           {formik.touched.phone && formik.errors.phone && (
             <span className="text-red-500 text-xs mt-1">

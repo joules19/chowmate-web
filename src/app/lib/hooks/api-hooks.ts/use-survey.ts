@@ -58,7 +58,6 @@ export const useSubmitSurveyResponse = () => {
       //   queryKey: surveyKeys.canSubmit(variables.surveyId, variables.sessionId)
       // });
       
-      console.log('Survey response submitted successfully:', data);
     },
     onError: (error) => {
       console.error('Error submitting survey response:', error);

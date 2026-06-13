@@ -50,14 +50,6 @@ export default function CustomerTable({ filters, onFiltersChange }: Props) {
 
     const { data: customersData, isLoading, error, refetch } = useCustomers(filters);
     
-    // Debug logging to see what data we're getting
-    console.log('🔍 Customer Table Data:', {
-        customersData,
-        isLoading,
-        error,
-        customersArray: customersData?.items,
-        customersCount: customersData?.items?.length
-    });
     const suspendMutation = useSuspendCustomer();
     const activateMutation = useActivateCustomer();
     const deleteMutation = useDeleteCustomer();

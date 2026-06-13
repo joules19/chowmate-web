@@ -143,7 +143,6 @@ export default function SurveyInterface({ survey }: SurveyInterfaceProps) {
       const result = await submitSurveyMutation.mutateAsync(submissionData);
 
       if (result.success) {
-        console.log('Survey submitted successfully:', result.data);
         setCurrentStep(totalSteps);
       } else {
         console.error('Survey submission failed:', result.message);

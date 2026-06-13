@@ -67,7 +67,7 @@ export default function UserRoleSwitcher({ onSuccess, onError }: Props) {
 // Export function for success/error handling
 export const showRoleSwitchSuccess = (result: RoleSwitchResponse) => {
     // You can integrate with your notification system here
-    console.log(`Successfully switched ${result.fromRole} to ${result.toRole}`);
+
 };
 
 export const showRoleSwitchError = (error: Error) => {

@@ -33,11 +33,6 @@ apiClient.interceptors.request.use(
       delete config.headers['Content-Type'];
     }
 
-    // Log request in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`);
-    }
-
     return config;
   },
   (error: AxiosError) => {
@@ -49,10 +44,6 @@ apiClient.interceptors.request.use(
 // Response interceptor for handling responses and errors
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    // Log successful responses in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`✅ API Response: ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data);
-    }
     return response;
   },
   async (error: AxiosError) => {
@@ -181,15 +172,6 @@ export const apiRequest = async <T>(
 ): Promise<T> => {
   try {
     const response = await requestFn();
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔍 Raw API Response Structure:', {
-        status: response.status,
-        data: response.data,
-        dataType: typeof response.data,
-        dataKeys: Object.keys(response.data || {}),
-      });
-    }
 
     return handleApiResponse(response);
   } catch (error) {

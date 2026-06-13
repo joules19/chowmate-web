@@ -21,16 +21,6 @@ export default function CustomerModal({ customerId, isOpen, onClose }: CustomerM
     const [confirmRevoke, setConfirmRevoke] = useState(false);
     // const { data: activities, isLoading: activitiesLoading } = useCustomerActivities(customerId, 10);
 
-    // Debug logging to check customer data
-    if (customer && process.env.NODE_ENV === 'development') {
-        console.log('Customer data:', {
-            id: customer.id,
-            fullName: customer.fullName,
-            totalOrders: customer.totalOrders,
-            totalSpent: customer.totalSpent,
-            status: customer.status
-        });
-    }
 
     const getStatusBadge = (status: string) => {
         const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";

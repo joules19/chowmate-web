@@ -13,8 +13,6 @@ export default function CookieConsentExample() {
   useEffect(() => {
     if (hasConsent) {
       // Initialize analytics only if user gave consent
-      console.log("User has consented to cookies - safe to load analytics");
-
       // Example: Initialize Google Analytics
       // window.gtag('config', 'GA_MEASUREMENT_ID');
 
@@ -24,7 +22,6 @@ export default function CookieConsentExample() {
       // Example: Initialize other tracking services
       // mixpanel.init('YOUR_TOKEN');
     } else {
-      console.log("User has not consented to cookies - skip analytics");
     }
   }, [hasConsent]);
 

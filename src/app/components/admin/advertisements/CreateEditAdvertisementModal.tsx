@@ -119,12 +119,6 @@ export default function CreateEditAdvertisementModal({ isOpen, onClose, advertis
           const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '1';
           formData.append('advertismentBackgroundColor', backgroundColorValue);
 
-          // Debug: Log FormData contents
-          console.log('Update FormData being sent:');
-          formData.forEach((value, key) => {
-            console.log(`${key}:`, value);
-          });
-
           // Use FormData for update
           await updateMutation.mutateAsync({
             advertisementId: advertisement.id,
@@ -150,11 +144,6 @@ export default function CreateEditAdvertisementModal({ isOpen, onClose, advertis
           };
           const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '1';
           formData.append('advertismentBackgroundColor', backgroundColorValue);
-
-          console.log('Update FormData (no image) being sent:');
-          formData.forEach((value, key) => {
-            console.log(`${key}:`, value);
-          });
 
           await updateMutation.mutateAsync({
             advertisementId: advertisement.id,
@@ -187,12 +176,6 @@ export default function CreateEditAdvertisementModal({ isOpen, onClose, advertis
         };
         const backgroundColorValue = backgroundColorMap[backgroundColor as keyof typeof backgroundColorMap] || '1';
         formData.append('advertismentBackgroundColor', backgroundColorValue);
-
-        // Debug: Log FormData contents
-        console.log('FormData being sent:');
-        formData.forEach((value, key) => {
-          console.log(`${key}:`, value);
-        });
 
         await createMutation.mutateAsync(formData);
         message.success('Advertisement created successfully');

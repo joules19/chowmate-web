@@ -85,7 +85,6 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
 
     changePasswordMutation.mutate(formData, {
       onSuccess: () => {
-        console.log('Password changed successfully');
         setSuccessMessage("Password changed successfully!");
         const currentUser = AuthService.getUser();
         setFormData({

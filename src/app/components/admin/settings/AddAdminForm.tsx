@@ -49,7 +49,6 @@ export default function AddAdminForm() {
 
     addAdminMutation.mutate(submitData, {
       onSuccess: (data) => {
-        console.log('Admin creation successful:', data);
         const adminName = `${data.firstName} ${data.lastName}`;
         setSuccessMessage(
           formData.generatePassword 

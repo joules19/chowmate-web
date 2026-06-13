@@ -183,8 +183,7 @@ export default function OrderManagementTable({ filters, onFiltersChange, onStats
     }
   };
 
-  const handleTrackOrder = (order: AllOrdersDto) => {
-    console.log('Track order:', order);
+  const handleTrackOrder = (_order: AllOrdersDto) => {
     // TODO: Implement tracking functionality
   };
 

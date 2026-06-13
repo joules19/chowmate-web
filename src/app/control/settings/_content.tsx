@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { UserPlusIcon, KeyIcon, TruckIcon } from "@heroicons/react/24/outline";
+import { UserPlusIcon, KeyIcon, TruckIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import AddAdminForm from "../../components/admin/settings/AddAdminForm";
 import SystemSettingsPanel from "../../components/admin/settings/SystemSettingsPanel";
 import PricingTiersPanel from "../../components/admin/settings/PricingTiersPanel";
+import AvatarPresetsPanel from "../../components/admin/settings/AvatarPresetsPanel";
 import PermissionGuard from "../../components/admin/guards/PermissionGuard";
 import { Permission } from "../../data/types/permissions";
 
@@ -23,6 +24,11 @@ const tabs = [
     id: "delivery-pricing",
     name: "Delivery Pricing",
     icon: TruckIcon,
+  },
+  {
+    id: "avatar-presets",
+    name: "Avatar Presets",
+    icon: UserCircleIcon,
   },
 ];
 
@@ -76,6 +82,8 @@ export default function SettingsPage() {
           {activeTab === "system-settings" && <SystemSettingsPanel />}
 
           {activeTab === "delivery-pricing" && <PricingTiersPanel />}
+
+          {activeTab === "avatar-presets" && <AvatarPresetsPanel />}
         </div>
       </div>
     </PermissionGuard>

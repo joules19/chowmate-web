@@ -51,12 +51,9 @@ export const useAdminSurveyAnalytics = (surveyId: string, enabled = true) => {
 
 // Get survey responses
 export const useAdminSurveyResponses = (surveyId: string, filters: SurveyResponseFilterDto, enabled = true) => {
-  console.log('🎯 useAdminSurveyResponses called with:', { surveyId, enabled, filters });
-  
   return useQuery({
     queryKey: surveyKeys.responses(surveyId, filters),
     queryFn: () => {
-      console.log('🚀 Survey responses query function executing...');
       return adminSurveyRepository.getSurveyResponses(surveyId, filters);
     },
     enabled: !!surveyId && enabled,

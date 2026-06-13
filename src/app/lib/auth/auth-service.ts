@@ -20,8 +20,6 @@ export class AuthService {
       );
 
       const authData = response.data.data;
-      console.log('Login response:', authData);
-
       if (!authData.accessToken || !authData.user) {
         throw new Error('Invalid login response - missing required data');
       }

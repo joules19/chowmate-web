@@ -55,7 +55,6 @@ export default function WalletTransactionsTable({ onTransactionSelect }: Props) 
                     hasNextPage: response.data.hasNextPage,
                     hasPreviousPage: response.data.hasPreviousPage
                 };
-                console.log('🔍 Pagination Data:', paginationData);
                 setPagination(paginationData);
             } else {
                 setError(response.message || 'Failed to load transactions');

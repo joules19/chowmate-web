@@ -34,7 +34,6 @@ export default function AdvertisementManagementPage() {
 
   const handleDetailsClick = (advertisement: Advertisement) => {
     // Details view functionality can be implemented later if needed
-    console.log('View details for:', advertisement.id);
   };
 
   const handleModalClose = () => {

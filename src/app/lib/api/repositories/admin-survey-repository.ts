@@ -308,13 +308,8 @@ export class AdminSurveyRepository extends BaseRepository<SurveyResponseDto> {
       if (filters.userEmail) queryParams.append('userEmail', filters.userEmail);
 
       const url = `/${surveyId}/responses?${queryParams.toString()}`;
-      console.log('🔍 Fetching survey responses from:', `${this.endpoint}${url}`);
-      console.log('🔍 Filters:', filters);
-      
       const data = await this.get<PagedResponse<SurveyResponseDetailDto>>(url);
-      
-      console.log('✅ Survey responses data received:', data);
-      
+
       return {
         success: true,
         data: data,

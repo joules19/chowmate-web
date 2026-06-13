@@ -82,13 +82,6 @@ export default function SurveyPage() {
 
   const apiError = error || (!activeSurveysResponse?.success && activeSurveysResponse?.message && surveyId !== 'chowmate-feedback');
 
-  // Debug logging
-  console.log('Survey ID:', surveyId);
-  console.log('Active Surveys Response:', activeSurveysResponse);
-  console.log('Active Surveys:', activeSurveys);
-  console.log('Selected Survey:', survey);
-  console.log('API Error:', apiError);
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50 flex items-center justify-center">

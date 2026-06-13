@@ -60,13 +60,10 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
     };
 
     const handlePaymentSuccess = async (reference: any) => {
-        console.log('Payment Success Callback:', reference);
         setPaymentStatus('processing');
         try {
             // Verify the payment with your backend
             const verificationResult = await paymentService.verifyWalletFundingForWeb(reference.reference, user.userId);
-            console.log('Verification Result:', verificationResult);
-
             if (verificationResult.isSuccess && verificationResult.statusCode === 200) {
                 // Check if the transaction status is Completed (1)
                 if (verificationResult.data.status === 1) {
@@ -92,7 +89,6 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
     };
 
     const handlePaymentClose = () => {
-        console.log('Payment Closed');
         if (paymentStatus === 'processing') return; // Don't allow closing during verification
         setPaymentStatus('failed');
         setError('Payment was cancelled or failed');
@@ -119,8 +115,6 @@ export default function WalletFundingModal({ isOpen, onClose, user, onSuccess }:
                 amount: parseFloat(amount),
                 email: user.email
             });
-
-            console.log('Initialize Result:', initResult);
 
             if (initResult.status) {
                 setPaymentReference(initResult.data.reference);

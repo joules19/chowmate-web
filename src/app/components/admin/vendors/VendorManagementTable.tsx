@@ -169,7 +169,6 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   };
 
   const handleSendBackToPending = (vendor: VendorSummary) => {
-    console.log('Send back to pending clicked for vendor:', vendor);
     setSelectedVendor(vendor);
     setShowSendBackModal(true);
   };
@@ -182,14 +181,11 @@ export default function VendorManagementTable({ filters, onFiltersChange, select
   const handleConfirmSendBackToPending = async (message: string) => {
     if (!selectedVendor) return;
 
-    console.log('Confirming send back to pending:', { vendorId: selectedVendor.id, message });
-
     try {
       await sendBackToPendingMutation.mutateAsync({
         vendorId: selectedVendor.id,
         message: message
       });
-      console.log('Successfully sent vendor back to pending');
     } catch (error) {
       console.error('Failed to send vendor back to pending:', error);
     } finally {

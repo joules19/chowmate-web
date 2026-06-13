@@ -19,8 +19,6 @@ interface Props {
 }
 
 const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
-  console.log('📋 SurveyResponsesModal rendered with:', { isOpen, surveyId });
-  
   const [filters, setFilters] = useState<SurveyResponseFilterDto>({
     page: 1,
     pageSize: 10,
@@ -31,8 +29,7 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
 
   // API hook - only fetch when modal is open and surveyId exists
   const hookEnabled = isOpen && !!surveyId;
-  console.log('🔧 Hook enabled status:', { isOpen, surveyId, hookEnabled });
-  
+
   const { data: responsesResponse, isLoading, error } = useAdminSurveyResponses(
     surveyId || '', 
     filters, 
@@ -48,16 +45,6 @@ const SurveyResponsesModal = ({ isOpen, onClose, surveyId }: Props) => {
     hasNextPage: false,
     hasPreviousPage: false
   };
-
-  console.log('📊 Responses data:', {
-    totalCount: responses.totalCount,
-    totalPages: responses.totalPages,
-    currentPage: responses.page,
-    dataLength: responses.data?.length,
-    hasNextPage: responses.hasNextPage,
-    hasPreviousPage: responses.hasPreviousPage,
-    filters
-  });
 
   const getStatusBadge = (status: ResponseStatus) => {
     const statusConfig = {

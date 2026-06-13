@@ -18,8 +18,6 @@ export default function CookieConsentBanner() {
   }, []);
 
   const handleAccept = () => {
-    console.log("🍪 Cookie consent accepted - User loves our cookies!");
-
     // Trigger confetti celebration!
     confetti({
       particleCount: 100,
@@ -53,7 +51,6 @@ export default function CookieConsentBanner() {
   };
 
   const handleDecline = () => {
-    console.log("Cookie consent declined - Essentials only");
     // Disable non-essential cookies/tracking
   };
 

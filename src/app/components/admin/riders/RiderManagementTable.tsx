@@ -134,8 +134,7 @@ export default function RiderManagementTable({ filters }: Props) {
       });
       
       // TODO: Assign zones separately if needed
-      console.log('Zone assignment needed:', data.zoneIds);
-      
+
     } catch (error) {
       console.error('Failed to approve rider:', error);
     } finally {

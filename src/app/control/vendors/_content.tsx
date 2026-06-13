@@ -43,7 +43,6 @@ export default function VendorManagementPage() {
     }
     // setBulkActionType(action);
     // setShowBulkModal(true);
-    console.log('Bulk action:', action, 'for vendors:', selectedVendors);
   };
 
   const handleBulkTransferToggle = () => {

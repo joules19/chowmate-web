@@ -45,9 +45,6 @@ const VendorSignupForm: React.FC = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log("Submitted values:", values);
-      console.log(password, confirmPassword);
-
       if (password !== confirmPassword) {
         message.warning("Passwords do not match");
         return;
