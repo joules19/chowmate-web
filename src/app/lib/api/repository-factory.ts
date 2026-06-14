@@ -2,6 +2,7 @@ import { DashboardRepository } from "./repositories/dashboard-repository";
 import { VendorRepository } from "./repositories/vendor-repository";
 import { OrderRepository } from "./repositories/order-repository";
 import { RiderRepository } from "./repositories/rider-repository";
+import { LoyaltyRepository } from "./repositories/loyalty-repository";
 // import { UserRepository } from "./repositories/user-repository";
 
 // Define repository types (uncomment and import as needed)
@@ -13,6 +14,7 @@ export class RepositoryFactory {
   private static riders: RiderRepository | null = null;
   private static users: UserRepository | null = null;
   private static dashboardRepo: DashboardRepository | null = null;
+  private static loyaltyRepo: LoyaltyRepository | null = null;
 
   static getDashboardRepository(): DashboardRepository {
     if (!this.dashboardRepo) {
@@ -50,12 +52,20 @@ export class RepositoryFactory {
     return this.users;
   }
 
+  static getLoyaltyRepository(): LoyaltyRepository {
+    if (!this.loyaltyRepo) {
+      this.loyaltyRepo = new LoyaltyRepository();
+    }
+    return this.loyaltyRepo;
+  }
+
   static clearCache(): void {
     this.vendors = null;
     this.orders = null;
     this.riders = null;
     this.users = null;
     this.dashboardRepo = null;
+    this.loyaltyRepo = null;
   }
 
   // Convenient static getters
@@ -73,5 +83,9 @@ export class RepositoryFactory {
 
   static get dashboard() {
     return this.getDashboardRepository();
+  }
+
+  static get loyalty() {
+    return this.getLoyaltyRepository();
   }
 }

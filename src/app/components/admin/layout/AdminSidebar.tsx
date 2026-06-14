@@ -22,7 +22,8 @@ import {
   ShieldExclamationIcon,
   ReceiptRefundIcon,
   ChatBubbleLeftRightIcon,
-  CubeIcon
+  CubeIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/outline";
 import { Bike } from 'lucide-react';
 import { PermissionService } from "../../../lib/auth/permissions";
@@ -141,6 +142,12 @@ const menuItems = [
   //   icon: ChartPieIcon,
   //   permission: Permission.VIEW_ANALYTICS
   // },
+  {
+    name: "Loyalty",
+    href: "/control/loyalty",
+    icon: TrophyIcon,
+    permission: Permission.VIEW_LOYALTY
+  },
   {
     name: "Settings",
     href: "/control/settings",

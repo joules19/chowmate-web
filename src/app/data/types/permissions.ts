@@ -100,6 +100,10 @@ export enum Permission {
   VIEW_SURVEY_RESPONSES = 'VIEW_SURVEY_RESPONSES',
   VIEW_SURVEY_ANALYTICS = 'VIEW_SURVEY_ANALYTICS',
 
+  // Loyalty
+  VIEW_LOYALTY = 'VIEW_LOYALTY',
+  MANAGE_LOYALTY = 'MANAGE_LOYALTY',
+
   // System
   VIEW_AUDIT_LOGS = 'VIEW_AUDIT_LOGS',
   MANAGE_SYSTEM = 'MANAGE_SYSTEM'
@@ -159,7 +163,9 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permission.DELETE_SURVEY,
     Permission.MANAGE_SURVEYS,
     Permission.VIEW_SURVEY_RESPONSES,
-    Permission.VIEW_SURVEY_ANALYTICS
+    Permission.VIEW_SURVEY_ANALYTICS,
+    Permission.VIEW_LOYALTY,
+    Permission.MANAGE_LOYALTY,
   ],
   [Role.MODERATOR]: [
     Permission.VIEW_DASHBOARD,
@@ -220,7 +226,9 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permission.EDIT_PROMOTION,
     Permission.DELETE_PROMOTION,
     Permission.TOGGLE_PROMOTION,
-    Permission.BULK_MANAGE_PROMOTIONS
+    Permission.BULK_MANAGE_PROMOTIONS,
+    Permission.VIEW_LOYALTY,
+    Permission.MANAGE_LOYALTY,
   ],
   [Role.RIDER_ADMIN]: [
     Permission.VIEW_DASHBOARD,
