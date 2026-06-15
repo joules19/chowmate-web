@@ -1,4 +1,5 @@
 import { BaseRepository } from '../base-repository';
+import apiClient, { ApiResponse, handleApiResponse } from '../axios-config';
 import {
   LoyaltyCustomer,
   LoyaltyCustomerFilters,
@@ -9,6 +10,8 @@ import {
   UpdateRankRequest,
   UpdateTierRequest,
 } from '@/app/data/types/loyalty';
+
+const BACKFILL_TIMEOUT = 0; // disable timeout — backfill is long-running
 
 export class LoyaltyRepository extends BaseRepository<LoyaltyCustomer> {
   constructor() {
@@ -44,11 +47,21 @@ export class LoyaltyRepository extends BaseRepository<LoyaltyCustomer> {
   }
 
   async runFullBackfill(): Promise<boolean> {
-    return this.post<boolean>('/backfill');
+    const response = await apiClient.post<ApiResponse<boolean>>(
+      `${this.endpoint}/backfill`,
+      undefined,
+      { timeout: BACKFILL_TIMEOUT }
+    );
+    return handleApiResponse(response);
   }
 
   async runCustomerBackfill(customerId: string): Promise<boolean> {
-    return this.post<boolean>(`/backfill/${customerId}`);
+    const response = await apiClient.post<ApiResponse<boolean>>(
+      `${this.endpoint}/backfill/${customerId}`,
+      undefined,
+      { timeout: BACKFILL_TIMEOUT }
+    );
+    return handleApiResponse(response);
   }
 
   async runMonthlyCredits(data: RunMonthlyCreditsRequest): Promise<boolean> {
