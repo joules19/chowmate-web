@@ -2,7 +2,7 @@
 
 import { Fragment, useState, useEffect } from 'react';
 import { XMarkIcon, MapPinIcon, PhoneIcon, UserIcon, BuildingStorefrontIcon, BanknotesIcon, TruckIcon } from '@heroicons/react/24/outline';
-import { AllOrdersDto } from '@/app/data/types/order';
+import { AllOrdersDto, OrderItemDetailsDto } from '@/app/data/types/order';
 import { formatCurrency } from '@/app/lib/utils/currency';
 import CopyButton from '@/app/components/ui/CopyButton';
 import { EarningsRepository } from '@/app/lib/api/repositories/earnings-repository';
@@ -18,6 +18,42 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   order: AllOrdersDto | null;
+}
+
+function OrderItemTile({ item }: { item: OrderItemDetailsDto }) {
+  return (
+    <div className="bg-white rounded-lg p-4 border border-gray-200">
+      <div className="flex items-start space-x-4">
+        {item.imageUrl && (
+          <div className="flex-shrink-0">
+            <img src={item.imageUrl} alt={item.productName} className="w-16 h-16 object-cover rounded-lg" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between items-start">
+            <div>
+              <h4 className="text-sm font-medium text-gray-900">{item.productName}</h4>
+              <p className="text-sm text-gray-600">Base Price: {formatCurrency(item.basePrice)} × {item.quantity}</p>
+            </div>
+            <div className="text-right"><p className="text-sm font-medium text-gray-900">{formatCurrency(item.totalPrice)}</p></div>
+          </div>
+          {item.selectedOptions && item.selectedOptions.length > 0 && (
+            <div className="mt-2">
+              <p className="text-xs text-gray-500 mb-1">Selected Options:</p>
+              <div className="space-y-1">
+                {item.selectedOptions.map((option, optionIndex) => (
+                  <div key={`${option.optionId}-${optionIndex}`} className="flex justify-between items-center text-xs">
+                    <span className="text-gray-600">• {option.optionName}</span>
+                    <span className="text-gray-900">+{formatCurrency(option.price)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function OrderDetailsModal({ isOpen, onClose, order }: Props) {
@@ -264,37 +300,55 @@ export default function OrderDetailsModal({ isOpen, onClose, order }: Props) {
                       <div>
                         <div className="bg-gray-50 rounded-lg p-4">
                           <h3 className="text-lg font-medium text-gray-900 mb-4">Order Items</h3>
-                          <div className="space-y-4">
-                            {order.orderItems.map((item, index) => (
-                              <div key={`${item.productId}-${index}`} className="bg-white rounded-lg p-4 border border-gray-200">
-                                <div className="flex items-start space-x-4">
-                                  {item.imageUrl && <div className="flex-shrink-0"><img src={item.imageUrl} alt={item.productName} className="w-16 h-16 object-cover rounded-lg" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} /></div>}
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex justify-between items-start">
-                                      <div>
-                                        <h4 className="text-sm font-medium text-gray-900">{item.productName}</h4>
-                                        <p className="text-sm text-gray-600">Base Price: {formatCurrency(item.basePrice)} × {item.quantity}</p>
-                                      </div>
-                                      <div className="text-right"><p className="text-sm font-medium text-gray-900">{formatCurrency(item.totalPrice)}</p></div>
-                                    </div>
-                                    {item.selectedOptions && item.selectedOptions.length > 0 && (
-                                      <div className="mt-2">
-                                        <p className="text-xs text-gray-500 mb-1">Selected Options:</p>
-                                        <div className="space-y-1">
-                                          {item.selectedOptions.map((option, optionIndex) => (
-                                            <div key={`${option.optionId}-${optionIndex}`} className="flex justify-between items-center text-xs">
-                                              <span className="text-gray-600">• {option.optionName}</span>
-                                              <span className="text-gray-900">+{formatCurrency(option.price)}</span>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
+                          {(() => {
+                            const hasPacks = order.orderItems.some(i => i.packNumber != null);
+                            if (!hasPacks) {
+                              return (
+                                <div className="space-y-4">
+                                  {order.orderItems.map((item, index) => (
+                                    <OrderItemTile key={`${item.productId}-${index}`} item={item} />
+                                  ))}
                                 </div>
+                              );
+                            }
+                            const packGroups: Record<number, typeof order.orderItems> = {};
+                            const unpackedItems: typeof order.orderItems = [];
+                            for (const item of order.orderItems) {
+                              if (item.packNumber != null) {
+                                if (!packGroups[item.packNumber]) packGroups[item.packNumber] = [];
+                                packGroups[item.packNumber].push(item);
+                              } else {
+                                unpackedItems.push(item);
+                              }
+                            }
+                            const sortedPackNums = Object.keys(packGroups).map(Number).sort((a, b) => a - b);
+                            return (
+                              <div className="space-y-4">
+                                {sortedPackNums.map(packNum => (
+                                  <div key={packNum}>
+                                    <div className="flex items-center gap-2 px-3 py-2 mb-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                      <span className="text-sm font-semibold text-yellow-700">Pack {packNum}</span>
+                                    </div>
+                                    <div className="space-y-3">
+                                      {packGroups[packNum].map((item, index) => (
+                                        <OrderItemTile key={`${item.productId}-${index}`} item={item} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                                {unpackedItems.length > 0 && (
+                                  <div>
+                                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 pl-1">Other Items</p>
+                                    <div className="space-y-3">
+                                      {unpackedItems.map((item, index) => (
+                                        <OrderItemTile key={`${item.productId}-${index}`} item={item} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
                               </div>
-                            ))}
-                          </div>
+                            );
+                          })()}
                         </div>
                       </div>
                     )}

@@ -63,6 +63,7 @@ export interface OrderItemDetailsDto {
   totalPrice: number;
   selectedOptions: OptionDto[];
   imageUrl?: string;
+  packNumber?: number;
 }
 
 export interface AllOrdersDto extends Record<string, unknown> {
