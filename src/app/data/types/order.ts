@@ -66,6 +66,11 @@ export interface OrderItemDetailsDto {
   packNumber?: number;
 }
 
+export interface PackBreakdownDto {
+  packNumber: number;
+  fee: number;
+}
+
 export interface AllOrdersDto extends Record<string, unknown> {
   id: string;
   orderId: string;
@@ -76,6 +81,7 @@ export interface AllOrdersDto extends Record<string, unknown> {
   subTotal: number;
   deliveryFee: number;
   serviceFee: number;
+  packFee: number;
 
   // Nested objects
   customer: CustomerInfo;
@@ -104,6 +110,7 @@ export interface AllOrdersDto extends Record<string, unknown> {
 
   // Order items
   orderItems: OrderItemDetailsDto[];
+  packBreakdown: PackBreakdownDto[];
 }
 
 export interface Order extends BaseEntity {

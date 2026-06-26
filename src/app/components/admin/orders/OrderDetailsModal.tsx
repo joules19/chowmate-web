@@ -2,7 +2,7 @@
 
 import { Fragment, useState, useEffect } from 'react';
 import { XMarkIcon, MapPinIcon, PhoneIcon, UserIcon, BuildingStorefrontIcon, BanknotesIcon, TruckIcon } from '@heroicons/react/24/outline';
-import { AllOrdersDto, OrderItemDetailsDto } from '@/app/data/types/order';
+import { AllOrdersDto, OrderItemDetailsDto, PackBreakdownDto } from '@/app/data/types/order';
 import { formatCurrency } from '@/app/lib/utils/currency';
 import CopyButton from '@/app/components/ui/CopyButton';
 import { EarningsRepository } from '@/app/lib/api/repositories/earnings-repository';
@@ -21,33 +21,46 @@ interface Props {
 }
 
 function OrderItemTile({ item }: { item: OrderItemDetailsDto }) {
+  const optionsTotal = item.selectedOptions.reduce((sum, o) => sum + o.price, 0);
+  const lineTotal = (item.basePrice + optionsTotal) * item.quantity;
+  const groupedOptions = Object.values(
+    item.selectedOptions.reduce((acc, option) => {
+      const key = `${option.optionId}-${option.price}`;
+      if (acc[key]) { acc[key].count++; } else { acc[key] = { ...option, count: 1 }; }
+      return acc;
+    }, {} as Record<string, typeof item.selectedOptions[0] & { count: number }>)
+  );
+
   return (
-    <div className="bg-white rounded-lg p-4 border border-gray-200">
-      <div className="flex items-start space-x-4">
-        {item.imageUrl && (
-          <div className="flex-shrink-0">
-            <img src={item.imageUrl} alt={item.productName} className="w-16 h-16 object-cover rounded-lg" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-          </div>
+    <div className="bg-white rounded-lg p-3 border border-gray-200">
+      <div className="flex items-start gap-3">
+        {item.imageUrl ? (
+          <img src={item.imageUrl} alt={item.productName} className="w-14 h-14 object-cover rounded-lg flex-shrink-0" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+        ) : (
+          <div className="w-14 h-14 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center text-gray-400 text-xl">🍽</div>
         )}
         <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-start">
-            <div>
-              <h4 className="text-sm font-medium text-gray-900">{item.productName}</h4>
-              <p className="text-sm text-gray-600">Base Price: {formatCurrency(item.basePrice)} × {item.quantity}</p>
-            </div>
-            <div className="text-right"><p className="text-sm font-medium text-gray-900">{formatCurrency(item.totalPrice)}</p></div>
-          </div>
-          {item.selectedOptions && item.selectedOptions.length > 0 && (
-            <div className="mt-2">
-              <p className="text-xs text-gray-500 mb-1">Selected Options:</p>
-              <div className="space-y-1">
-                {item.selectedOptions.map((option, optionIndex) => (
-                  <div key={`${option.optionId}-${optionIndex}`} className="flex justify-between items-center text-xs">
-                    <span className="text-gray-600">• {option.optionName}</span>
-                    <span className="text-gray-900">+{formatCurrency(option.price)}</span>
-                  </div>
-                ))}
+          <div className="flex justify-between items-start gap-2">
+            <div className="min-w-0">
+              <h4 className="text-sm font-semibold text-gray-900 leading-tight">{item.productName}</h4>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Qty {item.quantity}</span>
+                <span className="text-xs text-gray-500">{formatCurrency(item.basePrice)} each</span>
               </div>
+            </div>
+            <div className="text-right flex-shrink-0">
+              <p className="text-sm font-semibold text-gray-900">{formatCurrency(lineTotal)}</p>
+              <p className="text-xs text-gray-400">Total</p>
+            </div>
+          </div>
+          {groupedOptions.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {groupedOptions.map((option) => (
+                <span key={`${option.optionId}-${option.price}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                  {option.count > 1 ? `${option.optionName} ×${option.count}` : option.optionName}
+                  {option.price > 0 && <span className="font-semibold">+{formatCurrency(option.price * option.count)}</span>}
+                </span>
+              ))}
             </div>
           )}
         </div>
@@ -261,6 +274,8 @@ export default function OrderDetailsModal({ isOpen, onClose, order }: Props) {
                 <h3 className="text-sm font-medium text-gray-900 mb-3">Order Total</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between"><span className="text-gray-600">Subtotal:</span><span>{formatCurrency(order.subTotal)}</span></div>
+                  {order.packFee > 0 && <div className="flex justify-between"><span className="text-gray-600">Pack Fee:</span><span>{formatCurrency(order.packFee)}</span></div>}
+
                   <div className="flex justify-between"><span className="text-gray-600">Delivery Fee:</span><span>{formatCurrency(order.deliveryFee)}</span></div>
                   <div className="flex justify-between"><span className="text-gray-600">Service Fee:</span><span>{formatCurrency(order.serviceFee)}</span></div>
                   {order.promoCode && <div className="flex justify-between text-green-600"><span>Promo ({order.promoCode}):</span><span>-{formatCurrency(order.promoDiscountAmount || 0)}</span></div>}
@@ -323,23 +338,36 @@ export default function OrderDetailsModal({ isOpen, onClose, order }: Props) {
                             }
                             const sortedPackNums = Object.keys(packGroups).map(Number).sort((a, b) => a - b);
                             return (
-                              <div className="space-y-4">
-                                {sortedPackNums.map(packNum => (
-                                  <div key={packNum}>
-                                    <div className="flex items-center gap-2 px-3 py-2 mb-2 bg-yellow-50 border border-yellow-200 rounded-lg">
-                                      <span className="text-sm font-semibold text-yellow-700">Pack {packNum}</span>
+                              <div className="space-y-3">
+                                {sortedPackNums.map(packNum => {
+                                  const packEntry = (order.packBreakdown ?? []).find((p: PackBreakdownDto) => p.packNumber === packNum);
+                                  return (
+                                    <div key={packNum} className="rounded-xl border border-amber-200 overflow-hidden">
+                                      {/* Pack title bar */}
+                                      <div className="flex items-center justify-between px-3 py-2.5 bg-amber-50 border-b border-amber-200">
+                                        <div className="flex items-center gap-2">
+                                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                                          <span className="text-sm font-bold text-amber-700">Pack {packNum}</span>
+                                        </div>
+                                        {packEntry && packEntry.fee > 0 && (
+                                          <span className="text-xs font-semibold px-2 py-0.5 bg-amber-100 rounded-md text-amber-700 border border-amber-200">
+                                            Pack fee  {formatCurrency(packEntry.fee)}
+                                          </span>
+                                        )}
+                                      </div>
+                                      {/* Items body */}
+                                      <div className="p-2 space-y-2 bg-white">
+                                        {packGroups[packNum].map((item, index) => (
+                                          <OrderItemTile key={`${item.productId}-${index}`} item={item} />
+                                        ))}
+                                      </div>
                                     </div>
-                                    <div className="space-y-3">
-                                      {packGroups[packNum].map((item, index) => (
-                                        <OrderItemTile key={`${item.productId}-${index}`} item={item} />
-                                      ))}
-                                    </div>
-                                  </div>
-                                ))}
+                                  );
+                                })}
                                 {unpackedItems.length > 0 && (
                                   <div>
                                     <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 pl-1">Other Items</p>
-                                    <div className="space-y-3">
+                                    <div className="space-y-2">
                                       {unpackedItems.map((item, index) => (
                                         <OrderItemTile key={`${item.productId}-${index}`} item={item} />
                                       ))}
